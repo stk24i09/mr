@@ -13,11 +13,13 @@ body{
 
 table{
     border-collapse:collapse;
+    width:500px;
 }
 
 th,td{
-    border:1px solid #000;
-    padding:8px;
+    border:1px solid black;
+    padding:10px;
+    text-align:center;
 }
 
 th{
@@ -43,8 +45,12 @@ th{
 
 <script>
 
-google.script.run
-.withSuccessHandler(function(data){
+const apiUrl =
+"https://script.google.com/macros/s/AKfycbygGcjEbmmHe3KaoRXFL0GB_68YLnXK-jgcIHn4Ezy5Dhnb0By6cyjqEKo_60ExOdik/exec?mode=summary";
+
+fetch(apiUrl)
+.then(response => response.json())
+.then(data => {
 
     let html =
     "<tr><th>生徒ID</th><th>面接回数</th></tr>";
@@ -54,7 +60,7 @@ google.script.run
         html +=
         "<tr>" +
         "<td>" + id + "</td>" +
-        "<td>" + data[id] + "</td>" +
+        "<td>" + data[id] + "回</td>" +
         "</tr>";
 
     }
@@ -62,8 +68,7 @@ google.script.run
     document.getElementById("table").innerHTML =
     html;
 
-})
-.getSummary();
+});
 
 </script>
 
