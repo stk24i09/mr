@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>面接練習回数一覧</title>
@@ -13,12 +14,11 @@ body{
 
 table{
     border-collapse:collapse;
-    width:500px;
 }
 
 th,td{
-    border:1px solid black;
-    padding:10px;
+    border:1px solid #000;
+    padding:8px;
     text-align:center;
 }
 
@@ -35,12 +35,10 @@ th{
 <h2>面接練習回数一覧</h2>
 
 <table id="table">
-
 <tr>
 <th>生徒ID</th>
 <th>面接回数</th>
 </tr>
-
 </table>
 
 <script>
@@ -57,16 +55,24 @@ fetch(apiUrl)
 
     for(let id in data){
 
-        html +=
-        "<tr>" +
-        "<td>" + id + "</td>" +
-        "<td>" + data[id] + "回</td>" +
-        "</tr>";
-
+        html += `
+        <tr>
+            <td>${id}</td>
+            <td>${data[id]}回</td>
+        </tr>
+        `;
     }
 
     document.getElementById("table").innerHTML =
     html;
+
+})
+.catch(error => {
+
+    document.getElementById("table").innerHTML =
+    "<tr><td colspan='2'>データ取得失敗</td></tr>";
+
+    console.log(error);
 
 });
 
