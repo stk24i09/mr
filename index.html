@@ -2,7 +2,9 @@
 <html>
 
 <head>
+
 <meta charset="UTF-8">
+
 <title>面接練習回数管理システム</title>
 
 <style>
@@ -18,7 +20,8 @@ h1{
 
 table{
     border-collapse:collapse;
-    width:600px;
+    width:700px;
+    margin-bottom:20px;
 }
 
 th,td{
@@ -77,8 +80,8 @@ function loadSummary(){
 
         let html = `
         <tr>
-        <th>生徒ID</th>
-        <th>面接回数</th>
+            <th>生徒ID</th>
+            <th>面接回数</th>
         </tr>
         `;
 
@@ -86,14 +89,14 @@ function loadSummary(){
 
             html += `
             <tr>
-            <td>
-            <span
-            class="student-link"
-            onclick="showHistory('${id}')">
-            ${id}
-            </span>
-            </td>
-            <td>${data[id]}回</td>
+                <td>
+                    <span
+                        class="student-link"
+                        onclick="showHistory('${id}')">
+                        ${id}
+                    </span>
+                </td>
+                <td>${data[id]}回</td>
             </tr>
             `;
 
@@ -118,15 +121,15 @@ function showHistory(studentId){
 
     .then(data => {
 
-        let html =
-        `<h2>${studentId} の面接履歴</h2>`;
+        let html = `
+        <h2>${studentId} の面接履歴</h2>
 
-        html += `
         <table>
+
         <tr>
-        <th>回数</th>
-        <th>日時</th>
-        <th>担当先生</th>
+            <th>回数</th>
+            <th>日時</th>
+            <th>担当先生</th>
         </tr>
         `;
 
@@ -137,9 +140,9 @@ function showHistory(studentId){
 
             html += `
             <tr>
-            <td>${i+1}回目</td>
-            <td>${date.toLocaleString("ja-JP")}</td>
-            <td>${data[i].teacher}</td>
+                <td>${i+1}回目</td>
+                <td>${date.toLocaleString("ja-JP")}</td>
+                <td>${data[i].teacher}</td>
             </tr>
             `;
 
@@ -150,10 +153,11 @@ function showHistory(studentId){
         document.getElementById("historyArea").innerHTML =
         html;
 
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth"
-        });
+        document
+          .getElementById("historyArea")
+          .scrollIntoView({
+              behavior:"smooth"
+          });
 
     });
 
