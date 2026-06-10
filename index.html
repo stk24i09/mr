@@ -3,27 +3,42 @@
 
 <head>
 <meta charset="UTF-8">
-<title>面接練習回数一覧</title>
+<title>面接練習回数管理システム</title>
 
 <style>
 
 body{
     font-family:sans-serif;
-    padding:20px;
+    margin:30px;
+}
+
+h1{
+    color:#333;
 }
 
 table{
     border-collapse:collapse;
+    width:600px;
 }
 
 th,td{
     border:1px solid #000;
-    padding:8px;
+    padding:10px;
     text-align:center;
 }
 
 th{
     background:#eeeeee;
+}
+
+.student-link{
+    color:blue;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+#historyArea{
+    margin-top:30px;
 }
 
 </style>
@@ -32,51 +47,120 @@ th{
 
 <body>
 
-<h2>面接練習回数一覧</h2>
+<h1>面接練習回数一覧</h1>
 
-<table id="table">
+<table id="summaryTable">
+
 <tr>
 <th>生徒ID</th>
 <th>面接回数</th>
 </tr>
+
 </table>
+
+<div id="historyArea"></div>
 
 <script>
 
-const apiUrl =
-"https://script.google.com/macros/s/AKfycbygGcjEbmmHe3KaoRXFL0GB_68YLnXK-jgcIHn4Ezy5Dhnb0By6cyjqEKo_60ExOdik/exec?mode=summary";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbygGcjEbmmHe3KaoRXFL0GB_68YLnXK-jgcIHn4Ezy5Dhnb0By6cyjqEKo_60ExOdik/exec";
 
-fetch(apiUrl)
-.then(response => response.json())
-.then(data => {
+loadSummary();
 
-    let html =
-    "<tr><th>生徒ID</th><th>面接回数</th></tr>";
+function loadSummary(){
 
-    for(let id in data){
+    fetch(API_URL + "?mode=summary")
 
-        html += `
+    .then(response => response.json())
+
+    .then(data => {
+
+        let html = `
         <tr>
-            <td>${id}</td>
-            <td>${data[id]}回</td>
+        <th>生徒ID</th>
+        <th>面接回数</th>
         </tr>
         `;
-    }
 
-    document.getElementById("table").innerHTML =
-    html;
+        for(let id in data){
 
-})
-.catch(error => {
+            html += `
+            <tr>
+            <td>
+            <span
+            class="student-link"
+            onclick="showHistory('${id}')">
+            ${id}
+            </span>
+            </td>
+            <td>${data[id]}回</td>
+            </tr>
+            `;
 
-    document.getElementById("table").innerHTML =
-    "<tr><td colspan='2'>データ取得失敗</td></tr>";
+        }
 
-    console.log(error);
+        document.getElementById("summaryTable").innerHTML =
+        html;
 
-});
+    });
+
+}
+
+function showHistory(studentId){
+
+    fetch(
+        API_URL +
+        "?mode=history&id=" +
+        encodeURIComponent(studentId)
+    )
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let html =
+        `<h2>${studentId} の面接履歴</h2>`;
+
+        html += `
+        <table>
+        <tr>
+        <th>回数</th>
+        <th>日時</th>
+        <th>担当先生</th>
+        </tr>
+        `;
+
+        for(let i=0;i<data.length;i++){
+
+            let date =
+            new Date(data[i].date);
+
+            html += `
+            <tr>
+            <td>${i+1}回目</td>
+            <td>${date.toLocaleString("ja-JP")}</td>
+            <td>${data[i].teacher}</td>
+            </tr>
+            `;
+
+        }
+
+        html += "</table>";
+
+        document.getElementById("historyArea").innerHTML =
+        html;
+
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+
+    });
+
+}
 
 </script>
 
 </body>
+
 </html>
