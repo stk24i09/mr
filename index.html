@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>面接練習回数管理システム</title>
-
 <style>
 
 body{
     font-family:sans-serif;
     margin:30px;
+    max-width:1400px;
 }
 
 .container{
     display:flex;
-    gap:50px;
+    flex-direction:row;
     align-items:flex-start;
+    gap:30px;
 }
 
 .left-panel{
-    width:45%;
+    flex:1;
+    min-width:400px;
 }
 
 .right-panel{
-    width:55%;
+    flex:1;
+    min-width:400px;
 }
 
 h1{
@@ -39,12 +34,14 @@ h2{
 table{
     border-collapse:collapse;
     width:100%;
+    table-layout:fixed;
 }
 
 th,td{
     border:1px solid #000;
     padding:10px;
     text-align:center;
+    word-wrap:break-word;
 }
 
 th{
@@ -63,6 +60,9 @@ th{
 
 #historyArea{
     padding:10px;
+    border:1px solid #ccc;
+    background:#fafafa;
+    min-height:300px;
 }
 
 .message{
@@ -71,144 +71,3 @@ th{
 }
 
 </style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-    <!-- 左側 -->
-    <div class="left-panel">
-
-        <h1>面接練習回数一覧</h1>
-
-        <table id="summaryTable">
-
-            <tr>
-                <th>生徒ID</th>
-                <th>面接回数</th>
-            </tr>
-
-        </table>
-
-    </div>
-
-    <!-- 右側 -->
-    <div class="right-panel">
-
-        <div id="historyArea">
-
-            <h2>面接履歴</h2>
-
-            <p class="message">
-                生徒IDをクリックすると履歴が表示されます
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script>
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycbygGcjEbmmHe3KaoRXFL0GB_68YLnXK-jgcIHn4Ezy5Dhnb0By6cyjqEKo_60ExOdik/exec";
-
-loadSummary();
-
-function loadSummary(){
-
-    fetch(API_URL + "?mode=summary")
-
-    .then(response => response.json())
-
-    .then(data => {
-
-        let html = `
-        <tr>
-            <th>生徒ID</th>
-            <th>面接回数</th>
-        </tr>
-        `;
-
-        for(let id in data){
-
-            html += `
-            <tr>
-                <td>
-                    <span
-                        class="student-link"
-                        onclick="showHistory('${id}')">
-                        ${id}
-                    </span>
-                </td>
-
-                <td>${data[id]}回</td>
-            </tr>
-            `;
-
-        }
-
-        document.getElementById("summaryTable").innerHTML =
-        html;
-
-    });
-
-}
-
-function showHistory(studentId){
-
-    fetch(
-        API_URL +
-        "?mode=history&id=" +
-        encodeURIComponent(studentId)
-    )
-
-    .then(response => response.json())
-
-    .then(data => {
-
-        let html = `
-        <h2>${studentId} の面接履歴</h2>
-
-        <table>
-
-            <tr>
-                <th>回数</th>
-                <th>日時</th>
-                <th>担当先生</th>
-            </tr>
-        `;
-
-        for(let i = 0; i < data.length; i++){
-
-            let date =
-            new Date(data[i].date);
-
-            html += `
-            <tr>
-                <td>${i + 1}回目</td>
-                <td>${date.toLocaleString("ja-JP")}</td>
-                <td>${data[i].teacher}</td>
-            </tr>
-            `;
-        }
-
-        html += `
-        </table>
-        `;
-
-        document.getElementById("historyArea").innerHTML =
-        html;
-
-    });
-
-}
-
-</script>
-
-</body>
-
-</html>
