@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>面接練習回数管理システム</title>
+
 <style>
 
 body{
@@ -71,3 +80,168 @@ th{
 }
 
 </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left-panel">
+
+        <h1>面接練習回数一覧</h1>
+
+        <table id="summaryTable">
+
+            <tr>
+                <th>生徒ID</th>
+                <th>面接回数</th>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="right-panel">
+
+        <div id="historyArea">
+
+            <h2>面接履歴</h2>
+
+            <p class="message">
+                生徒IDをクリックすると履歴が表示されます
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbygGcjEbmmHe3KaoRXFL0GB_68YLnXK-jgcIHn4Ezy5Dhnb0By6cyjqEKo_60ExOdik/exec";
+
+loadSummary();
+
+function loadSummary(){
+
+    fetch(API_URL + "?mode=summary")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let html = `
+        <tr>
+            <th>生徒ID</th>
+            <th>面接回数</th>
+        </tr>
+        `;
+
+        for(let id in data){
+
+            html += `
+            <tr>
+                <td>
+                    <span
+                        class="student-link"
+                        onclick="showHistory('${id}')">
+                        ${id}
+                    </span>
+                </td>
+
+                <td>${data[id]}回</td>
+            </tr>
+            `;
+
+        }
+
+        document.getElementById("summaryTable").innerHTML =
+        html;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("summaryTable").innerHTML =
+        `
+        <tr>
+            <td colspan="2">
+                データ取得エラー
+            </td>
+        </tr>
+        `;
+
+        console.error(error);
+
+    });
+
+}
+
+function showHistory(studentId){
+
+    fetch(
+        API_URL +
+        "?mode=history&id=" +
+        encodeURIComponent(studentId)
+    )
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let html = `
+        <h2>${studentId} の面接履歴</h2>
+
+        <table>
+
+            <tr>
+                <th>回数</th>
+                <th>日時</th>
+                <th>担当先生</th>
+            </tr>
+        `;
+
+        for(let i = 0; i < data.length; i++){
+
+            let date =
+            new Date(data[i].date);
+
+            html += `
+            <tr>
+                <td>${i + 1}回目</td>
+                <td>${date.toLocaleString("ja-JP")}</td>
+                <td>${data[i].teacher}</td>
+            </tr>
+            `;
+        }
+
+        html += `
+        </table>
+        `;
+
+        document.getElementById("historyArea").innerHTML =
+        html;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("historyArea").innerHTML =
+        `
+        <h2>エラー</h2>
+        <p>履歴を取得できませんでした。</p>
+        `;
+
+        console.error(error);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
