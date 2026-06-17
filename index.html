@@ -14,14 +14,31 @@ body{
     margin:30px;
 }
 
+.container{
+    display:flex;
+    gap:50px;
+    align-items:flex-start;
+}
+
+.left-panel{
+    width:45%;
+}
+
+.right-panel{
+    width:55%;
+}
+
 h1{
     color:#333;
 }
 
+h2{
+    margin-top:0;
+}
+
 table{
     border-collapse:collapse;
-    width:700px;
-    margin-bottom:20px;
+    width:100%;
 }
 
 th,td{
@@ -40,8 +57,17 @@ th{
     text-decoration:underline;
 }
 
+.student-link:hover{
+    color:red;
+}
+
 #historyArea{
-    margin-top:30px;
+    padding:10px;
+}
+
+.message{
+    font-size:18px;
+    color:#666;
 }
 
 </style>
@@ -50,18 +76,40 @@ th{
 
 <body>
 
-<h1>面接練習回数一覧</h1>
+<div class="container">
 
-<table id="summaryTable">
+    <!-- 左側 -->
+    <div class="left-panel">
 
-<tr>
-<th>生徒ID</th>
-<th>面接回数</th>
-</tr>
+        <h1>面接練習回数一覧</h1>
 
-</table>
+        <table id="summaryTable">
 
-<div id="historyArea"></div>
+            <tr>
+                <th>生徒ID</th>
+                <th>面接回数</th>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- 右側 -->
+    <div class="right-panel">
+
+        <div id="historyArea">
+
+            <h2>面接履歴</h2>
+
+            <p class="message">
+                生徒IDをクリックすると履歴が表示されます
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script>
 
@@ -96,6 +144,7 @@ function loadSummary(){
                         ${id}
                     </span>
                 </td>
+
                 <td>${data[id]}回</td>
             </tr>
             `;
@@ -126,38 +175,33 @@ function showHistory(studentId){
 
         <table>
 
-        <tr>
-            <th>回数</th>
-            <th>日時</th>
-            <th>担当先生</th>
-        </tr>
+            <tr>
+                <th>回数</th>
+                <th>日時</th>
+                <th>担当先生</th>
+            </tr>
         `;
 
-        for(let i=0;i<data.length;i++){
+        for(let i = 0; i < data.length; i++){
 
             let date =
             new Date(data[i].date);
 
             html += `
             <tr>
-                <td>${i+1}回目</td>
+                <td>${i + 1}回目</td>
                 <td>${date.toLocaleString("ja-JP")}</td>
                 <td>${data[i].teacher}</td>
             </tr>
             `;
-
         }
 
-        html += "</table>";
+        html += `
+        </table>
+        `;
 
         document.getElementById("historyArea").innerHTML =
         html;
-
-        document
-          .getElementById("historyArea")
-          .scrollIntoView({
-              behavior:"smooth"
-          });
 
     });
 
