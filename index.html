@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📂 システムバインダー // 児童生徒指導記録簿</title>
+<title>📋 学校指導記録システム // 職員室ダッシュボード</title>
 
 <style>
-/* 共通リセット＆手帳・フォント */
+/* 共通リセット＆校内公用フォント（可読性最優先） */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,325 +15,289 @@
 }
 
 body {
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-    background-color: #e5e0d8; /* 机の木目を意識した温かみのあるグレーベージュ */
-    color: #2c3e50;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif;
+    background-color: #f1f5f9; /* 明るく清潔感のある職員室ライトグレー */
+    color: #1e293b;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 24px;
+    padding: 20px;
 }
 
-/* ヘッダー：バインダーの背表紙・ラベルプレート風 */
-.binder-header {
-    height: 56px;
+/* ヘッダー：自治体や校内LANにありそうな信頼性の高いシステムバー */
+.gov-header {
+    height: 60px;
+    background-color: #0f172a; /* 深みのある濃紺 */
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    background-color: #2e5a44; /* モスグリーン（黒板調） */
     border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    margin-bottom: 20px;
-    border-bottom: 3px solid #1e3c2d;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
     flex-shrink: 0;
 }
 
-.brand-title {
+.system-title {
     font-size: 16px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 1px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.brand-label {
-    background-color: #f5f3ef;
-    color: #2e5a44;
+.school-tag {
     font-size: 11px;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 3px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    font-weight: 700;
+    background-color: #3b82f6; /* 公共性のあるスクールブルー */
+    padding: 3px 8px;
+    border-radius: 4px;
 }
 
-.user-tag {
+.time-stamp {
     font-size: 12px;
-    color: #e5e0d8;
-    font-weight: 500;
+    color: #94a3b8;
 }
 
-/* 2カラムレイアウト */
-.binder-workspace {
+/* ワークスペース：左右分割 */
+.workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 20px;
-    width: 100%;
+    gap: 16px;
 }
 
-/* バインダーの「見開きページ」を再現したパネル */
-.binder-page {
+/* 共通パネル設計：紙ベースの台帳のようなフラット感 */
+.ledger-panel {
     flex: 1;
-    background-color: #fdfcfb; /* ルーズリーフの紙の白 */
-    border: 1px solid #dcd8d0;
-    border-radius: 8px;
-    box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    position: relative;
 }
 
-/* バインダーのリング孔（左側のページ用） */
-.binder-page-left::before {
-    content: "";
-    position: absolute;
-    left: 8px;
-    top: 0;
-    bottom: 0;
-    width: 6px;
-    background-image: radial-gradient(circle, #ccc 30%, transparent 35%);
-    background-size: 100% 30px;
-    opacity: 0.7;
-}
-
-/* バインダーのリング孔（右側のページ用） */
-.binder-page-right::before {
-    content: "";
-    position: absolute;
-    right: 8px;
-    top: 0;
-    bottom: 0;
-    width: 6px;
-    background-image: radial-gradient(circle, #ccc 30%, transparent 35%);
-    background-size: 100% 30px;
-    opacity: 0.7;
-}
-
-/* ヘッダー */
-.page-header {
-    background-color: #faf8f5;
-    padding: 16px 24px;
-    border-bottom: 2px solid #e2ded8;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.page-title {
+.panel-header {
+    background-color: #f8fafc;
+    padding: 12px 16px;
+    border-bottom: 2px solid #cbd5e1;
     font-size: 14px;
     font-weight: 700;
-    color: #4a5568;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding-left: 12px; /* リング孔を避けるマージン */
-}
-
-.page-body {
-    overflow-y: auto;
-    flex: 1;
-    padding: 24px;
-}
-
-/* 整理されたコントロールバー */
-.control-bar {
+    color: #334155;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 20px;
-    background-color: #f7f5f0;
-    border-radius: 6px;
-    padding: 10px 16px;
-    border: 1px solid #e2ded8;
 }
 
-.control-label {
+.panel-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 16px;
+}
+
+/* 職員室の黒板を思わせる機能的なフィルター・ボタン類 */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f1f5f9;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 12px;
-    font-weight: bold;
-    color: #718096;
+    font-weight: 700;
+    color: #475569;
 }
 
-/* クラシックな手帳風セレクト */
 select {
     background-color: #ffffff;
-    color: #2c3e50;
-    border: 1px solid #cbd5e0;
-    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
     font-size: 12px;
+    font-weight: 600;
     border-radius: 4px;
+    color: #1e293b;
     outline: none;
     cursor: pointer;
 }
 
-/* クラシックなボタン */
-.btn-classic {
-    background-color: #2e5a44;
+/* 実用本位の同期ボタン */
+.btn-action {
+    background-color: #0f172a;
     color: #ffffff;
     border: none;
-    padding: 6px 14px;
+    padding: 7px 14px;
     font-size: 12px;
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     transition: background-color 0.15s;
 }
 
-.btn-classic:hover {
-    background-color: #244735;
+.btn-action:hover {
+    background-color: #1e293b;
 }
 
-#updateTime {
-    font-size: 11px;
-    color: #a0aec0;
-    margin-top: 4px;
-    text-align: right;
-}
-
-/* 名簿テーブル（罫線ノート風） */
-.ledger-table {
+/* 表簿（グリッドリスト）：縦書き名簿のようなきっちりした罫線 */
+.grid-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.ledger-table th {
-    padding: 8px 12px;
+.grid-table th {
+    padding: 8px;
     font-size: 11px;
-    color: #a0aec0;
+    font-weight: 700;
+    color: #64748b;
     text-align: left;
-    border-bottom: 2px solid #cbd5e0;
+    border-bottom: 2px solid #cbd5e1;
+    background-color: #f8fafc;
 }
 
-/* ノートの1行 */
-.ledger-row {
+.grid-row {
     cursor: pointer;
+    border-bottom: 1px solid #e2e8f0;
     transition: background-color 0.1s;
 }
 
-.ledger-row:hover {
-    background-color: #f7f5f0;
+.grid-row:hover {
+    background-color: #f8fafc;
 }
 
-.ledger-row td {
-    padding: 12px;
+.grid-row.active-row {
+    background-color: #eff6ff !important;
+}
+
+.grid-row td {
+    padding: 12px 8px;
     font-size: 13px;
-    border-bottom: 1px solid #e2ded8;
 }
 
-/* インデックス風のアクティブ行 */
-.ledger-row.selected-row {
-    background-color: #f0f4f1 !important; /* 優しい緑のマーカー色 */
-}
-
-.student-id {
-    font-weight: bold;
-    color: #2e5a44;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* 指導数バッジ */
-.record-count {
-    background-color: #e2ded8;
-    color: #4a5568;
-    font-size: 10px;
-    font-weight: bold;
+/* 整理用マグネットバッジ */
+.status-magnet {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
     padding: 2px 8px;
     border-radius: 3px;
+    text-align: center;
 }
 
-.selected-row .record-count {
-    background-color: #2e5a44;
-    color: #ffffff;
+/* 通常 */
+.magnet-normal {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
 }
 
-/* 右側：ルーズリーフに書き留めた記録風 */
-.report-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #2e5a44;
-    padding-bottom: 8px;
-    padding-left: 12px;
+/* 注意（2回〜4回） */
+.magnet-warning {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
 }
 
-.record-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+/* 頻回（5回以上） */
+.magnet-alert {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
 }
 
-/* 公文・手帳の記録用紙カード */
-.record-card {
+/* 右側：指導カルテ記録（要録罫線風） */
+.report-card {
     background-color: #ffffff;
-    border: 1px solid #e2ded8;
+    border: 1px solid #cbd5e1;
     border-radius: 4px;
     padding: 16px;
-    /* 本物の紙のような薄い境界影 */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    margin-bottom: 12px;
+    position: relative;
 }
 
-.record-main {
-    font-size: 13px;
-    color: #2d3748;
-    line-height: 1.6;
+/* 要録風の左縦引き線 */
+.report-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #94a3b8;
+}
+
+.report-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
     margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 6px;
 }
 
-.record-main strong {
-    color: #1a202c;
-    background-image: linear-gradient(transparent 60%, #fff3cd 40%); /* 蛍光イエローマーカー風 */
+.report-body {
+    font-size: 13px;
+    color: #0f172a;
+    line-height: 1.6;
 }
 
-.record-meta {
-    font-size: 11px;
-    color: #718096;
-    text-align: right;
+.report-body strong {
+    color: #0f172a;
+    border-bottom: 1px solid #475569; /* 手書きの下線風 */
+    padding-bottom: 1px;
 }
 
-/* 白紙・未選択状態 */
-.blank-state {
+/* 空白プレースホルダー */
+.placeholder-view {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #a0aec0;
+    color: #94a3b8;
     text-align: center;
+    border: 2px dashed #cbd5e1;
+    border-radius: 6px;
+    margin: 16px;
+    background-color: #fafbfc;
 }
 
-.blank-icon {
+.placeholder-icon {
     font-size: 32px;
-    margin-bottom: 12px;
-    opacity: 0.5;
+    margin-bottom: 10px;
 }
 
-.blank-text {
+.placeholder-text {
     font-size: 12px;
     line-height: 1.6;
 }
 
-/* シンプルなロード表示 */
-.loader {
+/* ローディング指示器 */
+.spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid #e2ded8;
-    border-top-color: #2e5a44;
+    border: 2px solid #cbd5e1;
+    border-top-color: #0f172a;
     border-radius: 50%;
-    animation: rotate 0.8s infinite linear;
-    margin-bottom: 12px;
+    animation: spin 0.8s infinite linear;
+    margin-bottom: 10px;
 }
 
-@keyframes rotate {
+@keyframes spin {
     to { transform: rotate(360deg); }
 }
 </style>
@@ -342,44 +306,41 @@ select {
 
 <body>
 
-<!-- バインダーの背表紙風ヘッダー -->
-<div class="binder-header">
-    <div class="brand-title">
-        <span class="brand-label">R8-Log</span>
-        <span>児童生徒指導カルテ・ファイリングシステム</span>
+<!-- 公用ヘッダー -->
+<div class="gov-header">
+    <div class="system-title">
+        <span>🏫 児童生徒指導要録データベース</span>
+        <span class="school-tag">指導記録ログ</span>
     </div>
-    <div class="user-tag">教員用ポータル</div>
+    <div class="time-stamp" id="liveClock">ロード中...</div>
 </div>
 
-<!-- バインダー見開きワークスペース -->
-<div class="binder-workspace">
+<!-- メインエリア -->
+<div class="workspace">
 
-    <!-- 左ページ：名簿一覧 -->
-    <div class="binder-page binder-page-left">
-        <div class="page-header">
-            <div class="page-title">📁 指導対象生徒一覧</div>
+    <!-- 左：生徒名簿リスト（一覧ボード） -->
+    <div class="ledger-panel">
+        <div class="panel-header">
+            <span>📊 指導生徒管理マスター</span>
         </div>
-        <div class="page-body">
+        <div class="panel-body">
             
-            <div class="control-bar">
-                <div>
-                    <span class="control-label">整列:</span>
+            <div class="toolbar">
+                <div class="toolbar-group">
+                    <span>表示順:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">指導件数の多い順</option>
-                        <option value="id">識別ID（昇順）</option>
+                        <option value="count">累積指導回数の多い順</option>
+                        <option value="id">児童生徒ID（昇順）</option>
                     </select>
                 </div>
-                <div>
-                    <button class="btn-classic" onclick="refreshData()">同期更新</button>
-                    <div id="updateTime"></div>
-                </div>
+                <button class="btn-action" onclick="refreshData()">最新の台帳に同期</button>
             </div>
 
-            <table class="ledger-table" id="summaryTable">
+            <table class="grid-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th style="padding-left: 12px;">児童生徒ID</th>
-                        <th style="text-align: right; padding-right: 12px; width: 100px;">累積件数</th>
+                        <th style="padding-left: 8px;">識別番号 (生徒ID)</th>
+                        <th style="text-align: right; padding-right: 8px; width: 120px;">指導回数ステータス</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -390,19 +351,19 @@ select {
         </div>
     </div>
 
-    <!-- 右ページ：指導内容詳細 -->
-    <div class="binder-page binder-page-right">
-        <div class="page-header">
-            <div class="page-title">📝 個別指導経過記録</div>
+    <!-- 右：個別指導履歴（要録ビュー） -->
+    <div class="ledger-panel">
+        <div class="panel-header">
+            <span>📝 個別指導経過・カルテ詳細</span>
         </div>
-        <div id="historyArea" class="page-body">
+        <div id="historyArea" class="panel-body" style="padding: 16px 0;">
             
-            <!-- 初期白紙状態 -->
-            <div class="blank-state">
-                <div class="blank-icon">📒</div>
-                <p class="blank-text">
-                    <strong>記録ファイルが選択されていません</strong><br>
-                    左側の名簿から生徒ID行をクリックして、カルテを展開してください。
+            <!-- 未選択時のメッセージ表示 -->
+            <div class="placeholder-view">
+                <div class="placeholder-icon">📄</div>
+                <p class="placeholder-text">
+                    <strong>個別カルテ未展開</strong><br>
+                    名簿から生徒を選択すると、詳細な指導時系列ログがここに描画されます。
                 </p>
             </div>
 
@@ -414,12 +375,19 @@ select {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
+// 時計機能
+function updateClock() {
+    const now = new Date();
+    document.getElementById("liveClock").innerText = "稼働中 // " + now.toLocaleDateString("ja-JP") + " " + now.toLocaleTimeString("ja-JP");
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// 初期読み込み
 loadSummary();
 
 function refreshData(){
     loadSummary();
-    let now = new Date();
-    document.getElementById("updateTime").innerHTML = "更新: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -449,15 +417,21 @@ function loadSummary(){
         }
 
         students.forEach(student => {
+            // 回数に応じたマグネットカラー設定
+            let magnetClass = "status-magnet magnet-normal";
+            if (student.count >= 5) {
+                magnetClass = "status-magnet magnet-alert";
+            } else if (student.count >= 2) {
+                magnetClass = "status-magnet magnet-warning";
+            }
+
             html += `
-            <tr class="ledger-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
+            <tr class="grid-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
                 <td>
-                    <div class="student-id">
-                        📄 ${student.id}
-                    </div>
+                    <strong style="color: #0f172a;">👤 ${student.id}</strong>
                 </td>
-                <td style="text-align: right; padding-right: 12px;">
-                    <span class="record-count">${student.count} 件</span>
+                <td style="text-align: right; padding-right: 8px;">
+                    <span class="${magnetClass}">${student.count} 回</span>
                 </td>
             </tr>
             `;
@@ -468,18 +442,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // 行選択状態の更新
-    document.querySelectorAll('.ledger-table tbody tr').forEach(tr => tr.classList.remove('selected-row'));
+    // 選択行のハイライト
+    document.querySelectorAll('.grid-table tbody tr').forEach(tr => tr.classList.remove('active-row'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('selected-row');
+        selectedRow.classList.add('active-row');
     }
 
-    // 読み込み中
+    // ローディング表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="blank-state">
-            <div class="loader"></div>
-            <p class="blank-text">記録簿を閲覧用ラックから取り出しています...</p>
+        <div class="placeholder-view">
+            <div class="spinner"></div>
+            <p class="placeholder-text">要録データベースより ${studentId} の履歴を取得しています...</p>
         </div>
     `;
 
@@ -487,8 +461,10 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="report-title">■ 個人記録カード: ${studentId}</div>
-        <div class="record-stack">
+        <div style="padding: 0 16px 12px 16px; font-size: 15px; font-weight: 800; border-bottom: 2px solid #0f172a; margin-bottom: 16px; color: #0f172a;">
+            📁 児童生徒：${studentId} の指導事歴一覧
+        </div>
+        <div style="padding: 0 16px;">
         `;
 
         for(let i = 0; i < data.length; i++){
@@ -496,12 +472,13 @@ function showHistory(studentId){
             let dateStr = d.toLocaleDateString("ja-JP", { year: 'numeric', month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
 
             html += `
-            <div class="record-card">
-                <div class="record-main">
-                    担当指導者: <strong>${data[i].teacher} 先生</strong>
+            <div class="report-card">
+                <div class="report-header">
+                    <span>事歴番号: #${i+1}</span>
+                    <span>📅 記録日時: ${dateStr}</span>
                 </div>
-                <div class="record-meta">
-                    記録日時: ${dateStr}
+                <div class="report-body">
+                    本件対応担当者: <strong>${data[i].teacher} 教諭</strong>
                 </div>
             </div>
             `;
@@ -512,9 +489,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="blank-state" style="color: #c53030;">
-                <div class="blank-icon">⚠️</div>
-                <p class="blank-text">読み込みエラーが発生しました。ネットワーク環境を確認してください。</p>
+            <div class="placeholder-view" style="color: #dc2626; border-color: #fca5a5; background-color: #fef2f2;">
+                <div class="placeholder-icon">⚠️</div>
+                <p class="placeholder-text">データ同期エラー：校内サーバーへの接続を確認してください。</p>
             </div>
         `;
     });
