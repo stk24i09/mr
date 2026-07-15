@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌿 BOTANICAL OASIS // ハーブ温室管理ログ</title>
+<title>Dashboard - Student Log Connection</title>
 
 <style>
 /* 共通リセット */
@@ -15,316 +15,307 @@
 }
 
 body {
-    font-family: "Avenir Next", "Helvetica Neue", Arial, "Hiragino Sans", "Segoe UI", sans-serif;
-    /* 朝露と木漏れ日を表現した爽やかなグラデーション */
-    background: linear-gradient(135deg, #eef4f1 0%, #f3f6f0 50%, #faf8f0 100%);
-    color: #2c3e35; /* 深いフォレストグリーン */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f1f5f9; /* 落ち着いたライトグレー */
+    color: #1e293b; /* 視認性の高いダークスレート */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     padding: 24px;
-    letter-spacing: 0.04em;
 }
 
-/* ヘッダー：お洒落なハーブガーデンの看板風 */
-.garden-header {
-    height: 60px;
+/* ヘッダー：モダンなナビゲーションバー */
+.app-header {
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
-    padding: 0 10px;
-    border-bottom: 2px solid #8fa89b;
+    margin-bottom: 20px;
+    padding: 0 24px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #436a56;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
     display: flex;
     align-items: center;
-    gap: 10px;
-    text-transform: uppercase;
+    gap: 8px;
 }
 
-.brand-icon {
-    font-size: 22px;
-    animation: leaf-breeze 5s infinite ease-in-out;
+/* ロゴ代わりにCSSで描く青いインジケータードット */
+.brand-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #2563eb;
+    border-radius: 50%;
 }
 
-@keyframes leaf-breeze {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(8deg) scale(1.05); }
-}
-
-.garden-status {
-    font-size: 10px;
-    font-weight: bold;
-    background-color: rgba(67, 106, 86, 0.08);
-    color: #436a56;
-    padding: 4px 12px;
-    border-radius: 20px;
-    letter-spacing: 0.1em;
+.app-status {
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    background-color: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 6px;
 }
 
 /* 2カラムレイアウト */
-.garden-workspace {
+.app-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 24px;
+    gap: 20px;
     width: 100%;
 }
 
-/* 朝霧の擦りガラスをイメージした半透明パネル */
-.garden-panel {
+/* アプリケーション風白色パネル */
+.app-panel {
     flex: 1;
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(143, 168, 155, 0.3);
-    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 10px 30px rgba(44, 62, 53, 0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
 }
 
 .panel-header {
-    background-color: rgba(255, 255, 255, 0.3);
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(143, 168, 155, 0.2);
-    font-size: 11px;
-    font-weight: bold;
-    color: #5c7e6c;
-    letter-spacing: 0.12em;
+    background-color: #ffffff;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    letter-spacing: 0.05em;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 24px;
+    padding: 20px;
 }
 
-/* コントロール（テラコッタの鉢植えツール調） */
+/* コントロール（ツールバー） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 24px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(143, 168, 155, 0.2);
-    border-radius: 14px;
-    padding: 12px 16px;
+    margin-bottom: 20px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 11px;
-    color: #5c7e6c;
+    font-size: 12px;
+    color: #64748b;
 }
 
-/* オーガニックなセレクトボックス */
+/* スマートなドロップダウンメニュー */
 select {
     padding: 6px 12px;
-    font-size: 11px;
+    font-size: 12px;
     font-family: inherit;
-    border: 1px solid rgba(143, 168, 155, 0.4);
-    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     background-color: #ffffff;
-    color: #2c3e35;
+    color: #1e293b;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s;
 }
 
 select:hover {
-    border-color: #436a56;
+    border-color: #94a3b8;
 }
 
-/* ハーブガーデンボタン */
-.btn-herb {
-    padding: 6px 16px;
-    font-size: 11px;
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* 洗練されたアクションボタン */
+.btn-primary {
+    padding: 6px 14px;
+    font-size: 12px;
     font-family: inherit;
-    font-weight: bold;
-    background-color: #436a56;
+    font-weight: 500;
+    background-color: #2563eb;
     color: #ffffff;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(67, 106, 86, 0.15);
-    transition: all 0.2s;
+    transition: background-color 0.15s;
 }
 
-.btn-herb:hover {
-    background-color: #325141;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(67, 106, 86, 0.25);
+.btn-primary:hover {
+    background-color: #1d4ed8;
 }
 
 #updateTime {
     font-size: 10px;
-    color: #7a9485;
+    color: #94a3b8;
     margin-top: 4px;
+    text-align: right;
 }
 
-/* 台帳（テーブル） */
-.garden-table {
+/* フラットテーブル */
+.app-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.garden-table th {
-    padding: 12px 8px;
+.app-table th {
+    padding: 10px 8px;
     font-size: 11px;
-    color: #5c7e6c;
+    font-weight: 600;
+    color: #64748b;
     text-transform: uppercase;
     text-align: left;
-    border-bottom: 1.5px solid #8fa89b;
+    border-bottom: 2px solid #f1f5f9;
 }
 
-.garden-table td {
-    padding: 16px 8px;
-    font-size: 13.5px;
-    border-bottom: 1px solid rgba(143, 168, 155, 0.15);
+.app-table td {
+    padding: 14px 8px;
+    font-size: 13px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-/* 苗木ラベル（生徒名ボタン） */
+/* テキスト風ボタン（生徒名） */
 .student-btn {
-    font-size: 14px;
+    font-size: 13.5px;
     font-family: inherit;
-    font-weight: 700;
-    color: #2c3e35;
+    font-weight: 500;
+    color: #0f172a;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: color 0.2s, transform 0.2s;
-}
-
-.student-btn::before {
-    content: "🌱 ";
+    transition: color 0.15s;
 }
 
 .student-btn:hover {
-    color: #436a56;
-    transform: translateX(3px);
+    color: #2563eb;
 }
 
-/* 選択行：やわらかなグリーンと日の光のブレンド */
+/* 選択行：左側にさりげないアクティブ線を表示 */
 .row-selected td {
-    background-color: rgba(143, 168, 155, 0.08) !important;
-    border-bottom-color: #8fa89b;
+    background-color: #f8fafc !important;
+    border-bottom-color: #cbd5e1;
 }
 
 .row-selected .student-btn {
-    color: #436a56;
+    color: #2563eb;
+    font-weight: 600;
 }
 
-/* 育成回数バッジ */
-.sprout-badge {
-    background-color: rgba(67, 106, 86, 0.08);
-    color: #436a56;
-    border: 1px solid rgba(67, 106, 86, 0.2);
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: bold;
+/* プレーンな数量バッジ */
+.count-badge {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-/* 右側：ハーブのシードペーパー・ネームタグ風 */
-.tag-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #436a56;
-    margin-bottom: 20px;
-    border-bottom: 1px solid rgba(143, 168, 155, 0.3);
+/* 右側：記録リスト */
+.history-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 8px;
 }
 
-.tag-list {
+.history-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
-/* ウッディでクラフト紙のようなオーガニックカード */
-.tag-card {
-    background-color: #f7f5ed; /* 無漂白のクラフトペーパー風 */
-    border: 1px dashed rgba(67, 106, 86, 0.3);
-    border-radius: 12px;
-    padding: 16px;
-    position: relative;
-    box-shadow: 0 4px 12px rgba(44, 62, 53, 0.03);
-    overflow: hidden;
+/* 余白と陰影を抑えたモダンなカード */
+.history-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: all 0.15s;
 }
 
-.tag-card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background-color: #8fa89b; /* 優しいグリーンライン */
+.history-card:hover {
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
-.tag-card:hover {
-    border-style: solid;
-    border-color: #436a56;
-}
-
-.tag-num {
-    font-size: 9px;
-    font-weight: bold;
-    color: #7a9485;
-    letter-spacing: 0.1em;
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 6px;
 }
 
-.tag-teacher {
-    font-size: 13.5px;
-    font-weight: bold;
-    color: #2c3e35;
-    margin-bottom: 6px;
+.history-num {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
 }
 
-.tag-date {
+.history-teacher {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.history-date {
     font-size: 11px;
-    color: #7a9485;
+    color: #64748b;
 }
 
-/* 未選択：ジョウロと双葉 */
-.oasis-state {
+/* 未選択時のプレースホルダー */
+.empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #7a9485;
+    color: #94a3b8;
     text-align: center;
 }
 
-.oasis-icon {
-    font-size: 36px;
+/* CSSで作成するミニマルな読み込みリング */
+.loading-ring {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(37, 99, 235, 0.1);
+    border-left-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
     margin-bottom: 16px;
-    animation: watering 3s infinite ease-in-out;
-    transform-origin: bottom right;
 }
 
-@keyframes watering {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-15deg); }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.oasis-text {
-    font-size: 11.5px;
-    line-height: 1.8;
+.empty-text {
+    font-size: 12px;
+    line-height: 1.6;
 }
 </style>
 
@@ -332,43 +323,43 @@ select:hover {
 
 <body>
 
-<!-- ヘッダー -->
-<div class="garden-header">
+<!-- アプリヘッダー -->
+<div class="app-header">
     <div class="brand-title">
-        <span class="brand-icon">🌿</span>
-        <span>BOTANICAL OASIS // RECORD LAB</span>
+        <div class="brand-dot"></div>
+        <span>Data Connection Dashboard</span>
     </div>
-    <div class="garden-status">GREENHOUSE_01</div>
+    <div class="app-status">SaaS Portal v1.2</div>
 </div>
 
 <!-- メインエリア -->
-<div class="garden-workspace">
+<div class="app-workspace">
 
-    <!-- 左パネル：苗木（生徒）一覧 -->
-    <div class="garden-panel">
+    <!-- 左パネル：生徒一覧 -->
+    <div class="app-panel">
         <div class="panel-header">
-            <span>🍃 NURSERY INDEX (育成台帳)</span>
+            <span>STUDENT SUMMARY</span>
         </div>
         <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>ソート:</span>
+                    <span>並び替え:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">育成（特訓）回数順</option>
-                        <option value="id">品種（生徒）ID 順</option>
+                        <option value="count">指導回数順</option>
+                        <option value="id">生徒 ID 順</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-herb" onclick="refreshData()">新芽を同期</button>
+                    <button class="btn-primary" onclick="refreshData()">同期する</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="garden-table" id="summaryTable">
+            <table class="app-table" id="summaryTable">
                 <thead>
                     <tr>
                         <th>生徒識別 ID</th>
-                        <th style="text-align: right; width: 110px;">指導回数</th>
+                        <th style="text-align: right; width: 100px;">指導回数</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -378,18 +369,17 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右パネル：シードタグ（指導履歴） -->
-    <div class="garden-panel">
+    <!-- 右パネル：履歴詳細 -->
+    <div class="app-panel">
         <div class="panel-header">
-            <span>🏷️ SEED TAGS (お世話の履歴)</span>
+            <span>ACTIVITY DETAILS</span>
         </div>
         <div id="historyArea" class="panel-body">
-            <!-- 未選択画面 -->
-            <div class="oasis-state">
-                <div class="oasis-icon">🚿</div>
-                <p class="oasis-text">
-                    温室に優しい風が吹き込んでいます。<br>
-                    左の生徒を選択して、これまでの育成ログ（指導履歴）を開いてください。
+            <!-- 初期表示 -->
+            <div class="empty-state">
+                <p class="empty-text">
+                    データは保護されています。<br>
+                    左の生徒 ID を選択してアクティビティ履歴を読み込んでください。
                 </p>
             </div>
         </div>
@@ -405,7 +395,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "最終お世話: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "Last update: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -443,7 +433,7 @@ function loadSummary(){
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="sprout-badge">${student.count} 芽</span>
+                    <span class="count-badge">${student.count} 回</span>
                 </td>
             </tr>
             `;
@@ -455,17 +445,17 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.garden-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.app-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
     }
 
-    // 爽やかなロード表示
+    // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="oasis-state">
-            <div class="oasis-icon">🌱</div>
-            <p class="oasis-text">${studentId} の育成ノートを紐解いています...</p>
+        <div class="empty-state">
+            <div class="loading-ring"></div>
+            <p class="empty-text">セッションデータを取得中 (${studentId})</p>
         </div>
     `;
 
@@ -473,17 +463,19 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="tag-title">🌿 ${studentId} の成長記録</div>
-        <div class="tag-list">
+        <div class="history-title">${studentId} - 指導セッション履歴</div>
+        <div class="history-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="tag-card">
-                <div class="tag-num">SESSION_0${i+1}</div>
-                <div class="tag-teacher">担当ガーデナー：${data[i].teacher} 先生</div>
-                <div class="tag-date">観察日時：${date.toLocaleString("ja-JP")}</div>
+            <div class="history-card">
+                <div class="history-card-header">
+                    <span class="history-num">Session 0${i+1}</span>
+                    <span class="history-date">${date.toLocaleString("ja-JP")}</span>
+                </div>
+                <div class="history-teacher">担当：${data[i].teacher} 講師</div>
             </div>
             `;
         }
@@ -493,9 +485,8 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="oasis-state" style="color: #c05c5c;">
-                <div class="oasis-icon">⚠️</div>
-                <p class="oasis-text">通信の水分が不足しているようです。新芽を同期（更新）してください。</p>
+            <div class="empty-state" style="color: #ef4444;">
+                <p class="empty-text">接続エラーが発生しました。時間を置いて同期を再実行してください。</p>
             </div>
         `;
     });
