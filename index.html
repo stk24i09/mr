@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🍔 RETRO DINER // STUDENT LOG CONNECTION</title>
+<title>🛠️ GARAGE RACK // CONTROL TERMINAL</title>
 
 <style>
 /* 共通リセット */
@@ -15,68 +15,70 @@
 }
 
 body {
-    /* アメリカンレトロなサンセリフと可愛いポップフォント */
-    font-family: "Futura", "Helvetica Neue", "Arial", "Comic Sans MS", cursive, sans-serif;
-    background-color: #fdfcf5; /* バニラシェイク・クリーム */
-    /* 薄いチェッカーフラッグ柄の背景 */
+    /* 硬質でインダストリアルなサンセリフと等幅フォント */
+    font-family: "Impact", "Arial Black", "Consolas", "Courier New", monospace, sans-serif;
+    background-color: #121314; /* 鋳鉄のような極暗グレー */
+    /* 縞鋼板（チェッカープレート）を模した極薄のパターン背景 */
     background-image: 
-        linear-gradient(45deg, #f8f6e9 25%, transparent 25%), 
-        linear-gradient(-45deg, #f8f6e9 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #f8f6e9 75%),
-        linear-gradient(-45deg, transparent 75%, #f8f6e9 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-    color: #333;
+        linear-gradient(45deg, #18191a 25%, transparent 25%), 
+        linear-gradient(-45deg, #18191a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #18191a 75%),
+        linear-gradient(-45deg, transparent 75%, #18191a 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    color: #d1d2d3; /* くすんだスチール色 */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 24px;
-    letter-spacing: 0.02em;
+    padding: 32px;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* ヘッダー：ダイナーのネオン看板風 */
-.diner-header {
-    height: 70px;
+/* ヘッダー：工業用マシンの銘板（ネームプレート）風 */
+.garage-header {
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 24px;
     margin-bottom: 24px;
-    padding: 0 20px;
-    background-color: #e74c3c; /* チェリーレッド */
-    border: 4px solid #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 0 #c0392b, 0 8px 15px rgba(0,0,0,0.2);
+    background-color: #1a1c1e;
+    border: 2px solid #2d3135;
+    border-left: 6px solid #d35400; /* アンバーオレンジのアクセント */
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5);
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 900;
-    color: #fff;
-    text-shadow: 3px 3px 0 #c0392b, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;
+    color: #f3f4f6;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.brand-icon {
-    font-size: 32px;
+.brand-title span {
+    color: #d35400;
 }
 
-.station-status {
-    font-size: 14px;
-    font-weight: bold;
-    color: #f1c40f; /* サンシャインイエロー */
-    background-color: #333;
-    padding: 6px 16px;
-    border-radius: 20px;
-    border: 2px solid #fff;
-    letter-spacing: 0.1em;
+.system-volt {
+    font-size: 11px;
+    font-family: "Consolas", monospace;
+    color: #2ecc71; /* インジケーターのグリーン */
+    background: #0d1b15;
+    padding: 4px 10px;
+    border: 1px solid #145a32;
+    border-radius: 3px;
+    letter-spacing: 1px;
 }
 
-/* 2カラムレイアウト */
-.diner-workspace {
+/* 2カラムワークスペース */
+.garage-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
@@ -84,283 +86,299 @@ body {
     width: 100%;
 }
 
-/* ダイナーのカウンターや席をイメージしたパネル */
-.diner-panel {
+/* スチールラックをイメージしたパネル */
+.garage-panel {
     flex: 1;
-    background: #fff;
-    border: 4px solid #333;
-    border-radius: 16px;
+    background: #16181a;
+    border: 2px solid #2d3135;
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
 }
 
 .panel-header {
-    /* チェッカーフラッグ柄のヘッダー */
-    background-image: 
-        linear-gradient(45deg, #333 25%, transparent 25%), 
-        linear-gradient(-45deg, #333 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #333 75%),
-        linear-gradient(-45deg, transparent 75%, #333 75%);
-    background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-    background-color: #fff;
-    padding: 12px 20px;
-    border-bottom: 4px solid #333;
+    background-color: #1c1e22;
+    padding: 16px 20px;
+    border-bottom: 2px solid #2d3135;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .panel-title {
-    font-size: 16px;
-    font-weight: 900;
-    color: #fff;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    background-color: rgba(0,0,0,0.7);
-    padding: 4px;
-    display: inline-block;
-}
-
-.panel-body {
-    overflow-y: auto;
-    flex: 1;
-    padding: 24px;
-}
-
-/* コントロール（メニュー注文風） */
-.control-panel {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 24px;
-    background-color: #fcf8e3; /* 薄いイエロー */
-    border: 2px dashed #e67e22; /* オレンジの破線 */
-    border-radius: 12px;
-    padding: 16px;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #e67e22;
-}
-
-/* ポップなセレクトボックス */
-select {
-    padding: 8px 16px;
-    font-size: 13px;
-    font-family: inherit;
-    border: 3px solid #333;
-    border-radius: 8px;
-    background-color: #fff;
-    color: #333;
-    outline: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-select:hover {
-    background-color: #fdfcf5;
-}
-
-/* ジュークボックスのボタン風同期ボタン */
-.btn-diner {
-    padding: 8px 20px;
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 900;
-    background-color: #3498db; /* アクアブルー */
-    color: #fff;
-    border: 3px solid #333;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.1s;
-    box-shadow: 0 4px 0 #333;
-    text-transform: uppercase;
-}
-
-.btn-diner:hover {
-    background-color: #5dade2;
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #333;
-}
-
-.btn-diner:active {
-    transform: translateY(4px);
-    box-shadow: none;
-}
-
-#updateTime {
-    font-size: 11px;
-    color: #7f8c8d;
-    margin-top: 6px;
-    text-align: right;
-    font-weight: bold;
-}
-
-/* メニュー表風のテーブル */
-.diner-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.diner-table th {
-    padding: 12px 8px;
     font-size: 12px;
-    color: #e74c3c;
+    font-weight: bold;
+    color: #a0a5a9;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    text-align: left;
-    border-bottom: 3px solid #333;
-}
-
-.diner-table td {
-    padding: 18px 8px;
-    font-size: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-/* オーダーボタン風（生徒名） */
-.student-btn {
-    font-size: 16px;
-    font-family: inherit;
-    font-weight: 900;
-    color: #3498db;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.1s;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.student-btn:hover {
-    color: #e74c3c;
-    transform: scale(1.05);
-}
-
-/* 選択行：ケチャップとマスタードのような陽気な黄色ハイライト */
-.row-selected td {
-    background-color: #fef9e7 !important;
-    border-bottom: 2px solid #f1c40f;
-}
-
-.row-selected .student-btn {
-    color: #e74c3c;
-}
-
-/* オーダー数バッジ（ソーダのキャップ風） */
-.order-badge {
-    background-color: #f1c40f;
-    color: #333;
-    border: 2px solid #333;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 900;
-}
-
-/* 右側：履歴（オーダー伝票風） */
-.order-slip-title {
-    font-size: 18px;
-    font-weight: 900;
-    color: #e74c3c;
-    margin-bottom: 24px;
-    border-bottom: 3px solid #333;
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-.order-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* レトロな伝票・メニュー風カード */
-.order-card {
-    background-color: #fff;
-    border: 3px solid #333;
-    border-radius: 8px;
-    padding: 16px;
-    position: relative;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
-}
-
-.order-card:hover {
-    background-color: #fdfcf5;
-}
-
-/* 伝票のパンチ穴を疑似表現 */
-.order-card::before {
+.panel-title::before {
     content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 12px;
-    height: 12px;
-    background-color: #fdfcf5; /* 背景色で抜く */
-    border: 2px solid #333;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #d35400;
     border-radius: 50%;
+    box-shadow: 0 0 8px #d35400;
 }
 
-.order-num {
+/* コントロールコンソール（アナログアンプのつまみ風） */
+.control-console {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    background-color: #111214;
+    border: 1px solid #23272a;
+    border-radius: 4px;
+    padding: 12px 16px;
+}
+
+.selector-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-family: "Consolas", monospace;
+    color: #888;
+}
+
+/* ヘヴィ・デューティーなセレクトボックス */
+select {
+    background: #1a1c1e;
+    color: #d1d2d3;
+    border: 1px solid #3a3f44;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: "Consolas", monospace;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+select:focus {
+    border-color: #d35400;
+}
+
+/* トグルスイッチ風の金属製同期ボタン */
+.btn-industrial {
+    background: linear-gradient(to bottom, #2c3035, #1c1e22);
+    color: #e5e7eb;
+    border: 1px solid #3e444b;
+    border-bottom: 3px solid #111214;
+    padding: 6px 16px;
+    font-family: "Consolas", monospace;
     font-size: 11px;
     font-weight: bold;
-    color: #e67e22;
-    margin-bottom: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.1s;
 }
 
-.order-main {
-    font-size: 14px;
+.btn-industrial:hover {
+    background: linear-gradient(to bottom, #353b41, #24292e);
+    border-color: #4e555d;
+}
+
+.btn-industrial:active {
+    border-bottom-width: 1px;
+    transform: translateY(2px);
+}
+
+#updateTime {
+    font-size: 10px;
+    font-family: "Consolas", monospace;
+    color: #666;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.panel-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 20px;
+}
+
+/* テーブルスタイル（配管やメタルラックをイメージ） */
+.garage-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.garage-table th {
+    padding: 10px 8px;
+    font-size: 10px;
+    font-family: "Consolas", monospace;
+    color: #666;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 2px solid #2d3135;
+}
+
+.garage-table td {
+    padding: 14px 8px;
+    font-size: 13px;
+    border-bottom: 1px solid #202225;
+}
+
+/* ギアやメタルパーツを想起させる生徒名選択 */
+.target-btn {
+    font-size: 13px;
+    font-family: "Consolas", monospace;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 6px;
+    color: #a0a5a9;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all 0.15s;
 }
 
-.order-main span {
-    color: #e74c3c;
+.target-btn:hover {
+    color: #d35400;
+    text-shadow: 0 0 10px rgba(211,84,0,0.3);
 }
 
-.order-date {
-    font-size: 12px;
-    color: #7f8c8d;
+/* アクティブ選択行：ヴィンテージウッドのような赤みのブラウン */
+.row-active td {
+    background-color: #231c16 !important; /* オイルステインウッド風 */
+    border-top: 1px solid rgba(211,84,0,0.3);
+    border-bottom: 1px solid rgba(211,84,0,0.3);
+}
+
+.row-active .target-btn {
+    color: #d35400;
+}
+
+/* メタルプレート風カウンター */
+.gear-badge {
+    background-color: #111214;
+    color: #d4ac0d; /* 真鍮ゴールド */
+    border: 1px solid #3a321a;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: "Consolas", monospace;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.row-active .gear-badge {
+    color: #f39c12;
+    border-color: #e67e22;
+    background-color: #1c1008;
+}
+
+/* 右側：詳細（工業用ワークカード風） */
+.card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #f3f4f6;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #2d3135;
+    font-family: "Consolas", monospace;
+}
+
+/* タイムカード風ログカード */
+.work-card {
+    background-color: #1a1c1e;
+    border: 1px solid #2d3135;
+    border-left: 3px solid #d4ac0d; /* ブラスライン */
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.work-card:hover {
+    background-color: #1e2124;
+}
+
+.work-main {
+    font-size: 13px;
+    color: #cbd5e1;
     font-family: sans-serif;
 }
 
-/* 未選択：営業時間外のジュークボックス */
-.closed-state {
+.work-main strong {
+    color: #f3f4f6;
+    font-family: "Consolas", monospace;
+}
+
+.work-meta {
+    font-family: "Consolas", monospace;
+    font-size: 11px;
+    color: #70757a;
+}
+
+/* 未選択：無稼働状態のモニター */
+.offline-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #7f8c8d;
+    color: #555;
     text-align: center;
 }
 
-.closed-icon {
-    font-size: 48px;
-    margin-bottom: 20px;
-    animation: jukebox-wobble 2s infinite ease-in-out;
+.offline-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    color: #333;
 }
 
-@keyframes jukebox-wobble {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(3deg); }
-}
-
-.closed-text {
-    font-size: 14px;
+.offline-prompt {
+    font-size: 11px;
+    font-family: "Consolas", monospace;
     line-height: 1.8;
-    font-weight: bold;
+}
+
+/* 歯車調ローディング */
+.gear-loader {
+    width: 24px;
+    height: 24px;
+    border: 3px dashed #d35400;
+    border-radius: 50%;
+    animation: rotate-gear 2s infinite linear;
+    margin-bottom: 16px;
+}
+
+@keyframes rotate-gear {
+    to { transform: rotate(360deg); }
+}
+
+/* タフなスクロールバー */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #111214;
+}
+::-webkit-scrollbar-thumb {
+    background: #2a2d30;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3e4448;
 }
 </style>
 
@@ -368,64 +386,65 @@ select:hover {
 
 <body>
 
-<!-- ヘッダー -->
-<div class="diner-header">
+<!-- 工業用ネームプレート調ヘッダー -->
+<div class="garage-header">
     <div class="brand-title">
-        <span class="brand-icon">🍔</span>
-        <span>RETRO DINER // LOG CONNECTION</span>
+        <span>[🛠️]</span> GARAGE_RACK // ADMIN_PORT
     </div>
-    <div class="station-status">OPEN 24 HOURS</div>
+    <div class="system-volt">SYS_STATUS: ACTIVE</div>
 </div>
 
 <!-- メインエリア -->
-<div class="diner-workspace">
+<div class="garage-workspace">
 
-    <!-- 左パネル：メニュー（生徒名簿） -->
-    <div class="diner-panel">
+    <!-- 左パネル：ツール（生徒名簿） -->
+    <div class="garage-panel">
         <div class="panel-header">
-            <div class="panel-title">MENU: ACCESS ID List</div>
+            <div class="panel-title">Target Registry</div>
         </div>
         <div class="panel-body">
-            <div class="control-panel">
-                <div class="filter-group">
-                    <span>SORT BY:</span>
+            
+            <div class="control-console">
+                <div class="selector-group">
+                    <span>SORT:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Most Orders (指導回数)</option>
-                        <option value="id">ID (Alphabetical)</option>
+                        <option value="count">Count (最高稼働順)</option>
+                        <option value="id">Alphabetical (ID順)</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-diner" onclick="refreshData()">SYNC (同期)</button>
+                    <button class="btn-industrial" onclick="refreshData()">Sync Server</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="diner-table" id="summaryTable">
+            <table class="garage-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>Identifier (ID)</th>
-                        <th style="text-align: right; width: 100px;">Orders</th>
+                        <th style="padding-left: 8px;">Target Unit (ID)</th>
+                        <th style="text-align: right; padding-right: 8px; width: 80px;">Tasks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JSで展開 -->
+                    <!-- JS展開 -->
                 </tbody>
             </table>
+
         </div>
     </div>
 
-    <!-- 右パネル：オーダー伝票（指導履歴） -->
-    <div class="diner-panel">
+    <!-- 右パネル：タスクカード（指導履歴） -->
+    <div class="garage-panel">
         <div class="panel-header">
-            <div class="panel-title">Your Order History</div>
+            <div class="panel-title">Operation Logs</div>
         </div>
         <div id="historyArea" class="panel-body">
-            <!-- 未選択表示 -->
-            <div class="closed-state">
-                <div class="closed-icon">📻</div>
-                <p class="closed-text">
-                    Welcome to Retro Diner!<br>
-                    左のID（メニュー）をクリックして、これまでの特訓オーダー（指導履歴）を呼び出してください。
+            <!-- 未選択状態 -->
+            <div class="offline-state">
+                <div class="offline-icon">🔌</div>
+                <p class="offline-prompt">
+                    SYSTEM IDLE // SELECT TARGET ON THE LEFT<br>
+                    左リストから識別IDを選択して、ログをアクティブ化してください。
                 </p>
             </div>
         </div>
@@ -441,7 +460,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYNC TIME: " + now.toLocaleTimeString("en-US");
+    document.getElementById("updateTime").innerHTML = "SYNC_T: " + now.toLocaleTimeString("en-US", {hour12: false});
 }
 
 function loadSummary(){
@@ -449,8 +468,8 @@ function loadSummary(){
     .then(response => response.json())
     .then(data => {
         let html = "";
-
         let students = [];
+        
         for(let id in data){
             students.push({
                 id: id,
@@ -474,12 +493,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="student-btn" onclick="showHistory('${student.id}')">
-                        🥤 ${student.id}
+                    <button class="target-btn" onclick="showHistory('${student.id}')">
+                        &gt; ${student.id}
                     </button>
                 </td>
-                <td style="text-align: right;">
-                    <span class="order-badge">${student.count}</span>
+                <td style="text-align: right; padding-right: 8px;">
+                    <span class="gear-badge">${student.count} LOGS</span>
                 </td>
             </tr>
             `;
@@ -490,18 +509,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.diner-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブ行の変更
+    document.querySelectorAll('.garage-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-selected');
+        selectedRow.classList.add('row-active');
     }
 
-    // ロード表示
+    // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="closed-state">
-            <div class="closed-icon" style="animation: jukebox-wobble 0.5s infinite linear;">🍔</div>
-            <p class="closed-text">Now Cooking... データをオーブンで焼いています...</p>
+        <div class="offline-state">
+            <div class="gear-loader"></div>
+            <p class="offline-prompt">RETRIEVING MACHINE DATA FOR ${studentId}...</p>
         </div>
     `;
 
@@ -509,17 +528,22 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="order-slip-title">ORDER SLIP // ${studentId}様</div>
-        <div class="order-stack">
+        <div class="detail-title">> REGISTERED STREAM: ${studentId}</div>
+        <div class="card-stack">
         `;
 
         for(let i = 0; i < data.length; i++){
-            let date = new Date(data[i].date);
+            let d = new Date(data[i].date);
+            let dateStr = d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' }) + " " + d.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false });
+
             html += `
-            <div class="order-card">
-                <div class="order-num">GUEST CHECK #0${i+1}</div>
-                <div class="order-main">担当スタッフ：<span>${data[i].teacher}</span> 先生</div>
-                <div class="order-date">日時：${date.toLocaleString("ja-JP")}</div>
+            <div class="work-card">
+                <div class="work-main">
+                    Supervisor / Instructor: <strong>${data[i].teacher}</strong>
+                </div>
+                <div class="work-meta">
+                    [ ${dateStr} ]
+                </div>
             </div>
             `;
         }
@@ -529,9 +553,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="closed-state" style="color: #e74c3c;">
-                <div class="closed-icon">💥</div>
-                <p class="closed-text">Oops! 通信エラーです。オーブンの調子が悪いようです。「SYNC」ボタンを押してください。</p>
+            <div class="offline-state" style="color: #e74c3c;">
+                <div class="offline-icon">🚨</div>
+                <p class="offline-prompt">CONNECTION ERROR // SYNC FAILED.</p>
             </div>
         `;
     });
