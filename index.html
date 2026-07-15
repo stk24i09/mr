@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workspace</title>
+<title>Workspace — Dev Portal</title>
 
 <style>
 /* 共通リセット */
@@ -15,51 +15,81 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #ffffff;
-    color: #111111;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #09090b; /* 漆黒に近いニュートラルグレー */
+    color: #f4f4f5; /* 柔らかな白 */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 40px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    padding: 20px;
 }
 
-/* シンプルなヘッダー（余白でゾーニング） */
+/* ヘッダー */
 .header {
+    height: 48px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 48px;
+    margin-bottom: 16px;
+    padding: 0 16px;
+    background-color: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 8px;
     flex-shrink: 0;
 }
 
-.brand-title {
-    font-size: 18px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-symbol {
+    width: 14px;
+    height: 14px;
+    border: 2.5px solid #818cf8; /* テックパープル */
+    border-radius: 3px;
+    transform: rotate(45deg);
+}
+
+.brand-text {
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
 }
 
-.app-status {
-    font-size: 12px;
-    color: #888888;
-    font-weight: 400;
+.status-badge {
+    font-size: 11px;
+    color: #a1a1aa;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-/* 2カラムレイアウト */
+/* 点滅しないスマートな静的インジケーター */
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #10b981; /* 正常稼働を示すグリーン */
+    border-radius: 50%;
+}
+
+/* メインレイアウト */
 .workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 64px; /* 広めの余白で情報の混ざりを防ぐ */
+    gap: 16px;
     width: 100%;
 }
 
 /* パネル */
 .panel {
     flex: 1;
+    background-color: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -67,188 +97,219 @@ body {
 }
 
 .panel-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid #27272a;
     font-size: 11px;
     font-weight: 600;
-    color: #888888;
-    letter-spacing: 0.08em;
+    color: #71717a;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    margin-bottom: 24px;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
+    padding: 20px;
 }
 
-/* コントロール（余白と文字だけで構成） */
+/* コントロール */
 .control-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 32px;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 13px;
-    color: #666666;
+    gap: 8px;
+    font-size: 12px;
+    color: #71717a;
 }
 
-/* プレーンなドロップダウン */
+/* スタイリッシュなセレクト */
 select {
-    padding: 4px 0;
-    font-size: 13px;
+    background-color: #09090b;
+    border: 1px solid #27272a;
+    color: #f4f4f5;
+    padding: 6px 12px;
+    font-size: 12px;
     font-family: inherit;
-    border: none;
-    border-bottom: 1px solid #e5e5e5;
-    background-color: transparent;
-    color: #111111;
+    border-radius: 6px;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.15s;
+    transition: all 0.15s;
 }
 
 select:hover {
-    border-color: #111111;
+    border-color: #3f3f46;
 }
 
-/* 境界線のないテキストボタン */
-.btn-plain {
-    background: none;
+select:focus {
+    border-color: #818cf8;
+}
+
+/* ミニマルなフラットボタン */
+.btn-action {
+    background-color: #f4f4f5;
+    color: #09090b;
     border: none;
+    padding: 6px 12px;
+    font-size: 12px;
     font-family: inherit;
-    font-size: 13px;
     font-weight: 500;
-    color: #111111;
+    border-radius: 6px;
     cursor: pointer;
-    padding: 4px 0;
-    border-bottom: 1px solid #111111;
-    transition: opacity 0.15s;
+    transition: background-color 0.15s;
 }
 
-.btn-plain:hover {
-    opacity: 0.6;
+.btn-action:hover {
+    background-color: #e4e4e7;
 }
 
 #updateTime {
     font-size: 10px;
-    color: #aaaaaa;
-    margin-top: 6px;
+    color: #52525b;
+    margin-top: 4px;
     text-align: right;
 }
 
-/* 線を極限まで省いたリスト（テーブル） */
-.list-table {
+/* グリッド風テーブル */
+.table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.list-table th {
-    padding: 8px 0;
+.table th {
+    padding: 8px;
     font-size: 11px;
     font-weight: 500;
-    color: #888888;
+    color: #71717a;
     text-align: left;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #27272a;
 }
 
-.list-table td {
-    padding: 16px 0;
-    font-size: 14px;
-    border-bottom: 1px solid #f9f9f9;
+.table td {
+    padding: 12px 8px;
+    font-size: 13px;
+    border-bottom: 1px solid #27272a;
 }
 
-/* リスト内のテキストリンク */
-.item-btn {
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 400;
-    color: #111111;
+/* リストアイテム（ボタン） */
+.student-btn {
     background: none;
     border: none;
+    color: #e4e4e7;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
     cursor: pointer;
     text-align: left;
-    transition: opacity 0.15s;
+    transition: color 0.15s;
 }
 
-.item-btn:hover {
-    opacity: 0.5;
+.student-btn:hover {
+    color: #818cf8;
 }
 
-/* 選択行：背景は変えず、文字の太さとわずかな左余白だけで表現 */
-.row-active .item-btn {
-    font-weight: 600;
-    padding-left: 8px;
-    border-left: 2px solid #111111;
+/* 選択行：全体の背景を一段明るくし、ボーダーをハイライト */
+.row-active td {
+    background-color: #27272a !important;
 }
 
-/* グレーのシンプルなカウント表示 */
-.count-text {
-    font-size: 13px;
-    color: #888888;
+.row-active .student-btn {
+    color: #818cf8;
+    font-weight: 500;
+}
+
+/* チップ形式の数量カウンター */
+.pill {
+    background-color: #27272a;
+    color: #a1a1aa;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
 }
 
 /* 右側：記録リスト */
-.history-title {
-    font-size: 16px;
+.history-section-title {
+    font-size: 14px;
     font-weight: 600;
-    color: #111111;
-    margin-bottom: 24px;
-    letter-spacing: -0.01em;
+    color: #f4f4f5;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.history-container {
+/* アクティブな対象の横に添える微細なインジケーター */
+.history-section-title::before {
+    content: "";
+    width: 3px;
+    height: 12px;
+    background-color: #818cf8;
+    border-radius: 2px;
+}
+
+.history-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 8px;
 }
 
-/* 枠線のないフラットなカード */
-.history-row {
+/* 境界線だけで構成されたフラットカード */
+.history-item {
+    border: 1px solid #27272a;
+    background-color: #09090b;
+    border-radius: 6px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+    transition: border-color 0.15s;
 }
 
-.history-main {
-    font-size: 14px;
-    font-weight: 500;
-    color: #111111;
+.history-item:hover {
+    border-color: #3f3f46;
 }
 
-.history-meta {
-    font-size: 12px;
-    color: #888888;
-    text-align: right;
+.history-teacher {
+    font-size: 13px;
+    color: #e4e4e7;
 }
 
-/* 未選択状態（何もない空間を贅沢に使う） */
-.blank-state {
+.history-date {
+    font-size: 11px;
+    color: #71717a;
+}
+
+/* プレースホルダー／ローディング状態 */
+.state-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #888888;
+    color: #71717a;
+    text-align: center;
 }
 
-.blank-text {
-    font-size: 13px;
-    font-weight: 400;
+.state-text {
+    font-size: 12px;
     line-height: 1.6;
 }
 
-/* スタイリッシュなフェードローダー（CSSのみ） */
-.minimal-loader {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #111111;
+/* スケルトンローダー（CSSのみ） */
+.skeleton-line {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #27272a;
     border-radius: 50%;
-    border-right-color: transparent;
-    animation: rotate 0.6s linear infinite;
+    border-top-color: #818cf8;
+    animation: rotate 0.8s linear infinite;
     margin-bottom: 16px;
 }
 
@@ -257,13 +318,20 @@ select:hover {
     100% { transform: rotate(360deg); }
 }
 
-/* スクロールバーの非表示（モバイルライクな挙動） */
-.panel-body::-webkit-scrollbar {
-    display: none;
+/* スクロールバーのカスタマイズ（ブラウザ標準をテック風に） */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
-.panel-body {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
 }
 </style>
 
@@ -271,39 +339,45 @@ select:hover {
 
 <body>
 
-<!-- ヘッダー -->
+<!-- アプリケーションヘッダー -->
 <div class="header">
-    <div class="brand-title">Directory</div>
-    <div class="app-status">Standard Portal</div>
+    <div class="brand">
+        <div class="brand-symbol"></div>
+        <span class="brand-text">INTEGRATION CONSOLE</span>
+    </div>
+    <div class="status-badge">
+        <div class="status-dot"></div>
+        <span>SYSTEM READ_ONLY</span>
+    </div>
 </div>
 
 <!-- ワークスペース -->
 <div class="workspace">
 
-    <!-- 左パネル：リスト一覧 -->
+    <!-- 左パネル：生徒一覧 -->
     <div class="panel">
-        <div class="panel-header">Students</div>
+        <div class="panel-header">Directory Database</div>
         <div class="panel-body">
             
             <div class="control-bar">
                 <div class="filter-group">
-                    <span>Sort by</span>
+                    <span>Sort</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Count</option>
-                        <option value="id">ID</option>
+                        <option value="count">Count (High to Low)</option>
+                        <option value="id">Alphabetical ID</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-plain" onclick="refreshData()">Sync</button>
+                    <button class="btn-action" onclick="refreshData()">Sync Live</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="list-table" id="summaryTable">
+            <table class="table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>Identifier</th>
-                        <th style="text-align: right; width: 80px;">Sessions</th>
+                        <th>Access ID</th>
+                        <th style="text-align: right; width: 80px;">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -314,15 +388,16 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右パネル：履歴詳細 -->
+    <!-- 右パネル：ログ詳細 -->
     <div class="panel">
-        <div class="panel-header">Activity</div>
+        <div class="panel-header">Console Output</div>
         <div id="historyArea" class="panel-body">
             
             <!-- 初期状態 -->
-            <div class="blank-state">
-                <p class="blank-text">
-                    Select a student ID to view session logs.
+            <div class="state-container">
+                <p class="state-text">
+                    Waiting for selection.<br>
+                    Select an Access ID on the left to inspect activity.
                 </p>
             </div>
 
@@ -339,7 +414,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "Updated: " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: false });
+    document.getElementById("updateTime").innerHTML = "Last check: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -372,12 +447,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="item-btn" onclick="showHistory('${student.id}')">
+                    <button class="student-btn" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="count-text">${student.count}</span>
+                    <span class="pill">${student.count}</span>
                 </td>
             </tr>
             `;
@@ -388,8 +463,8 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブな行のスタイリング切り替え
-    document.querySelectorAll('.list-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
+    // アクティブな行のハイライト変更
+    document.querySelectorAll('.table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-active');
@@ -397,9 +472,9 @@ function showHistory(studentId){
 
     // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="blank-state" style="flex-direction: column;">
-            <div class="minimal-loader"></div>
-            <p class="blank-text">Loading ${studentId}...</p>
+        <div class="state-container">
+            <div class="skeleton-line"></div>
+            <p class="state-text">Resolving record logs for ${studentId}...</p>
         </div>
     `;
 
@@ -407,20 +482,20 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="history-title">${studentId}</div>
-        <div class="history-container">
+        <div class="history-section-title">${studentId} — Activity Log</div>
+        <div class="history-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let d = new Date(data[i].date);
-            let dateStr = d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
+            let dateStr = d.toLocaleDateString("ja-JP") + " " + d.toLocaleTimeString("ja-JP", {hour: '2-digit', minute:'2-digit'});
 
             html += `
-            <div class="history-row">
-                <div class="history-main">
+            <div class="history-item">
+                <div class="history-teacher">
                     Instructor: ${data[i].teacher}
                 </div>
-                <div class="history-meta">
+                <div class="history-date">
                     ${dateStr}
                 </div>
             </div>
@@ -432,8 +507,8 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="blank-state">
-                <p class="blank-text" style="color: #ff0000;">Failed to load data. Please try again.</p>
+            <div class="state-container" style="color: #f87171;">
+                <p class="state-text">Fetch abort: Network connection lost or server error.</p>
             </div>
         `;
     });
