@@ -2,102 +2,143 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
 <title>面接練習回数管理システム</title>
 
 <style>
-
-body{
-    font-family:sans-serif;
-    margin:30px;
-    max-width:1400px;
+/* 全体の基本設定（無駄な余白を消し、読みやすいフォントに） */
+body {
+    font-family: sans-serif;
+    margin: 40px;
+    background-color: #ffffff;
+    color: #333333;
 }
 
-.container{
-    display:flex;
-    flex-direction:row;
-    align-items:flex-start;
-    gap:30px;
+/* 左右並びのレイアウト設定 */
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.left-panel{
-    flex:1;
-    min-width:400px;
+.left-panel {
+    flex: 1;
+    min-width: 400px;
 }
 
-.right-panel{
-    flex:1;
-    min-width:400px;
+.right-panel {
+    flex: 1;
+    min-width: 400px;
 }
 
-table{
-    border-collapse:collapse;
-    width:100%;
+/* 見出し：シンプルで引き締まった黒 */
+h1, h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #111111;
 }
 
-th,td{
-    border:1px solid #000;
-    padding:10px;
-    text-align:center;
+/* 操作エリア：シンプルに横並び */
+.sortArea {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 
-th{
-    background:#eeeeee;
+select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background: #ffffff;
 }
 
-.student-link{
-    color:blue;
-    cursor:pointer;
-    text-decoration:underline;
+button {
+    padding: 6px 15px;
+    font-size: 14px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-.student-link:hover{
-    color:red;
+button:hover {
+    background-color: #f5f5f5;
 }
 
-#historyArea{
-    border:1px solid #ccc;
-    padding:15px;
-    min-height:300px;
-    background:#fafafa;
+#updateTime {
+    margin: 0;
+    color: #666666;
+    font-size: 13px;
 }
 
-.sortArea{
-    margin-bottom:15px;
+/* テーブル：すっきりした細い線と、十分な余白 */
+table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
-select{
-    padding:5px;
-    font-size:16px;
+th, td {
+    border-bottom: 1px solid #e0e0e0; /* 細いグレーの境界線 */
+    padding: 12px;
+    text-align: left;
 }
 
-button{
-
-    padding:6px 15px;
-
-    font-size:16px;
-
-    margin-left:15px;
-
-    cursor:pointer;
-
+th {
+    background-color: #fafafa;
+    color: #555555;
+    font-weight: bold;
+    font-size: 14px;
 }
 
-button:hover{
-
-    background:#eeeeee;
-
+td {
+    font-size: 15px;
 }
 
-#updateTime{
-
-    margin-top:10px;
-
-    color:#555;
-
+/* 数値・回数だけは右寄せ、または中央にして見やすく */
+th:nth-child(2), td:nth-child(2) {
+    text-align: center;
 }
 
+/* 生徒IDのリンク：上品な青色に */
+.student-link {
+    color: #0066cc;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.student-link:hover {
+    color: #ff3333;
+}
+
+/* 選択された生徒の行を目立たせる（薄いグレー） */
+.active-row {
+    background-color: #f0f7ff !important;
+}
+
+/* 右側の履歴エリア */
+#historyArea {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 24px;
+    min-height: 400px;
+    background-color: #ffffff;
+}
+
+.placeholder-text {
+    color: #888888;
+    text-align: center;
+    margin-top: 150px;
+    font-size: 14px;
+}
 </style>
 
 </head>
@@ -105,479 +146,153 @@ button:hover{
 
 <body>
 
-
 <div class="container">
 
+    <!-- 左パネル：一覧 -->
+    <div class="left-panel">
+        <h1>面接練習回数一覧</h1>
+        
+        <div class="sortArea">
+            <label for="sortSelect">並び替え：</label>
+            <select id="sortSelect" onchange="loadSummary()">
+                <option value="count">面接回数順</option>
+                <option value="id">生徒ID順</option>
+            </select>
+            
+            <button onclick="refreshData()">🔄 更新</button>
+            <span id="updateTime"></span>
+        </div>
 
-<div class="left-panel">
+        <table id="summaryTable">
+            <tr>
+                <th>生徒ID</th>
+                <th>面接回数</th>
+            </tr>
+        </table>
+    </div>
 
-
-<h1>面接練習回数一覧</h1>
-
-
-<div class="sortArea">
-
-
-<label for="sortSelect">
-並び替え：
-</label>
-
-
-<select id="sortSelect" onchange="loadSummary()">
-
-
-
-<option value="count">
-面接回数順
-</option>
-
-
-
-<option value="id">
-生徒ID順
-</option>
-
-
-
-</select>
-
-
-<button onclick="refreshData()">
-
-🔄 更新
-
-</button>
-
-
-<p id="updateTime">
-
-</p>
-
+    <!-- 右パネル：履歴詳細 -->
+    <div class="right-panel">
+        <div id="historyArea">
+            <p class="placeholder-text">生徒IDをクリックすると、ここに詳細な履歴が表示されます。</p>
+        </div>
+    </div>
 
 </div>
-
-
-
-<table id="summaryTable">
-
-
-<tr>
-
-<th>
-生徒ID
-</th>
-
-
-<th>
-面接回数
-</th>
-
-
-</tr>
-
-
-</table>
-
-
-
-</div>
-
-
-
-
-<div class="right-panel">
-
-
-<div id="historyArea">
-
-
-<h2>
-面接履歴
-</h2>
-
-
-<p>
-生徒IDをクリックしてください。
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
 
 
 <script>
-
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
-
-
+const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
 loadSummary();
 
-
-
-
-
 // 更新ボタン
-
 function refreshData(){
-
-
     loadSummary();
-
-
     let now = new Date();
-
-
-    document.getElementById("updateTime").innerHTML =
-
-    "最終更新：" +
-
-    now.toLocaleString("ja-JP");
-
-
+    document.getElementById("updateTime").innerHTML = "（最終更新：" + now.toLocaleTimeString("ja-JP") + "）";
 }
-
-
-
-
 
 function loadSummary(){
+    fetch(API_URL + "?mode=summary")
+    .then(response=>response.json())
+    .then(data=>{
+        let html = `
+        <tr>
+            <th>生徒ID</th>
+            <th>面接回数</th>
+        </tr>
+        `;
 
+        let students=[];
+        for(let id in data){
+            students.push({
+                id: id,
+                count: data[id]
+            });
+        }
 
+        const sortType = document.getElementById("sortSelect").value;
 
-fetch(API_URL + "?mode=summary")
+        // 面接回数順
+        if(sortType=="count"){
+            students.sort(function(a, b){
+                return b.count - a.count;
+            });
+        }
+        // 生徒ID順
+        else {
+            students.sort(function(a, b){
+                const numA = parseInt(a.id.match(/\d+$/)[0]);
+                const numB = parseInt(b.id.match(/\d+$/)[0]);
+                return numA - numB;
+            });
+        }
 
-.then(response=>response.json())
+        students.forEach(function(student){
+            html += `
+            <tr id="row-${student.id}">
+                <td>
+                    <span class="student-link" onclick="showHistory('${student.id}')">
+                        ${student.id}
+                    </span>
+                </td>
+                <td>
+                    ${student.count}回
+                </td>
+            </tr>
+            `;
+        });
 
-
-.then(data=>{
-
-
-let html = `
-
-<tr>
-
-<th>
-生徒ID
-</th>
-
-
-<th>
-面接回数
-</th>
-
-
-</tr>
-
-`;
-
-
-
-let students=[];
-
-
-
-for(let id in data){
-
-
-students.push({
-
-id:id,
-
-count:data[id]
-
-});
-
-
+        document.getElementById("summaryTable").innerHTML = html;
+    });
 }
-
-
-
-
-
-const sortType =
-
-document.getElementById("sortSelect").value;
-
-
-
-
-
-// 面接回数順
-
-if(sortType=="count"){
-
-
-students.sort(function(a,b){
-
-
-return b.count-a.count;
-
-
-});
-
-
-}
-
-
-
-
-// 生徒ID順
-
-else{
-
-
-students.sort(function(a,b){
-
-
-const numA =
-
-parseInt(a.id.match(/\d+$/)[0]);
-
-
-
-const numB =
-
-parseInt(b.id.match(/\d+$/)[0]);
-
-
-
-return numA-numB;
-
-
-
-});
-
-
-}
-
-
-
-
-
-students.forEach(function(student){
-
-
-
-html += `
-
-
-<tr>
-
-
-<td>
-
-
-<span
-
-class="student-link"
-
-onclick="showHistory('${student.id}')">
-
-
-${student.id}
-
-
-</span>
-
-
-</td>
-
-
-<td>
-
-
-${student.count}回
-
-
-</td>
-
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-
-
-document.getElementById("summaryTable").innerHTML =
-
-html;
-
-
-
-});
-
-
-}
-
-
-
-
-
-
 
 function showHistory(studentId){
-
-
-
-fetch(
-
-API_URL+
-
-"?mode=history&id="+
-
-encodeURIComponent(studentId)
-
-)
-
-
-
-.then(response=>response.json())
-
-
-
-.then(data=>{
-
-
-
-let html = `
-
-
-<h2>
-
-${studentId}
-
-の面接履歴
-
-
-</h2>
-
-
-
-<table>
-
-
-<tr>
-
-<th>
-回数
-</th>
-
-
-<th>
-日時
-</th>
-
-
-<th>
-担当先生
-</th>
-
-
-</tr>
-
-
-
-`;
-
-
-
-
-
-for(let i=0;i<data.length;i++){
-
-
-
-let date =
-
-new Date(data[i].date);
-
-
-
-
-html += `
-
-
-<tr>
-
-
-<td>
-
-${i+1}回目
-
-</td>
-
-
-
-<td>
-
-${date.toLocaleString("ja-JP")}
-
-</td>
-
-
-
-<td>
-
-${data[i].teacher}
-
-</td>
-
-
-
-</tr>
-
-
-`;
-
-
-
+    // 選択された生徒の行に薄い青背景を設定
+    document.querySelectorAll('#summaryTable tr').forEach(tr => tr.classList.remove('active-row'));
+    const selectedRow = document.getElementById(`row-${studentId}`);
+    if(selectedRow) {
+        selectedRow.classList.add('active-row');
+    }
+
+    // 読み込み中表示
+    document.getElementById("historyArea").innerHTML = `<p class="placeholder-text">データを読み込んでいます...</p>`;
+
+    fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
+    .then(response=>response.json())
+    .then(data=>{
+        let html = `
+        <h2 style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 15px;">
+            ${studentId} の面接履歴
+        </h2>
+        <table>
+            <tr>
+                <th>回数</th>
+                <th>日時</th>
+                <th>担当先生</th>
+            </tr>
+        `;
+
+        for(let i=0; i<data.length; i++){
+            let date = new Date(data[i].date);
+            html += `
+            <tr>
+                <td>${i+1}回目</td>
+                <td>${date.toLocaleString("ja-JP")}</td>
+                <td>${data[i].teacher}</td>
+            </tr>
+            `;
+        }
+
+        html += "</table>";
+        document.getElementById("historyArea").innerHTML = html;
+    })
+    .catch(error => {
+        document.getElementById("historyArea").innerHTML = `<p class="placeholder-text" style="color: red;">エラー：データの取得に失敗しました。</p>`;
+    });
 }
-
-
-
-
-
-html += "</table>";
-
-
-
-
-document.getElementById("historyArea").innerHTML =
-
-html;
-
-
-
-});
-
-
-
-}
-
-
-
 </script>
 
-
 </body>
-
 </html>
