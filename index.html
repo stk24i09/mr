@@ -72,86 +72,224 @@ select{
     font-size:16px;
 }
 
+button{
+
+    padding:6px 15px;
+
+    font-size:16px;
+
+    margin-left:15px;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#eeeeee;
+
+}
+
+#updateTime{
+
+    margin-top:10px;
+
+    color:#555;
+
+}
+
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
 <div class="left-panel">
+
 
 <h1>面接練習回数一覧</h1>
 
+
 <div class="sortArea">
 
-<label for="sortSelect">並び替え：</label>
+
+<label for="sortSelect">
+並び替え：
+</label>
+
 
 <select id="sortSelect" onchange="loadSummary()">
+
+
 
 <option value="count">
 面接回数順
 </option>
 
+
+
 <option value="id">
 生徒ID順
 </option>
 
+
+
 </select>
 
+
+<button onclick="refreshData()">
+
+🔄 更新
+
+</button>
+
+
+<p id="updateTime">
+
+</p>
+
+
 </div>
+
+
 
 <table id="summaryTable">
 
+
 <tr>
-<th>生徒ID</th>
-<th>面接回数</th>
+
+<th>
+生徒ID
+</th>
+
+
+<th>
+面接回数
+</th>
+
+
 </tr>
+
 
 </table>
 
+
+
 </div>
+
+
+
 
 <div class="right-panel">
 
+
 <div id="historyArea">
 
-<h2>面接履歴</h2>
 
-<p>生徒IDをクリックしてください。</p>
+<h2>
+面接履歴
+</h2>
+
+
+<p>
+生徒IDをクリックしてください。
+</p>
+
 
 </div>
 
-</div>
 
 </div>
+
+
+
+</div>
+
+
+
+
 
 <script>
+
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
+
+
 loadSummary();
+
+
+
+
+
+// 更新ボタン
+
+function refreshData(){
+
+
+    loadSummary();
+
+
+    let now = new Date();
+
+
+    document.getElementById("updateTime").innerHTML =
+
+    "最終更新：" +
+
+    now.toLocaleString("ja-JP");
+
+
+}
+
+
+
+
 
 function loadSummary(){
 
+
+
 fetch(API_URL + "?mode=summary")
 
-.then(response => response.json())
+.then(response=>response.json())
 
-.then(data => {
+
+.then(data=>{
+
 
 let html = `
+
 <tr>
-<th>生徒ID</th>
-<th>面接回数</th>
+
+<th>
+生徒ID
+</th>
+
+
+<th>
+面接回数
+</th>
+
+
 </tr>
+
 `;
 
-let students = [];
+
+
+let students=[];
+
+
 
 for(let id in data){
+
 
 students.push({
 
@@ -161,138 +299,284 @@ count:data[id]
 
 });
 
+
 }
 
+
+
+
+
 const sortType =
+
 document.getElementById("sortSelect").value;
 
+
+
+
+
 // 面接回数順
+
 if(sortType=="count"){
 
+
 students.sort(function(a,b){
+
 
 return b.count-a.count;
 
+
 });
+
 
 }
 
+
+
+
 // 生徒ID順
+
 else{
+
 
 students.sort(function(a,b){
 
-// 生徒IDの最後の数字を取得
-const numA = parseInt(a.id.match(/\d+$/)[0]);
-const numB = parseInt(b.id.match(/\d+$/)[0]);
 
-return numA - numB;
+const numA =
+
+parseInt(a.id.match(/\d+$/)[0]);
+
+
+
+const numB =
+
+parseInt(b.id.match(/\d+$/)[0]);
+
+
+
+return numA-numB;
+
+
 
 });
 
+
 }
+
+
+
+
 
 students.forEach(function(student){
 
+
+
 html += `
+
 
 <tr>
 
+
 <td>
 
+
 <span
+
 class="student-link"
+
 onclick="showHistory('${student.id}')">
+
 
 ${student.id}
 
+
 </span>
 
+
 </td>
+
 
 <td>
 
+
 ${student.count}回
+
 
 </td>
 
+
 </tr>
+
 
 `;
 
+
+
 });
+
+
+
+
 
 document.getElementById("summaryTable").innerHTML =
+
 html;
 
+
+
 });
+
 
 }
 
+
+
+
+
+
+
 function showHistory(studentId){
+
+
 
 fetch(
 
-API_URL +
+API_URL+
 
-"?mode=history&id=" +
+"?mode=history&id="+
 
 encodeURIComponent(studentId)
 
 )
 
-.then(response => response.json())
 
-.then(data => {
+
+.then(response=>response.json())
+
+
+
+.then(data=>{
+
+
 
 let html = `
 
-<h2>${studentId} の面接履歴</h2>
+
+<h2>
+
+${studentId}
+
+の面接履歴
+
+
+</h2>
+
+
 
 <table>
 
+
 <tr>
 
-<th>回数</th>
+<th>
+回数
+</th>
 
-<th>日時</th>
 
-<th>担当先生</th>
+<th>
+日時
+</th>
+
+
+<th>
+担当先生
+</th>
+
 
 </tr>
 
+
+
 `;
+
+
+
+
 
 for(let i=0;i<data.length;i++){
 
-let date = new Date(data[i].date);
+
+
+let date =
+
+new Date(data[i].date);
+
+
+
 
 html += `
 
+
 <tr>
 
-<td>${i+1}回目</td>
 
-<td>${date.toLocaleString("ja-JP")}</td>
+<td>
 
-<td>${data[i].teacher}</td>
+${i+1}回目
+
+</td>
+
+
+
+<td>
+
+${date.toLocaleString("ja-JP")}
+
+</td>
+
+
+
+<td>
+
+${data[i].teacher}
+
+</td>
+
+
 
 </tr>
 
+
 `;
 
+
+
 }
+
+
+
+
 
 html += "</table>";
 
+
+
+
 document.getElementById("historyArea").innerHTML =
+
 html;
+
+
 
 });
 
+
+
 }
 
+
+
 </script>
+
 
 </body>
 
