@@ -1,433 +1,583 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>面接練習回数管理システム - MATRIX VERSION</title>
+<title>面接練習回数管理システム</title>
 
 <style>
-/* 共通リセット */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+
+body{
+    font-family:sans-serif;
+    margin:30px;
+    max-width:1400px;
 }
 
-body {
-    font-family: 'Courier New', Courier, monospace, "Hiragino Sans", "Meiryo", sans-serif;
-    background-color: #050a05; /* 極限まで深い緑がかった黒 */
-    color: #39ff14; /* ネオングリーン（蛍光） */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 16px;
-    position: relative;
+.container{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    gap:30px;
 }
 
-/* ブラウン管風のスキャンライン効果 */
-body::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 10;
-    background-size: 100% 4px, 6px 100%;
-    pointer-events: none;
+.left-panel{
+    flex:1;
+    min-width:400px;
 }
 
-/* ヘッダー：軍用コンソール風 */
-.app-header {
-    border: 1px solid #39ff14;
-    height: 50px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    background: rgba(0, 20, 0, 0.4);
-    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+.right-panel{
+    flex:1;
+    min-width:400px;
 }
 
-.brand {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 2px;
+table{
+    border-collapse:collapse;
+    width:100%;
 }
 
-.brand::after {
-    content: " _";
-    animation: blink 1s step-start infinite;
+th,td{
+    border:1px solid #000;
+    padding:10px;
+    text-align:center;
 }
 
-@keyframes blink {
-    50% { opacity: 0; }
+th{
+    background:#eeeeee;
 }
 
-.system-status {
-    font-size: 12px;
-    color: #39ff14;
-    background: rgba(57, 255, 20, 0.1);
-    padding: 4px 10px;
-    border-radius: 2px;
+.student-link{
+    color:blue;
+    cursor:pointer;
+    text-decoration:underline;
 }
 
-/* 2カラムレイアウト */
-.app-viewport {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    gap: 16px;
+.student-link:hover{
+    color:red;
 }
 
-/* コンソールウィンドウ */
-.terminal-window {
-    flex: 1;
-    border: 1px solid #39ff14;
-    background: rgba(0, 10, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 100%;
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.1) inset;
+#historyArea{
+    border:1px solid #ccc;
+    padding:15px;
+    min-height:300px;
+    background:#fafafa;
 }
 
-.window-header {
-    background: rgba(57, 255, 20, 0.15);
-    padding: 10px 16px;
-    border-bottom: 1px solid #39ff14;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 1px;
+.sortArea{
+    margin-bottom:15px;
 }
 
-.window-body {
-    overflow-y: auto;
-    flex: 1;
-    padding: 16px;
+select{
+    padding:5px;
+    font-size:16px;
 }
 
-/* コントロール */
-.terminal-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-    border-bottom: 1px dashed rgba(57, 255, 20, 0.3);
-    padding-bottom: 12px;
+button{
+
+    padding:6px 15px;
+
+    font-size:16px;
+
+    margin-left:15px;
+
+    cursor:pointer;
+
 }
 
-.control-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
+button:hover{
+
+    background:#eeeeee;
+
 }
 
-select {
-    background: #000;
-    color: #39ff14;
-    border: 1px solid #39ff14;
-    padding: 6px 12px;
-    font-family: inherit;
-    outline: none;
-    cursor: pointer;
+#updateTime{
+
+    margin-top:10px;
+
+    color:#555;
+
 }
 
-select option {
-    background: #050a05;
-}
-
-.btn-terminal {
-    background: transparent;
-    color: #39ff14;
-    border: 1px solid #39ff14;
-    padding: 6px 16px;
-    font-family: inherit;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s;
-}
-
-.btn-terminal:hover {
-    background: #39ff14;
-    color: #050a05;
-    box-shadow: 0 0 10px #39ff14;
-}
-
-#updateTime {
-    font-size: 10px;
-    color: rgba(57, 255, 20, 0.6);
-    margin-top: 4px;
-}
-
-/* ターミナル風テーブル */
-.terminal-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.terminal-table th {
-    border-bottom: 1px solid #39ff14;
-    padding: 10px;
-    font-size: 12px;
-    text-align: left;
-    color: rgba(57, 255, 20, 0.7);
-}
-
-.terminal-table td {
-    padding: 12px 10px;
-    border-bottom: 1px dashed rgba(57, 255, 20, 0.15);
-    font-size: 13px;
-}
-
-.terminal-table tr:hover td {
-    background: rgba(57, 255, 20, 0.05);
-}
-
-/* 生徒選択リンク */
-.id-link {
-    background: none;
-    border: none;
-    color: #39ff14;
-    font-family: inherit;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    border-bottom: 1px dotted #39ff14;
-}
-
-.id-link:hover {
-    color: #fff;
-    border-bottom: 1px solid #fff;
-}
-
-/* 選択行のネオン光 */
-.row-active td {
-    background: rgba(57, 255, 20, 0.1) !important;
-    text-shadow: 0 0 5px #39ff14;
-}
-
-.count-text {
-    font-weight: bold;
-}
-
-/* ログリスト */
-.log-meta {
-    font-size: 13px;
-    border-bottom: 1px dashed #39ff14;
-    padding-bottom: 10px;
-    margin-bottom: 16px;
-}
-
-.log-item {
-    border-left: 2px solid #39ff14;
-    padding-left: 14px;
-    margin-bottom: 14px;
-    font-size: 12px;
-}
-
-.log-session {
-    font-size: 10px;
-    color: rgba(57, 255, 20, 0.6);
-}
-
-.log-teacher {
-    font-weight: bold;
-    margin: 2px 0;
-}
-
-.log-date {
-    font-size: 11px;
-}
-
-/* 未接続時の待機画面 */
-.terminal-idle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: rgba(57, 255, 20, 0.5);
-    text-align: center;
-}
-
-.idle-code {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.idle-text {
-    font-size: 12px;
-}
 </style>
 
 </head>
 
+
 <body>
 
-<!-- ヘッダー -->
-<div class="app-header">
-    <div class="brand">SYSTEM_ID://MEISETSU_LOG</div>
-    <div class="system-status">PORT: 8080 // ON-LINE</div>
-</div>
 
-<!-- メインエリア -->
-<div class="app-viewport">
+<div class="container">
 
-    <!-- 左パネル -->
-    <div class="terminal-window">
-        <div class="window-header">> STUDENT_DATABASE</div>
-        <div class="window-body">
-            <div class="terminal-controls">
-                <div class="control-item">
-                    <span>SORT_BY:</span>
-                    <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">COUNT_DESC</option>
-                        <option value="id">ID_ASC</option>
-                    </select>
-                </div>
-                <div style="text-align: right;">
-                    <button class="btn-terminal" onclick="refreshData()">SYS_RELOAD</button>
-                    <div id="updateTime"></div>
-                </div>
-            </div>
 
-            <table class="terminal-table" id="summaryTable">
-                <thead>
-                    <tr>
-                        <th>STUDENT_ID</th>
-                        <th style="text-align: right; width: 100px;">COUNT</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 動的展開 -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="left-panel">
 
-    <!-- 右パネル -->
-    <div class="terminal-window">
-        <div class="window-header">> LIVE_TRANSMISSION_LOG</div>
-        <div id="historyArea" class="window-body">
-            <!-- デフォルト待機 -->
-            <div class="terminal-idle">
-                <div class="idle-code">[ * ]</div>
-                <p class="idle-text">STAND-BY. SELECT STUDENT_ID TO REQUEST STREAM...</p>
-            </div>
-        </div>
-    </div>
+
+<h1>面接練習回数一覧</h1>
+
+
+<div class="sortArea">
+
+
+<label for="sortSelect">
+並び替え：
+</label>
+
+
+<select id="sortSelect" onchange="loadSummary()">
+
+
+
+<option value="count">
+面接回数順
+</option>
+
+
+
+<option value="id">
+生徒ID順
+</option>
+
+
+
+</select>
+
+
+<button onclick="refreshData()">
+
+🔄 更新
+
+</button>
+
+
+<p id="updateTime">
+
+</p>
+
 
 </div>
+
+
+
+<table id="summaryTable">
+
+
+<tr>
+
+<th>
+生徒ID
+</th>
+
+
+<th>
+面接回数
+</th>
+
+
+</tr>
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+<div class="right-panel">
+
+
+<div id="historyArea">
+
+
+<h2>
+面接履歴
+</h2>
+
+
+<p>
+生徒IDをクリックしてください。
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
+
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
+
+
 
 loadSummary();
 
+
+
+
+
+// 更新ボタン
+
 function refreshData(){
+
+
     loadSummary();
+
+
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "LAST_SYNC: " + now.toLocaleTimeString("ja-JP");
+
+
+    document.getElementById("updateTime").innerHTML =
+
+    "最終更新：" +
+
+    now.toLocaleString("ja-JP");
+
+
 }
+
+
+
+
 
 function loadSummary(){
-    fetch(API_URL + "?mode=summary")
-    .then(response => response.json())
-    .then(data => {
-        let html = "";
 
-        let students = [];
-        for(let id in data){
-            students.push({
-                id: id,
-                count: data[id]
-            });
-        }
 
-        const sortType = document.getElementById("sortSelect").value;
 
-        if(sortType == "count"){
-            students.sort((a, b) => b.count - a.count);
-        } else {
-            students.sort((a, b) => {
-                const numA = parseInt(a.id.match(/\d+$/)[0]);
-                const numB = parseInt(b.id.match(/\d+$/)[0]);
-                return numA - numB;
-            });
-        }
+fetch(API_URL + "?mode=summary")
 
-        students.forEach(student => {
-            html += `
-            <tr id="row-${student.id}">
-                <td>
-                    <button class="id-link" onclick="showHistory('${student.id}')">
-                        ${student.id}
-                    </button>
-                </td>
-                <td style="text-align: right;" class="count-text">
-                    ${student.count}
-                </td>
-            </tr>
-            `;
-        });
+.then(response=>response.json())
 
-        document.querySelector("#summaryTable tbody").innerHTML = html;
-    });
+
+.then(data=>{
+
+
+let html = `
+
+<tr>
+
+<th>
+生徒ID
+</th>
+
+
+<th>
+面接回数
+</th>
+
+
+</tr>
+
+`;
+
+
+
+let students=[];
+
+
+
+for(let id in data){
+
+
+students.push({
+
+id:id,
+
+count:data[id]
+
+});
+
+
 }
+
+
+
+
+
+const sortType =
+
+document.getElementById("sortSelect").value;
+
+
+
+
+
+// 面接回数順
+
+if(sortType=="count"){
+
+
+students.sort(function(a,b){
+
+
+return b.count-a.count;
+
+
+});
+
+
+}
+
+
+
+
+// 生徒ID順
+
+else{
+
+
+students.sort(function(a,b){
+
+
+const numA =
+
+parseInt(a.id.match(/\d+$/)[0]);
+
+
+
+const numB =
+
+parseInt(b.id.match(/\d+$/)[0]);
+
+
+
+return numA-numB;
+
+
+
+});
+
+
+}
+
+
+
+
+
+students.forEach(function(student){
+
+
+
+html += `
+
+
+<tr>
+
+
+<td>
+
+
+<span
+
+class="student-link"
+
+onclick="showHistory('${student.id}')">
+
+
+${student.id}
+
+
+</span>
+
+
+</td>
+
+
+<td>
+
+
+${student.count}回
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+});
+
+
+
+
+
+document.getElementById("summaryTable").innerHTML =
+
+html;
+
+
+
+});
+
+
+}
+
+
+
+
+
+
 
 function showHistory(studentId){
-    // 選択行のアクティブ強調
-    document.querySelectorAll('.terminal-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
-    const selectedRow = document.getElementById(`row-${studentId}`);
-    if(selectedRow) {
-        selectedRow.classList.add('row-active');
-    }
 
-    // ロード表示をログ風に
-    document.getElementById("historyArea").innerHTML = `
-        <div class="terminal-idle">
-            <div class="idle-code">[ CONNECTING ]</div>
-            <p class="idle-text">FETCHING PACKETS FOR USER: ${studentId} ...</p>
-        </div>
-    `;
 
-    fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
-    .then(response => response.json())
-    .then(data => {
-        let html = `
-        <div class="log-meta">
-            > RETRIEVED_LOGS_FOR: ${studentId} (${data.length} RECORDS FOUND)
-        </div>
-        `;
 
-        for(let i = 0; i < data.length; i++){
-            let date = new Date(data[i].date);
-            html += `
-            <div class="log-item">
-                <div class="log-session">[SESSION_0${i+1}]</div>
-                <div class="log-teacher">INTERVIEWER: ${data[i].teacher}_SENSEI</div>
-                <div class="log-date">TIMESTAMP: ${date.toLocaleString("ja-JP")}</div>
-            </div>
-            `;
-        }
+fetch(
 
-        document.getElementById("historyArea").innerHTML = html;
-    })
-    .catch(error => {
-        document.getElementById("historyArea").innerHTML = `
-            <div class="terminal-idle" style="color: #ff3939;">
-                <div class="idle-code">[ ERR_CONN ]</div>
-                <p class="idle-text">CONNECTION TERMINATED. UNABLE TO ACCESS DATABASE.</p>
-            </div>
-        `;
-    });
+API_URL+
+
+"?mode=history&id="+
+
+encodeURIComponent(studentId)
+
+)
+
+
+
+.then(response=>response.json())
+
+
+
+.then(data=>{
+
+
+
+let html = `
+
+
+<h2>
+
+${studentId}
+
+の面接履歴
+
+
+</h2>
+
+
+
+<table>
+
+
+<tr>
+
+<th>
+回数
+</th>
+
+
+<th>
+日時
+</th>
+
+
+<th>
+担当先生
+</th>
+
+
+</tr>
+
+
+
+`;
+
+
+
+
+
+for(let i=0;i<data.length;i++){
+
+
+
+let date =
+
+new Date(data[i].date);
+
+
+
+
+html += `
+
+
+<tr>
+
+
+<td>
+
+${i+1}回目
+
+</td>
+
+
+
+<td>
+
+${date.toLocaleString("ja-JP")}
+
+</td>
+
+
+
+<td>
+
+${data[i].teacher}
+
+</td>
+
+
+
+</tr>
+
+
+`;
+
+
+
 }
+
+
+
+
+
+html += "</table>";
+
+
+
+
+document.getElementById("historyArea").innerHTML =
+
+html;
+
+
+
+});
+
+
+
+}
+
+
+
 </script>
 
+
 </body>
+
 </html>
