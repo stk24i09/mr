@@ -7,7 +7,7 @@
 <title>面接練習回数管理システム</title>
 
 <style>
-/* ゼロベースのリセット */
+/* 共通リセット */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,365 +15,271 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f8fafc; /* 極薄のブルーグレー */
-    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #fcfcfd; /* 超極薄グレー */
+    color: #1e1e1e;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* アプリケーションヘッダー */
-.app-bar {
+/* シンプルなヘッダー（線の細いミニマルなデザイン） */
+.app-navbar {
     background-color: #ffffff;
-    height: 64px;
-    padding: 0 32px;
+    height: 56px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-    z-index: 10;
+    border-bottom: 1px solid #ededed;
     flex-shrink: 0;
 }
 
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.brand-icon {
-    width: 28px;
-    height: 28px;
-    background-color: #4f46e5; /* インディゴブルー */
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.brand-name {
-    font-size: 16px;
+.app-logo {
+    font-size: 15px;
     font-weight: 700;
-    color: #1e293b;
-    letter-spacing: -0.025em;
-}
-
-.badge {
-    background-color: #e0e7ff;
-    color: #4338ca;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 9999px;
-}
-
-/* 2カラムレイアウト */
-.app-viewport {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    padding: 32px;
-    gap: 32px;
-    max-width: 1500px;
-    width: 100%;
-    margin: 0 auto;
-}
-
-/* 左右のパネル */
-.card-panel {
-    flex: 1;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.03);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 100%;
-}
-
-.card-header {
-    padding: 24px 32px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
-    flex-shrink: 0;
-}
-
-.card-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1e293b;
-}
-
-.card-body {
-    overflow-y: auto;
-    flex: 1;
-    padding: 24px 32px;
-}
-
-/* 洗練された操作バー */
-.action-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    gap: 16px;
-}
-
-.select-wrapper {
+    letter-spacing: 0.05em;
+    color: #111111;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.select-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
+.logo-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #111111;
+    border-radius: 50%;
 }
 
-select {
-    padding: 8px 16px;
-    font-size: 13px;
+.app-status {
+    font-size: 11px;
+    color: #666666;
+    background: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-weight: 500;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
+}
+
+/* メインフレーム */
+.app-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* 左：生徒リスト（ナビゲーション型） */
+.sidebar-panel {
+    width: 380px;
     background-color: #ffffff;
-    color: #334155;
+    border-right: 1px solid #ededed;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+/* 右：コンテンツ表示 */
+.content-panel {
+    flex: 1;
+    background-color: #fbfbfb;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* 各エリアのヘッダー */
+.area-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #ededed;
+    background-color: #ffffff;
+    flex-shrink: 0;
+}
+
+.area-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #666666;
+}
+
+/* スクロールする中身 */
+.scroll-area {
+    overflow-y: auto;
+    flex: 1;
+    padding: 24px;
+}
+
+/* すっきり整理されたツールバー */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tool-select {
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #333333;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-select:hover {
-    border-color: #cbd5e1;
-}
-
-select:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.btn-refresh {
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    background-color: #4f46e5;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-.btn-refresh:hover {
-    background-color: #4338ca;
-    transform: translateY(-1px);
-}
-
-.btn-refresh:active {
-    transform: translateY(0);
-}
-
-#updateTime {
-    font-size: 11px;
-    color: #94a3b8;
-    text-align: right;
-    margin-top: 4px;
-}
-
-/* 生徒一覧テーブルの刷新 */
-.custom-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px; /* 行間に隙間を作る */
-    margin-top: -8px;
-}
-
-.custom-table th {
-    padding: 12px 16px;
+.btn-update {
     font-size: 12px;
     font-weight: 600;
-    color: #64748b;
-    text-align: left;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.custom-table td {
-    padding: 16px;
-    background-color: #ffffff;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
-    transition: all 0.2s;
-}
-
-.custom-table td:first-child {
-    border-left: 1px solid #f1f5f9;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-}
-
-.custom-table td:last-child {
-    border-right: 1px solid #f1f5f9;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    text-align: right; /* 回数は右寄せにしてスッキリ */
-}
-
-/* ホバー時の美しいバウンス */
-.custom-table tr:hover td {
-    background-color: #f8fafc;
-    border-color: #e2e8f0;
-}
-
-/* 生徒IDのリンクボタン化 */
-.student-btn {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4f46e5;
+    padding: 6px 12px;
+    border: 1px solid #111111;
+    background-color: #111111;
+    color: #ffffff;
+    border-radius: 4px;
     cursor: pointer;
-    background: none;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 6px;
     transition: all 0.15s;
 }
 
-.student-btn:hover {
-    background-color: #f5f3ff;
+.btn-update:hover {
+    background-color: #333333;
+    border-color: #333333;
 }
 
-/* 選択された生徒のアクティブ状態 */
-.selected-row td {
-    background-color: #f5f3ff !important;
-    border-color: #ddd6fe !important;
+#updateTime {
+    font-size: 10px;
+    color: #888888;
+    margin-top: 4px;
+    text-align: right;
 }
 
-.selected-row .student-btn {
-    color: #6d28d9;
+/* Notion風テーブルリスト（行間に境界線を引かず、ブロックが並んでいるように見せる） */
+.student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-/* 回数バッジ */
-.count-chip {
-    background-color: #f1f5f9;
-    color: #475569;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 13px;
+.student-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.student-row:hover {
+    border-color: #111111;
+    background-color: #fafafa;
+}
+
+.student-row-active {
+    background-color: #111111 !important;
+    border-color: #111111 !important;
+}
+
+.student-row-id {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111111;
+    transition: color 0.15s;
+}
+
+.student-row-active .student-row-id {
+    color: #ffffff;
+}
+
+/* ミニマムな回数バッジ */
+.badge-count {
+    font-size: 11px;
     font-weight: 700;
-    display: inline-block;
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    color: #555555;
+    border-radius: 4px;
+    transition: all 0.15s;
 }
 
-.selected-row .count-chip {
-    background-color: #ede9fe;
-    color: #6d28d9;
+.student-row-active .badge-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
 }
 
-/* タイムライン風の面接詳細履歴 */
-.history-timeline {
-    position: relative;
-    padding-left: 24px;
-    margin-top: 16px;
+/* 右側：詳細履歴のカード型デザイン */
+.history-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111111;
 }
 
-.history-timeline::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background-color: #e2e8f0;
+.history-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.timeline-item {
-    position: relative;
-    padding-bottom: 24px;
-}
-
-.timeline-item:last-child {
-    padding-bottom: 0;
-}
-
-.timeline-dot {
-    position: absolute;
-    left: -21px;
-    top: 5px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #4f46e5;
-    border: 3px solid #ffffff;
-    box-shadow: 0 0 0 1px #4f46e5;
-}
-
-.timeline-content {
-    background-color: #f8fafc;
-    border-radius: 12px;
+.history-card {
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+    border-radius: 8px;
     padding: 16px 20px;
-    border: 1px solid #f1f5f9;
-}
-
-.timeline-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
 }
 
-.timeline-title {
-    font-size: 14px;
+.history-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.history-card-num {
+    font-size: 11px;
     font-weight: 700;
-    color: #1e293b;
+    color: #888888;
+    text-transform: uppercase;
 }
 
-.timeline-date {
+.history-card-teacher {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111111;
+}
+
+.history-card-date {
     font-size: 12px;
-    color: #64748b;
+    color: #666666;
+    text-align: right;
 }
 
-.timeline-teacher {
-    font-size: 13px;
-    color: #475569;
-}
-
-/* プレースホルダー（未選択・読み込み中） */
-.empty-state {
+/* プレースホルダー */
+.state-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #94a3b8;
+    color: #888888;
     text-align: center;
-    padding: 32px;
 }
 
-.empty-state-icon {
-    font-size: 36px;
-    margin-bottom: 12px;
-    background-color: #f1f5f9;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.state-empty-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
 }
 
-.empty-state-text {
+.state-empty-text {
     font-size: 13px;
-    font-weight: 500;
 }
 </style>
 
@@ -382,63 +288,50 @@ select:focus {
 <body>
 
 <!-- アプリヘッダー -->
-<div class="app-bar">
-    <div class="brand">
-        <div class="brand-icon">M</div>
-        <div class="brand-name">面接練習管理</div>
-        <span class="badge">教員用</span>
+<div class="app-navbar">
+    <div class="app-logo">
+        <div class="logo-dot"></div>
+        面接回数ダッシュボード
     </div>
+    <span class="app-status">管理者用ツール</span>
 </div>
 
-<!-- メイン画面 -->
-<div class="app-viewport">
+<!-- メイン領域 -->
+<div class="app-main">
 
-    <!-- 左：生徒一覧カード -->
-    <div class="card-panel">
-        <div class="card-header">
-            <div class="card-title">生徒一覧</div>
+    <!-- 左：サイドバー（生徒一覧） -->
+    <div class="sidebar-panel">
+        <div class="area-header">
+            <div class="area-title">生徒リスト</div>
         </div>
-        <div class="card-body">
-            <div class="action-bar">
-                <div class="select-wrapper">
-                    <span class="select-label">並び替え</span>
-                    <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">面接回数順</option>
-                        <option value="id">生徒ID順</option>
-                    </select>
-                </div>
+        <div class="scroll-area">
+            <div class="toolbar">
+                <select id="sortSelect" class="tool-select" onchange="loadSummary()">
+                    <option value="count">面接数順</option>
+                    <option value="id">ID順</option>
+                </select>
                 <div>
-                    <button class="btn-refresh" onclick="refreshData()">
-                        🔄 データを更新
-                    </button>
-                    <p id="updateTime"></p>
+                    <button class="btn-update" onclick="refreshData()">更新</button>
+                    <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="custom-table" id="summaryTable">
-                <thead>
-                    <tr>
-                        <th>生徒ID</th>
-                        <th style="text-align: right;">面接回数</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- JSで挿入されます -->
-                </tbody>
-            </table>
+            <div class="student-list" id="studentListContainer">
+                <!-- JSで生徒リストが挿入されます -->
+            </div>
         </div>
     </div>
 
-    <!-- 右：履歴詳細カード -->
-    <div class="card-panel">
-        <div class="card-header">
-            <div class="card-title">履歴詳細</div>
+    <!-- 右：履歴画面 -->
+    <div class="content-panel">
+        <div class="area-header">
+            <div class="area-title">詳細情報</div>
         </div>
-        <div id="historyArea" class="card-body">
-            <!-- 初期状態の表示 -->
-            <div class="empty-state">
-                <div class="empty-state-icon">🔍</div>
-                <p class="empty-state-text">生徒をクリックすると、ここに面接履歴が表示されます。</p>
+        <div id="historyArea" class="scroll-area">
+            <!-- 初期表示 -->
+            <div class="state-empty">
+                <div class="state-empty-icon">📂</div>
+                <p class="state-empty-text">生徒を選択すると、詳細な履歴を表示します。</p>
             </div>
         </div>
     </div>
@@ -450,7 +343,6 @@ const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJ
 
 loadSummary();
 
-// 更新ボタン
 function refreshData(){
     loadSummary();
     let now = new Date();
@@ -473,54 +365,43 @@ function loadSummary(){
 
         const sortType = document.getElementById("sortSelect").value;
 
-        // 面接回数順
+        // 並び替え処理
         if(sortType == "count"){
-            students.sort(function(a, b){
-                return b.count - a.count;
-            });
-        }
-        // 生徒ID順
-        else {
-            students.sort(function(a, b){
+            students.sort((a, b) => b.count - a.count);
+        } else {
+            students.sort((a, b) => {
                 const numA = parseInt(a.id.match(/\d+$/)[0]);
                 const numB = parseInt(b.id.match(/\d+$/)[0]);
                 return numA - numB;
             });
         }
 
-        students.forEach(function(student){
+        students.forEach(student => {
             html += `
-            <tr id="row-${student.id}">
-                <td>
-                    <button class="student-btn" onclick="showHistory('${student.id}')">
-                        ${student.id}
-                    </button>
-                </td>
-                <td>
-                    <span class="count-chip">${student.count}回</span>
-                </td>
-            </tr>
+            <div class="student-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
+                <span class="student-row-id">${student.id}</span>
+                <span class="badge-count">${student.count}回</span>
+            </div>
             `;
         });
 
-        // プレースホルダーの table タグを維持するためにヘッダーと統合
-        document.querySelector("#summaryTable tbody").innerHTML = html;
+        document.getElementById("studentListContainer").innerHTML = html;
     });
 }
 
 function showHistory(studentId){
-    // クリックされた行をハイライト（selected-rowクラスを付与）
-    document.querySelectorAll('#summaryTable tr').forEach(tr => tr.classList.remove('selected-row'));
+    // アクティブな行のハイライト変更
+    document.querySelectorAll('.student-row').forEach(row => row.classList.remove('student-row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('selected-row');
+        selectedRow.classList.add('student-row-active');
     }
 
-    // 読み込み中
+    // 読み込み中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-state">
-            <div class="empty-state-icon">🔄</div>
-            <p class="empty-state-text">履歴を読み込んでいます...</p>
+        <div class="state-empty">
+            <div class="state-empty-icon">🔄</div>
+            <p class="state-empty-text">読み込み中...</p>
         </div>
     `;
 
@@ -528,23 +409,20 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 24px; color: #0f172a;">
-            ${studentId} の履歴
-        </h2>
-        <div class="history-timeline">
+        <h2 class="history-title">${studentId} の履歴詳細</h2>
+        <div class="history-grid">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-header">
-                        <span class="timeline-title">${i+1}回目</span>
-                        <span class="timeline-date">${date.toLocaleString("ja-JP")}</span>
-                    </div>
-                    <div class="timeline-teacher">担当：<strong>${data[i].teacher}</strong> 先生</div>
+            <div class="history-card">
+                <div class="history-card-left">
+                    <span class="history-card-num">${i+1}回目の練習</span>
+                    <span class="history-card-teacher">担当：${data[i].teacher} 先生</span>
+                </div>
+                <div class="history-card-date">
+                    ${date.toLocaleString("ja-JP")}
                 </div>
             </div>
             `;
@@ -555,9 +433,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-state" style="color: #ef4444;">
-                <div class="empty-state-icon">⚠️</div>
-                <p class="empty-state-text">データの取得に失敗しました。再度お試しください。</p>
+            <div class="state-empty" style="color: #ff3333;">
+                <div class="state-empty-icon">⚠️</div>
+                <p class="state-empty-text">読み込みに失敗しました。</p>
             </div>
         `;
     });
