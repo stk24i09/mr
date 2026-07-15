@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>面接とっくんノート</title>
+<title>ROOT://MEISETSU_CORE_v3.9</title>
 
 <style>
 /* 共通リセット */
@@ -15,316 +15,243 @@
 }
 
 body {
-    /* ぬくもりのある丸ゴシック */
-    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
-    background-color: #f7ebe1; /* やさしいミルクティーベージュ */
-    /* 背景にうっすら木目調のストライプ */
-    background-image: repeating-linear-gradient(90deg, rgba(139,115,85, 0.03) 0px, rgba(139,115,85, 0.03) 2px, transparent 2px, transparent 40px);
-    color: #5c4033; /* チョコレートブラウン */
+    /* 開発者用の等幅フォント */
+    font-family: "Courier New", Courier, Monaco, "Consolas", "MS Gothic", monospace;
+    background-color: #050505; /* 深い闇 */
+    color: #39ff14; /* ネオングリーン（サイバーフォントカラー） */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 24px;
+    padding: 16px;
+    position: relative;
 }
 
-/* ヘッダー：黒板のネームプレート風 */
-.app-header {
-    background-color: #ffffff;
-    border: 3px solid #bba38a;
-    border-radius: 16px;
-    height: 60px;
-    padding: 0 24px;
+/* CRTモニターの走査線ノイズを表現するオーバーレイ */
+body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 999;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* ヘッダー：システムのシェルプロンプト風 */
+.terminal-header {
+    border-bottom: 2px solid #39ff14;
+    height: 50px;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 0px rgba(187, 163, 138, 0.3);
+    margin-bottom: 16px;
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    letter-spacing: 1px;
 }
 
-.brand-icon {
-    font-size: 26px;
-}
-
-.app-badge {
-    background-color: #fceade;
-    color: #c68b59;
+.system-status {
     font-size: 11px;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 2px solid #e8ccb5;
+    color: #ffffff;
+    background-color: #004400;
+    padding: 2px 8px;
+    border: 1px solid #39ff14;
 }
 
-/* スケッチブック風2カラム */
-.app-content {
+/* 2カラムレイアウト */
+.terminal-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 12px;
+    gap: 16px;
     width: 100%;
-    position: relative;
 }
 
-/* ノートの真ん中の「ダブルリング」を表現する擬似要素 */
-.app-content::before {
-    content: "➰ ➰ ➰ ➰ ➰ ➰ ➰ ➰ ➰";
-    position: absolute;
-    left: 50%;
-    top: 5%;
-    transform: translateX(-50%) rotate(90deg);
-    color: #8c8c8c;
-    font-size: 24px;
-    letter-spacing: 12px;
-    z-index: 10;
-    pointer-events: none;
-    opacity: 0.8;
-}
-
-/* スケッチブックのページ */
-.sketch-page {
+/* ターミナルパネル */
+.terminal-panel {
     flex: 1;
-    background-color: #faf8f5; /* 画用紙のやさしい白 */
-    border: 3px solid #bba38a;
-    border-radius: 24px;
-    box-shadow: 0 6px 12px rgba(139, 115, 85, 0.15);
+    border: 1px solid #39ff14;
+    background-color: #000000;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    position: relative;
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.15);
 }
 
-/* ページ上部のミシン目 */
-.sketch-page::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 10%; right: 10%;
-    height: 6px;
-    background-image: radial-gradient(circle, #bba38a 2px, transparent 3px);
-    background-size: 12px 12px;
-    opacity: 0.5;
-}
-
-.page-header {
-    padding: 24px 24px 12px 24px;
-    flex-shrink: 0;
-}
-
-.page-title {
-    font-size: 16px;
-    font-weight: bold;
+.panel-header {
+    background-color: #111111;
+    padding: 6px 16px;
+    border-bottom: 1px solid #39ff14;
+    font-size: 11px;
+    color: #ffffff;
     display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 2px dashed #d9c5b2;
-    padding-bottom: 8px;
+    justify-content: space-between;
 }
 
-.page-body {
+.panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 24px;
+    padding: 16px;
 }
 
-/* コントロール（落書き風） */
+/* コントロール（コンソールコマンド風） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    background-color: #080808;
+    border: 1px dashed #39ff14;
+    padding: 10px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
-/* 丸っこい選択メニュー＆ボタン */
+/* 黒背景にグリーンのセレクト */
 select {
-    padding: 8px 14px;
-    font-size: 12px;
+    padding: 4px 8px;
+    font-size: 11px;
     font-family: inherit;
-    font-weight: bold;
-    border: 2px solid #bba38a;
-    border-radius: 12px;
-    background-color: #ffffff;
-    color: #5c4033;
+    border: 1px solid #39ff14;
+    background-color: #000000;
+    color: #39ff14;
     outline: none;
     cursor: pointer;
 }
 
-.btn-crayon {
-    padding: 8px 16px;
-    font-size: 12px;
+/* コマンド実行ボタン */
+.btn-console {
+    padding: 4px 12px;
+    font-size: 11px;
     font-family: inherit;
-    font-weight: bold;
-    background-color: #e8ccb5; /* クレヨンのオレンジがかったベージュ */
-    color: #5c4033;
-    border: 2px solid #bba38a;
-    border-radius: 14px;
+    background-color: #003300;
+    color: #39ff14;
+    border: 1px solid #39ff14;
     cursor: pointer;
-    box-shadow: 0 3px 0px #bba38a;
-    transition: all 0.1s;
 }
 
-.btn-crayon:hover {
-    background-color: #fceade;
-}
-
-.btn-crayon:active {
-    transform: translateY(3px);
-    box-shadow: none;
+.btn-console:hover {
+    background-color: #39ff14;
+    color: #000000;
 }
 
 #updateTime {
-    font-size: 11px;
-    color: #a38f80;
+    font-size: 9px;
+    color: #888888;
     margin-top: 4px;
-    font-style: italic;
 }
 
-/* 手書き罫線風テーブル */
-.crayon-table {
+/* ログ調テーブル */
+.term-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.crayon-table th {
-    padding: 8px 12px;
+.term-table th {
+    padding: 8px;
+    font-size: 11px;
+    color: #ffffff;
+    text-align: left;
+    border-bottom: 1px solid #39ff14;
+}
+
+.term-table td {
+    padding: 10px 8px;
     font-size: 12px;
-    font-weight: bold;
-    color: #a38f80;
+    border-bottom: 1px solid #111111;
+}
+
+/* 選択時のハッカー風反転ハイライト */
+.row-selected td {
+    background-color: #39ff14 !important;
+    color: #000000 !important;
+}
+
+.row-selected .student-btn {
+    color: #000000 !important;
+}
+
+/* コマンドライン実行のような生徒リンク */
+.student-btn {
+    font-size: 12px;
+    font-family: inherit;
+    color: #39ff14;
+    background: none;
+    border: none;
+    cursor: pointer;
     text-align: left;
 }
 
-.crayon-table td {
-    padding: 14px 12px;
-    font-size: 14px;
-    border-bottom: 2px dotted #e8ccb5; /* ドットの罫線 */
-}
-
-/* 生徒名ボタン：シールを貼ったようなデザイン */
-.student-btn {
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: bold;
-    color: #5c4033;
-    background: #ffffff;
-    border: 2px solid #bba38a;
-    padding: 4px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 2px 0px #bba38a;
+.student-btn::before {
+    content: "$ cat ./profiles/";
 }
 
 .student-btn:hover {
-    background-color: #fff9f5;
+    text-decoration: underline;
 }
 
-/* 選択行：色鉛筆でぐるぐる塗ったような黄色バック */
-.row-selected td {
-    background-color: #fff9db !important; /* やさしいひよこイエロー */
+/* 進捗バー表示（[#####.....]） */
+.progress-bar {
+    font-weight: bold;
 }
 
-/* どんぐりのような回数マーク */
-.count-badge {
-    background-color: #fff0e0;
-    color: #c68b59;
-    border: 2px solid #e8ccb5;
-    padding: 2px 10px;
-    border-radius: 8px;
+/* 右側：コマンドログ展開エリア */
+.cmd-line {
+    color: #ffffff;
     font-size: 12px;
-    font-weight: bold;
-}
-
-/* 右側：思い出アルバム風ログ */
-.diary-title {
-    font-size: 15px;
-    font-weight: bold;
     margin-bottom: 16px;
-    color: #c68b59;
 }
 
-.diary-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.diary-card {
-    background-color: #ffffff;
-    border: 2px solid #bba38a;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 4px 0px rgba(187, 163, 138, 0.1);
-    position: relative;
-}
-
-/* クリップで留めたようなデザイン */
-.diary-card::before {
-    content: "📎";
-    position: absolute;
-    top: -12px;
-    left: 20px;
-    font-size: 20px;
-}
-
-.diary-num {
+.log-entry {
+    border-left: 2px solid #39ff14;
+    padding-left: 12px;
+    margin-bottom: 16px;
     font-size: 11px;
-    font-weight: bold;
-    color: #a38f80;
+}
+
+.log-meta {
+    color: #888888;
     margin-bottom: 4px;
 }
 
-.diary-teacher {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 4px;
+.log-value {
+    color: #ffffff;
 }
 
-.diary-date {
+/* 待機プレースホルダー（点滅カーソル） */
+.terminal-idle {
     font-size: 12px;
-    color: #a38f80;
+    color: #888888;
+    line-height: 1.8;
 }
 
-/* 手書きイラスト風待機画面 */
-.page-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #bba38a;
-    text-align: center;
+.cursor-blink {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background-color: #39ff14;
+    animation: blink 1s infinite steps(1);
+    vertical-align: middle;
+    margin-left: 4px;
 }
 
-.empty-drawing {
-    font-size: 48px;
-    margin-bottom: 16px;
-    animation: sway 3s infinite ease-in-out;
-}
-
-@keyframes sway {
-    0%, 100% { transform: rotate(-8deg); }
-    50% { transform: rotate(8deg); }
-}
-
-.empty-text {
-    font-size: 12px;
-    line-height: 1.6;
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
 }
 </style>
 
@@ -333,64 +260,62 @@ select {
 <body>
 
 <!-- ヘッダー -->
-<div class="app-header">
-    <div class="brand-title">
-        <span class="brand-icon">🎨</span>
-        <span>面接とっくんノート</span>
-    </div>
-    <span class="app-badge">たいせつなきろく</span>
+<div class="terminal-header">
+    <div class="brand-title">CORE-SHELL://MEISETSU_DATABASE_CLI</div>
+    <div class="system-status">SYS_STATUS: ONLINE</div>
 </div>
 
-<!-- メインエリア（リングノート） -->
-<div class="app-content">
+<!-- メインエリア -->
+<div class="terminal-workspace">
 
-    <!-- 左ページ（名簿） -->
-    <div class="sketch-page">
-        <div class="page-header">
-            <div class="page-title">🌳 とっくんメンバー</div>
+    <!-- 左パネル -->
+    <div class="terminal-panel">
+        <div class="panel-header">
+            <span>[STUDENT_INDEX_MODULE]</span>
+            <span>MEM_USE: 4.2%</span>
         </div>
-        <div class="page-body">
+        <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>ならびかえ:</span>
+                    <span>QUERY_SORT:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">たくさん練習した順</option>
-                        <option value="id">名簿のID順</option>
+                        <option value="count">SESSION_COUNT (DESC)</option>
+                        <option value="id">SYSTEM_ID (ASC)</option>
                     </select>
                 </div>
-                <div>
-                    <button class="btn-crayon" onclick="refreshData()">ノートをひらく</button>
+                <div style="text-align: right;">
+                    <button class="btn-console" onclick="refreshData()">re-execute</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="crayon-table" id="summaryTable">
+            <table class="term-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>生徒ID</th>
-                        <th style="text-align: right; width: 120px;">がんばった数</th>
+                        <th>TARGET_NODE_ID</th>
+                        <th style="text-align: right; width: 140px;">METRIC_SESSIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JSで展開 -->
+                    <!-- 動的挿入 -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- 右ページ（思い出のアルバム） -->
-    <div class="sketch-page">
-        <div class="page-header">
-            <div class="page-title">📖 がんばったきろく</div>
+    <!-- 右パネル -->
+    <div class="terminal-panel">
+        <div class="panel-header">
+            <span>[SHELL_OUTPUT]</span>
+            <span>TTY: PTS/01</span>
         </div>
-        <div id="historyArea" class="page-body">
-            <!-- 未選択時の表示 -->
-            <div class="page-empty">
-                <div class="empty-drawing">✏️</div>
-                <p class="empty-text">
-                    ひだりのページから生徒IDをえらぶと、<br>
-                    これまでの特訓の思い出がここにひらきます。
-                </p>
+        <div id="historyArea" class="panel-body">
+            <!-- 待機画面 -->
+            <div class="terminal-idle">
+                meisetsu-server login: root<br>
+                Last login: Wed Jul 15 14:30:08 on console<br><br>
+                $ select_target_node --run<br>
+                Waiting for target selection input<span class="cursor-blink"></span>
             </div>
         </div>
     </div>
@@ -405,7 +330,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = now.toLocaleTimeString("ja-JP") + " にひらいたよ";
+    document.getElementById("updateTime").innerHTML = "SYS_TIME: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -435,15 +360,20 @@ function loadSummary(){
         }
 
         students.forEach(student => {
+            // カウントバーの視覚化 ([#####.....])
+            let filled = Math.min(student.count, 10);
+            let empty = Math.max(0, 10 - filled);
+            let bar = "[" + "#".repeat(filled) + ".".repeat(empty) + "]";
+
             html += `
             <tr id="row-${student.id}">
                 <td>
                     <button class="student-btn" onclick="showHistory('${student.id}')">
-                        🙋 ${student.id}
+                        ${student.id}
                     </button>
                 </td>
-                <td style="text-align: right;">
-                    <span class="count-badge">${student.count} 回</span>
+                <td style="text-align: right;" class="progress-bar">
+                    ${bar} [${student.count}]
                 </td>
             </tr>
             `;
@@ -454,8 +384,8 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.crayon-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブ選択行の表示
+    document.querySelectorAll('.term-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -463,9 +393,10 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="page-empty">
-            <div class="empty-drawing" style="animation: none;">🔍</div>
-            <p class="empty-text">おもいでを探しちゅう...</p>
+        <div class="terminal-idle">
+            $ query_logs --id="${studentId}"<br>
+            [STATUS] REQUEST SENT. RETRIEVING DATA FROM REMOTE API...<br>
+            Please wait<span class="cursor-blink"></span>
         </div>
     `;
 
@@ -473,29 +404,31 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="diary-title">🌟 ${studentId} の思い出メモ</div>
-        <div class="diary-list">
+        <div class="cmd-line">
+            $ query_logs --id="${studentId}" --display=all<br>
+            [SUCCESS] RESOLVED ${data.length} MATCHING LOG ENTRIES.
+        </div>
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="diary-card">
-                <div class="diary-num">たいせつな思い出 0${i+1}</div>
-                <div class="diary-teacher">担当：${data[i].teacher} 先生</div>
-                <div class="diary-date">時間：${date.toLocaleString("ja-JP")}</div>
+            <div class="log-entry">
+                <div class="log-meta"># RECORD_INDEX [0${i+1}]</div>
+                <div>EXAMINER: <span class="log-value">${data[i].teacher}</span></div>
+                <div>TIMESTAMP: <span class="log-value">${date.toLocaleString("ja-JP")}</span></div>
             </div>
             `;
         }
 
-        html += "</div>";
         document.getElementById("historyArea").innerHTML = html;
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="page-empty" style="color: #c97a7a;">
-                <div class="empty-drawing">🍂</div>
-                <p class="empty-text">ノートが風で飛ばされたみたい...もう一回リロードしてみてね。</p>
+            <div class="terminal-idle" style="color: #ff0000;">
+                $ status --check<br>
+                [ERROR] CONNECTION TIMED OUT OR REMOTE HOST RESOLUTION FAILED.<br>
+                EXECUTE 're-execute' TO RESET CORE.
             </div>
         `;
     });
