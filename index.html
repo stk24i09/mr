@@ -1,185 +1,449 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>面接練習回数管理システム</title>
 
 <style>
-/* 全体の基本設定（無駄な余白を消し、読みやすいフォントに） */
-body {
-    font-family: sans-serif;
-    margin: 40px;
-    background-color: #ffffff;
-    color: #333333;
+/* ゼロベースのリセット */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* 左右並びのレイアウト設定 */
-.container {
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f8fafc; /* 極薄のブルーグレー */
+    color: #0f172a;
+    height: 100vh;
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 40px;
-    max-width: 1400px;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* アプリケーションヘッダー */
+.app-bar {
+    background-color: #ffffff;
+    height: 64px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    background-color: #4f46e5; /* インディゴブルー */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: -0.025em;
+}
+
+.badge {
+    background-color: #e0e7ff;
+    color: #4338ca;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+}
+
+/* 2カラムレイアウト */
+.app-viewport {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding: 32px;
+    gap: 32px;
+    max-width: 1500px;
+    width: 100%;
     margin: 0 auto;
 }
 
-.left-panel {
+/* 左右のパネル */
+.card-panel {
     flex: 1;
-    min-width: 400px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
 }
 
-.right-panel {
+.card-header {
+    padding: 24px 32px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.card-body {
+    overflow-y: auto;
     flex: 1;
-    min-width: 400px;
+    padding: 24px 32px;
 }
 
-/* 見出し：シンプルで引き締まった黒 */
-h1, h2 {
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: #111111;
-}
-
-/* 操作エリア：シンプルに横並び */
-.sortArea {
+/* 洗練された操作バー */
+.action-bar {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    font-size: 14px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+}
+
+.select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.select-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
 }
 
 select {
-    padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    background: #ffffff;
-}
-
-button {
-    padding: 6px 15px;
-    font-size: 14px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
+    color: #334155;
+    outline: none;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
-button:hover {
-    background-color: #f5f5f5;
+select:hover {
+    border-color: #cbd5e1;
+}
+
+select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.btn-refresh {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-refresh:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+}
+
+.btn-refresh:active {
+    transform: translateY(0);
 }
 
 #updateTime {
-    margin: 0;
-    color: #666666;
-    font-size: 13px;
+    font-size: 11px;
+    color: #94a3b8;
+    text-align: right;
+    margin-top: 4px;
 }
 
-/* テーブル：すっきりした細い線と、十分な余白 */
-table {
-    border-collapse: collapse;
+/* 生徒一覧テーブルの刷新 */
+.custom-table {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* 行間に隙間を作る */
+    margin-top: -8px;
 }
 
-th, td {
-    border-bottom: 1px solid #e0e0e0; /* 細いグレーの境界線 */
-    padding: 12px;
+.custom-table th {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
     text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-th {
-    background-color: #fafafa;
-    color: #555555;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-td {
-    font-size: 15px;
-}
-
-/* 数値・回数だけは右寄せ、または中央にして見やすく */
-th:nth-child(2), td:nth-child(2) {
-    text-align: center;
-}
-
-/* 生徒IDのリンク：上品な青色に */
-.student-link {
-    color: #0066cc;
-    cursor: pointer;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-.student-link:hover {
-    color: #ff3333;
-}
-
-/* 選択された生徒の行を目立たせる（薄いグレー） */
-.active-row {
-    background-color: #f0f7ff !important;
-}
-
-/* 右側の履歴エリア */
-#historyArea {
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 24px;
-    min-height: 400px;
+.custom-table td {
+    padding: 16px;
     background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.2s;
 }
 
-.placeholder-text {
-    color: #888888;
-    text-align: center;
-    margin-top: 150px;
+.custom-table td:first-child {
+    border-left: 1px solid #f1f5f9;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.custom-table td:last-child {
+    border-right: 1px solid #f1f5f9;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    text-align: right; /* 回数は右寄せにしてスッキリ */
+}
+
+/* ホバー時の美しいバウンス */
+.custom-table tr:hover td {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+/* 生徒IDのリンクボタン化 */
+.student-btn {
     font-size: 14px;
+    font-weight: 600;
+    color: #4f46e5;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.student-btn:hover {
+    background-color: #f5f3ff;
+}
+
+/* 選択された生徒のアクティブ状態 */
+.selected-row td {
+    background-color: #f5f3ff !important;
+    border-color: #ddd6fe !important;
+}
+
+.selected-row .student-btn {
+    color: #6d28d9;
+}
+
+/* 回数バッジ */
+.count-chip {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.selected-row .count-chip {
+    background-color: #ede9fe;
+    color: #6d28d9;
+}
+
+/* タイムライン風の面接詳細履歴 */
+.history-timeline {
+    position: relative;
+    padding-left: 24px;
+    margin-top: 16px;
+}
+
+.history-timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background-color: #e2e8f0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 24px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -21px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4f46e5;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 1px #4f46e5;
+}
+
+.timeline-content {
+    background-color: #f8fafc;
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: 1px solid #f1f5f9;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.timeline-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.timeline-teacher {
+    font-size: 13px;
+    color: #475569;
+}
+
+/* プレースホルダー（未選択・読み込み中） */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #94a3b8;
+    text-align: center;
+    padding: 32px;
+}
+
+.empty-state-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    background-color: #f1f5f9;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state-text {
+    font-size: 13px;
+    font-weight: 500;
 }
 </style>
 
 </head>
 
-
 <body>
 
-<div class="container">
+<!-- アプリヘッダー -->
+<div class="app-bar">
+    <div class="brand">
+        <div class="brand-icon">M</div>
+        <div class="brand-name">面接練習管理</div>
+        <span class="badge">教員用</span>
+    </div>
+</div>
 
-    <!-- 左パネル：一覧 -->
-    <div class="left-panel">
-        <h1>面接練習回数一覧</h1>
-        
-        <div class="sortArea">
-            <label for="sortSelect">並び替え：</label>
-            <select id="sortSelect" onchange="loadSummary()">
-                <option value="count">面接回数順</option>
-                <option value="id">生徒ID順</option>
-            </select>
-            
-            <button onclick="refreshData()">🔄 更新</button>
-            <span id="updateTime"></span>
+<!-- メイン画面 -->
+<div class="app-viewport">
+
+    <!-- 左：生徒一覧カード -->
+    <div class="card-panel">
+        <div class="card-header">
+            <div class="card-title">生徒一覧</div>
         </div>
+        <div class="card-body">
+            <div class="action-bar">
+                <div class="select-wrapper">
+                    <span class="select-label">並び替え</span>
+                    <select id="sortSelect" onchange="loadSummary()">
+                        <option value="count">面接回数順</option>
+                        <option value="id">生徒ID順</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-refresh" onclick="refreshData()">
+                        🔄 データを更新
+                    </button>
+                    <p id="updateTime"></p>
+                </div>
+            </div>
 
-        <table id="summaryTable">
-            <tr>
-                <th>生徒ID</th>
-                <th>面接回数</th>
-            </tr>
-        </table>
+            <table class="custom-table" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>生徒ID</th>
+                        <th style="text-align: right;">面接回数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JSで挿入されます -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- 右パネル：履歴詳細 -->
-    <div class="right-panel">
-        <div id="historyArea">
-            <p class="placeholder-text">生徒IDをクリックすると、ここに詳細な履歴が表示されます。</p>
+    <!-- 右：履歴詳細カード -->
+    <div class="card-panel">
+        <div class="card-header">
+            <div class="card-title">履歴詳細</div>
+        </div>
+        <div id="historyArea" class="card-body">
+            <!-- 初期状態の表示 -->
+            <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <p class="empty-state-text">生徒をクリックすると、ここに面接履歴が表示されます。</p>
+            </div>
         </div>
     </div>
 
 </div>
-
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
@@ -190,21 +454,16 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "（最終更新：" + now.toLocaleTimeString("ja-JP") + "）";
+    document.getElementById("updateTime").innerHTML = now.toLocaleTimeString("ja-JP") + " 更新";
 }
 
 function loadSummary(){
     fetch(API_URL + "?mode=summary")
-    .then(response=>response.json())
-    .then(data=>{
-        let html = `
-        <tr>
-            <th>生徒ID</th>
-            <th>面接回数</th>
-        </tr>
-        `;
+    .then(response => response.json())
+    .then(data => {
+        let html = "";
 
-        let students=[];
+        let students = [];
         for(let id in data){
             students.push({
                 id: id,
@@ -215,7 +474,7 @@ function loadSummary(){
         const sortType = document.getElementById("sortSelect").value;
 
         // 面接回数順
-        if(sortType=="count"){
+        if(sortType == "count"){
             students.sort(function(a, b){
                 return b.count - a.count;
             });
@@ -233,63 +492,74 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <span class="student-link" onclick="showHistory('${student.id}')">
+                    <button class="student-btn" onclick="showHistory('${student.id}')">
                         ${student.id}
-                    </span>
+                    </button>
                 </td>
                 <td>
-                    ${student.count}回
+                    <span class="count-chip">${student.count}回</span>
                 </td>
             </tr>
             `;
         });
 
-        document.getElementById("summaryTable").innerHTML = html;
+        // プレースホルダーの table タグを維持するためにヘッダーと統合
+        document.querySelector("#summaryTable tbody").innerHTML = html;
     });
 }
 
 function showHistory(studentId){
-    // 選択された生徒の行に薄い青背景を設定
-    document.querySelectorAll('#summaryTable tr').forEach(tr => tr.classList.remove('active-row'));
+    // クリックされた行をハイライト（selected-rowクラスを付与）
+    document.querySelectorAll('#summaryTable tr').forEach(tr => tr.classList.remove('selected-row'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('active-row');
+        selectedRow.classList.add('selected-row');
     }
 
-    // 読み込み中表示
-    document.getElementById("historyArea").innerHTML = `<p class="placeholder-text">データを読み込んでいます...</p>`;
+    // 読み込み中
+    document.getElementById("historyArea").innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">🔄</div>
+            <p class="empty-state-text">履歴を読み込んでいます...</p>
+        </div>
+    `;
 
     fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
-    .then(response=>response.json())
-    .then(data=>{
+    .then(response => response.json())
+    .then(data => {
         let html = `
-        <h2 style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 15px;">
-            ${studentId} の面接履歴
+        <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 24px; color: #0f172a;">
+            ${studentId} の履歴
         </h2>
-        <table>
-            <tr>
-                <th>回数</th>
-                <th>日時</th>
-                <th>担当先生</th>
-            </tr>
+        <div class="history-timeline">
         `;
 
-        for(let i=0; i<data.length; i++){
+        for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <tr>
-                <td>${i+1}回目</td>
-                <td>${date.toLocaleString("ja-JP")}</td>
-                <td>${data[i].teacher}</td>
-            </tr>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-title">${i+1}回目</span>
+                        <span class="timeline-date">${date.toLocaleString("ja-JP")}</span>
+                    </div>
+                    <div class="timeline-teacher">担当：<strong>${data[i].teacher}</strong> 先生</div>
+                </div>
+            </div>
             `;
         }
 
-        html += "</table>";
+        html += "</div>";
         document.getElementById("historyArea").innerHTML = html;
     })
     .catch(error => {
-        document.getElementById("historyArea").innerHTML = `<p class="placeholder-text" style="color: red;">エラー：データの取得に失敗しました。</p>`;
+        document.getElementById("historyArea").innerHTML = `
+            <div class="empty-state" style="color: #ef4444;">
+                <div class="empty-state-icon">⚠️</div>
+                <p class="empty-state-text">データの取得に失敗しました。再度お試しください。</p>
+            </div>
+        `;
     });
 }
 </script>
