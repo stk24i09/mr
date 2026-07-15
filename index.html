@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>面接練習回数管理システム</title>
+<title>面接練習回数管理システム - MATRIX VERSION</title>
 
 <style>
 /* 共通リセット */
@@ -15,342 +15,253 @@
 }
 
 body {
-    font-family: "Impact", "Arial Black", "Hiragino Kaku Gothic ProN", "Helvetica Neue", sans-serif;
-    background-color: #FFFCEB; /* 明るいレモンクリーム */
-    color: #1E1E1E; /* 濃いブラック */
+    font-family: 'Courier New', Courier, monospace, "Hiragino Sans", "Meiryo", sans-serif;
+    background-color: #050a05; /* 極限まで深い緑がかった黒 */
+    color: #39ff14; /* ネオングリーン（蛍光） */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 20px;
+    padding: 16px;
+    position: relative;
 }
 
-/* ヘッダー：大胆な帯デザイン */
+/* ブラウン管風のスキャンライン効果 */
+body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 10;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* ヘッダー：軍用コンソール風 */
 .app-header {
-    background-color: #A78BFA; /* ポップなパープル */
-    border: 3px solid #1E1E1E;
-    box-shadow: 5px 5px 0px #1E1E1E;
-    height: 70px;
-    padding: 0 24px;
+    border: 1px solid #39ff14;
+    height: 50px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
-    border-radius: 12px;
-    flex-shrink: 0;
+    margin-bottom: 16px;
+    background: rgba(0, 20, 0, 0.4);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
 }
 
-.brand-title {
-    font-size: 20px;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.brand {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
-.brand-icon {
-    font-size: 28px;
-    transform: rotate(-10deg); /* 遊び心で少し傾ける */
+.brand::after {
+    content: " _";
+    animation: blink 1s step-start infinite;
 }
 
-.app-badge {
-    background-color: #34D399; /* ビビッドミント */
-    color: #1E1E1E;
-    font-size: 13px;
-    font-weight: 800;
-    padding: 6px 16px;
-    border: 2px solid #1E1E1E;
-    border-radius: 8px;
-    box-shadow: 2px 2px 0px #1E1E1E;
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.system-status {
+    font-size: 12px;
+    color: #39ff14;
+    background: rgba(57, 255, 20, 0.1);
+    padding: 4px 10px;
+    border-radius: 2px;
 }
 
 /* 2カラムレイアウト */
-.app-content {
+.app-viewport {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 24px;
-    width: 100%;
+    gap: 16px;
 }
 
-/* 太フチ・ベタ影のカード */
-.brutal-card {
+/* コンソールウィンドウ */
+.terminal-window {
     flex: 1;
-    background-color: #FFFFFF;
-    border: 3px solid #1E1E1E;
-    border-radius: 16px;
-    box-shadow: 8px 8px 0px #1E1E1E; /* ぼかさない極太影 */
+    border: 1px solid #39ff14;
+    background: rgba(0, 10, 0, 0.8);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    transition: transform 0.1s;
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.1) inset;
 }
 
-.card-header {
-    padding: 20px 24px;
-    background-color: #F3F4F6;
-    border-bottom: 3px solid #1E1E1E;
-    flex-shrink: 0;
+.window-header {
+    background: rgba(57, 255, 20, 0.15);
+    padding: 10px 16px;
+    border-bottom: 1px solid #39ff14;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-.card-title {
-    font-size: 18px;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.card-body {
+.window-body {
     overflow-y: auto;
     flex: 1;
-    padding: 24px;
+    padding: 16px;
 }
 
-/* コントロールパネル */
-.control-panel {
+/* コントロール */
+.terminal-controls {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed rgba(57, 255, 20, 0.3);
+    padding-bottom: 12px;
 }
 
-.filter-group {
+.control-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    font-size: 12px;
 }
 
-.filter-label {
-    font-size: 13px;
-    font-weight: 800;
-}
-
-/* 押し心地抜群のボタン＆セレクト */
 select {
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: 800;
-    border: 3px solid #1E1E1E;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-    color: #1E1E1E;
+    background: #000;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    padding: 6px 12px;
+    font-family: inherit;
     outline: none;
     cursor: pointer;
-    box-shadow: 3px 3px 0px #1E1E1E;
-    transition: all 0.1s;
 }
 
-select:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0px #1E1E1E;
+select option {
+    background: #050a05;
 }
 
-select:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0px #1E1E1E;
-}
-
-.btn-brutal {
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 900;
-    background-color: #FF8A5B; /* ポップなオレンジ */
-    color: #1E1E1E;
-    border: 3px solid #1E1E1E;
-    border-radius: 10px;
+.btn-terminal {
+    background: transparent;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    padding: 6px 16px;
+    font-family: inherit;
     cursor: pointer;
-    box-shadow: 4px 4px 0px #1E1E1E;
-    transition: all 0.1s;
-    letter-spacing: 0.05em;
+    font-size: 11px;
+    transition: all 0.2s;
 }
 
-.btn-brutal:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0px #1E1E1E;
-}
-
-.btn-brutal:active {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0px #1E1E1E;
+.btn-terminal:hover {
+    background: #39ff14;
+    color: #050a05;
+    box-shadow: 0 0 10px #39ff14;
 }
 
 #updateTime {
-    font-size: 12px;
-    font-weight: 800;
-    color: #6B7280;
-    margin-top: 6px;
-    text-align: right;
+    font-size: 10px;
+    color: rgba(57, 255, 20, 0.6);
+    margin-top: 4px;
 }
 
-/* クッキリした太枠テーブル */
-.brutal-table {
+/* ターミナル風テーブル */
+.terminal-table {
     width: 100%;
     border-collapse: collapse;
-    border: 3px solid #1E1E1E;
 }
 
-.brutal-table th {
-    padding: 14px 16px;
-    font-size: 13px;
-    font-weight: 900;
-    background-color: #F3F4F6;
-    color: #1E1E1E;
+.terminal-table th {
+    border-bottom: 1px solid #39ff14;
+    padding: 10px;
+    font-size: 12px;
     text-align: left;
-    border-bottom: 3px solid #1E1E1E;
-    border-right: 3px solid #1E1E1E;
+    color: rgba(57, 255, 20, 0.7);
 }
 
-.brutal-table th:last-child {
-    border-right: none;
+.terminal-table td {
+    padding: 12px 10px;
+    border-bottom: 1px dashed rgba(57, 255, 20, 0.15);
+    font-size: 13px;
 }
 
-.brutal-table td {
-    padding: 14px 16px;
-    font-size: 14px;
-    font-weight: 800;
-    background-color: #FFFFFF;
-    border-bottom: 3px solid #1E1E1E;
-    border-right: 3px solid #1E1E1E;
+.terminal-table tr:hover td {
+    background: rgba(57, 255, 20, 0.05);
 }
 
-.brutal-table td:last-child {
-    border-right: none;
-}
-
-.brutal-table tr:last-child td {
-    border-bottom: none;
-}
-
-/* 生徒リンクボタン：太い下線 */
-.student-btn {
-    font-size: 15px;
-    font-weight: 900;
-    color: #1E1E1E;
+/* 生徒選択リンク */
+.id-link {
     background: none;
     border: none;
+    color: #39ff14;
+    font-family: inherit;
+    font-weight: bold;
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 4px;
-    transition: color 0.1s;
+    text-decoration: none;
+    border-bottom: 1px dotted #39ff14;
 }
 
-.student-btn:hover {
-    color: #8B5CF6; /* パープルにチェンジ */
+.id-link:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
 }
 
-/* 行選択時の「アクティブ・カラー」 */
-.row-selected td {
-    background-color: #FEF3C7 !important; /* 目立つライトイエロー */
+/* 選択行のネオン光 */
+.row-active td {
+    background: rgba(57, 255, 20, 0.1) !important;
+    text-shadow: 0 0 5px #39ff14;
 }
 
-/* ポップな丸型カウントバッジ */
-.brutal-badge {
-    background-color: #34D399;
-    color: #1E1E1E;
-    border: 2px solid #1E1E1E;
-    padding: 4px 12px;
-    border-radius: 20px;
+.count-text {
+    font-weight: bold;
+}
+
+/* ログリスト */
+.log-meta {
     font-size: 13px;
-    font-weight: 900;
-    box-shadow: 2px 2px 0px #1E1E1E;
-    display: inline-block;
+    border-bottom: 1px dashed #39ff14;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
 }
 
-/* 右側：履歴リスト */
-.history-title {
-    font-size: 18px;
-    font-weight: 900;
-    margin-bottom: 20px;
-    background-color: #FEE2E2; /* ピンクの蛍光ペン風背景 */
-    display: inline-block;
-    padding: 4px 12px;
-    border: 2px solid #1E1E1E;
-    border-radius: 6px;
-    box-shadow: 3px 3px 0px #1E1E1E;
-}
-
-.history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.history-item {
-    background-color: #FFFFFF;
-    border: 3px solid #1E1E1E;
-    border-radius: 12px;
-    padding: 16px 20px;
-    box-shadow: 4px 4px 0px #1E1E1E;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.history-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.history-number {
-    font-size: 11px;
-    font-weight: 900;
-    color: #FFFFFF;
-    background-color: #1E1E1E;
-    padding: 2px 8px;
-    border-radius: 4px;
-    width: max-content;
-}
-
-.history-teacher {
-    font-size: 15px;
-    font-weight: 900;
-}
-
-.history-date {
+.log-item {
+    border-left: 2px solid #39ff14;
+    padding-left: 14px;
+    margin-bottom: 14px;
     font-size: 12px;
-    font-weight: 800;
-    color: #4B5563;
-    background-color: #F3F4F6;
-    border: 2px solid #1E1E1E;
-    padding: 4px 10px;
-    border-radius: 8px;
 }
 
-/* 空状態のポップなプレースホルダー */
-.brutal-empty {
+.log-session {
+    font-size: 10px;
+    color: rgba(57, 255, 20, 0.6);
+}
+
+.log-teacher {
+    font-weight: bold;
+    margin: 2px 0;
+}
+
+.log-date {
+    font-size: 11px;
+}
+
+/* 未接続時の待機画面 */
+.terminal-idle {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
+    color: rgba(57, 255, 20, 0.5);
     text-align: center;
 }
 
-.brutal-empty-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    animation: bounce 1s infinite alternate;
+.idle-code {
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
-@keyframes bounce {
-    0% { transform: translateY(0) rotate(-5deg); }
-    100% { transform: translateY(-10px) rotate(5deg); }
-}
-
-.brutal-empty-text {
-    font-size: 14px;
-    font-weight: 900;
-    background-color: #F3F4F6;
-    border: 2px solid #1E1E1E;
-    padding: 8px 16px;
-    border-radius: 8px;
-    box-shadow: 3px 3px 0px #1E1E1E;
+.idle-text {
+    font-size: 12px;
 }
 </style>
 
@@ -360,60 +271,53 @@ select:active {
 
 <!-- ヘッダー -->
 <div class="app-header">
-    <div class="brand-title">
-        <span class="brand-icon">💥</span>
-        <span>MEISET-SU STRIKE!</span>
-    </div>
-    <span class="app-badge">TEACHER CONSOLE</span>
+    <div class="brand">SYSTEM_ID://MEISETSU_LOG</div>
+    <div class="system-status">PORT: 8080 // ON-LINE</div>
 </div>
 
 <!-- メインエリア -->
-<div class="app-content">
+<div class="app-viewport">
 
     <!-- 左パネル -->
-    <div class="brutal-card">
-        <div class="card-header">
-            <div class="card-title">👥 STUDENTS LIST</div>
-        </div>
-        <div class="card-body">
-            <div class="control-panel">
-                <div class="filter-group">
-                    <span class="filter-label">SORT:</span>
+    <div class="terminal-window">
+        <div class="window-header">> STUDENT_DATABASE</div>
+        <div class="window-body">
+            <div class="terminal-controls">
+                <div class="control-item">
+                    <span>SORT_BY:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">面接回数が多い順</option>
-                        <option value="id">生徒ID順</option>
+                        <option value="count">COUNT_DESC</option>
+                        <option value="id">ID_ASC</option>
                     </select>
                 </div>
-                <div>
-                    <button class="btn-brutal" onclick="refreshData()">RELOAD</button>
+                <div style="text-align: right;">
+                    <button class="btn-terminal" onclick="refreshData()">SYS_RELOAD</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="brutal-table" id="summaryTable">
+            <table class="terminal-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>生徒ID</th>
-                        <th style="text-align: right; width: 120px;">練習回数</th>
+                        <th>STUDENT_ID</th>
+                        <th style="text-align: right; width: 100px;">COUNT</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JSで展開 -->
+                    <!-- 動的展開 -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- 右パネル -->
-    <div class="brutal-card">
-        <div class="card-header">
-            <div class="card-title">⚡ PRACTICE LOG</div>
-        </div>
-        <div id="historyArea" class="card-body">
-            <!-- 未選択時の表示 -->
-            <div class="brutal-empty">
-                <div class="brutal-empty-icon">👉</div>
-                <p class="brutal-empty-text">生徒IDをクリックして、特訓履歴をロードせよ！</p>
+    <div class="terminal-window">
+        <div class="window-header">> LIVE_TRANSMISSION_LOG</div>
+        <div id="historyArea" class="window-body">
+            <!-- デフォルト待機 -->
+            <div class="terminal-idle">
+                <div class="idle-code">[ * ]</div>
+                <p class="idle-text">STAND-BY. SELECT STUDENT_ID TO REQUEST STREAM...</p>
             </div>
         </div>
     </div>
@@ -428,7 +332,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = now.toLocaleTimeString("ja-JP") + " 同期完了";
+    document.getElementById("updateTime").innerHTML = "LAST_SYNC: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -461,12 +365,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="student-btn" onclick="showHistory('${student.id}')">
+                    <button class="id-link" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
-                <td style="text-align: right;">
-                    <span class="brutal-badge">${student.count} 回目</span>
+                <td style="text-align: right;" class="count-text">
+                    ${student.count}
                 </td>
             </tr>
             `;
@@ -477,18 +381,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.brutal-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // 選択行のアクティブ強調
+    document.querySelectorAll('.terminal-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-selected');
+        selectedRow.classList.add('row-active');
     }
 
-    // ロード表示
+    // ロード表示をログ風に
     document.getElementById("historyArea").innerHTML = `
-        <div class="brutal-empty">
-            <div class="brutal-empty-icon">🛰️</div>
-            <p class="brutal-empty-text">データを引き抜いています...</p>
+        <div class="terminal-idle">
+            <div class="idle-code">[ CONNECTING ]</div>
+            <p class="idle-text">FETCHING PACKETS FOR USER: ${studentId} ...</p>
         </div>
     `;
 
@@ -496,35 +400,29 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <h2 class="history-title">
-            🔥 ${studentId} の特訓ログ
-        </h2>
-        <div class="history-list">
+        <div class="log-meta">
+            > RETRIEVED_LOGS_FOR: ${studentId} (${data.length} RECORDS FOUND)
+        </div>
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="history-item">
-                <div class="history-info">
-                    <span class="history-number">ROUND 0${i+1}</span>
-                    <span class="history-teacher">試験官: ${data[i].teacher} 先生</span>
-                </div>
-                <div class="history-date">
-                    ${date.toLocaleString("ja-JP")}
-                </div>
+            <div class="log-item">
+                <div class="log-session">[SESSION_0${i+1}]</div>
+                <div class="log-teacher">INTERVIEWER: ${data[i].teacher}_SENSEI</div>
+                <div class="log-date">TIMESTAMP: ${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
 
-        html += "</div>";
         document.getElementById("historyArea").innerHTML = html;
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="brutal-empty" style="color: #EF4444;">
-                <div class="brutal-empty-icon">☠️</div>
-                <p class="brutal-empty-text">通信エラー！再度リロードボタンを押してください。</p>
+            <div class="terminal-idle" style="color: #ff3939;">
+                <div class="idle-code">[ ERR_CONN ]</div>
+                <p class="idle-text">CONNECTION TERMINATED. UNABLE TO ACCESS DATABASE.</p>
             </div>
         `;
     });
