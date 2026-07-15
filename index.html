@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOTANICAL // ECO-SYSTEM LOG v2.4</title>
+<title>THE ARCHIVE // 蔵書と特訓の記録</title>
 
 <style>
 /* 共通リセット */
@@ -15,61 +15,60 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif;
-    /* 夜の温室をイメージした、深紫と深い緑のグラデーション背景 */
-    background: radial-gradient(circle at top left, #0e1e12 0%, #06040a 60%), radial-gradient(circle at bottom right, #130a1c 0%, #06040a 100%);
-    color: #e2e8f0;
+    /* 格式高い明朝・セリフ体 */
+    font-family: "Georgia", "Times New Roman", "YuMincho", "游明朝", serif;
+    background-color: #1a120b; /* 重厚な書斎の闇 */
+    /* 羊皮紙や古い洋紙のような、かすれたテクスチャ風の背景グラデーション */
+    background-image: radial-gradient(rgba(139, 90, 43, 0.15) 1px, transparent 0), radial-gradient(rgba(139, 90, 43, 0.1) 2px, transparent 0);
+    background-size: 32px 32px;
+    background-position: 0 0, 16px 16px;
+    color: #eed6b3; /* 落ち着いたゴールドベージュ */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     padding: 24px;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
 }
 
-/* ヘッダー：ラボのモニタリングパネル風 */
-.bio-header {
-    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-    height: 56px;
+/* ヘッダー：ヴィンテージな図書館のネームプレート風 */
+.archive-header {
+    border-bottom: 2px solid #b38b4d; /* 鈍く輝く真鍮カラー */
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
+    padding-bottom: 8px;
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    color: #10b981; /* ネオングリーン */
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    color: #e5c185;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .brand-icon {
-    font-size: 20px;
-    animation: pulse 3s infinite ease-in-out;
+    font-size: 24px;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.1); opacity: 1; }
-}
-
-.system-status {
+.app-badge {
     font-size: 11px;
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    padding: 4px 10px;
-    border-radius: 20px;
+    border: 1px solid #b38b4d;
+    color: #b38b4d;
+    padding: 2px 12px;
+    border-radius: 2px;
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 /* 2カラムレイアウト */
-.bio-workspace {
+.archive-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
@@ -77,41 +76,31 @@ body {
     width: 100%;
 }
 
-/* ガラス製温室のような半透明カード */
-.glass-panel {
+/* 古い本棚・キャビネット風の木製パネル */
+.cabinet-panel {
     flex: 1;
-    background: rgba(15, 11, 25, 0.45);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
+    background-color: #271a10; /* 深いマホガニーブラウン */
+    border: 1px solid rgba(179, 139, 77, 0.3);
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    transition: border-color 0.4s;
-}
-
-.glass-panel:hover {
-    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 .panel-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(179, 139, 77, 0.2);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background-color: #1f140d;
 }
 
 .panel-title {
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: bold;
+    color: #e5c185;
     letter-spacing: 0.15em;
-    color: #94a3b8;
-    text-transform: uppercase;
 }
 
 .panel-body {
@@ -120,17 +109,16 @@ body {
     padding: 24px;
 }
 
-/* コントロール（培養コントロール風） */
+/* コントロール（真鍮の調整ツマミ風） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
-    background-color: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    padding: 12px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background-color: #1a100a;
+    border: 1px solid rgba(179, 139, 77, 0.15);
+    padding: 12px;
 }
 
 .filter-group {
@@ -138,121 +126,133 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 12px;
-    color: #94a3b8;
+    color: #a08060;
 }
 
-/* ネオンがかかったダークセレクト */
+/* アンティーク調セレクト */
 select {
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-size: 12px;
     font-family: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    background-color: #0b0713;
-    color: #e2e8f0;
+    border: 1px solid #b38b4d;
+    border-radius: 2px;
+    background-color: #271a10;
+    color: #eed6b3;
     outline: none;
     cursor: pointer;
-    transition: all 0.3s;
 }
 
 select:hover {
-    border-color: #10b981;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+    background-color: #352417;
 }
 
-/* バイオ栽培ボタン */
-.btn-bio {
-    padding: 6px 16px;
+/* 押し込み式インクスタンプ調ボタン */
+.btn-brass {
+    padding: 6px 14px;
     font-size: 12px;
     font-family: inherit;
     font-weight: bold;
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-    border: 1px solid #10b981;
-    border-radius: 8px;
+    background-color: transparent;
+    color: #e5c185;
+    border: 1px solid #b38b4d;
     cursor: pointer;
-    transition: all 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(179, 139, 77, 0.3);
+    transition: all 0.3s;
 }
 
-.btn-bio:hover {
-    background-color: #10b981;
-    color: #06040a;
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+.btn-brass:hover {
+    background-color: #e5c185;
+    color: #1a120b;
+    box-shadow: 0 0 10px rgba(229, 193, 133, 0.3);
 }
 
 #updateTime {
     font-size: 11px;
-    color: #64748b;
+    color: #8c6e51;
     margin-top: 4px;
+    font-style: italic;
 }
 
-/* 培養インデックスリスト */
-.bio-table {
+/* 図書館の蔵書目録風テーブル */
+.archive-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.bio-table th {
-    padding: 12px 8px;
+.archive-table th {
+    padding: 10px 8px;
     font-size: 11px;
-    color: #64748b;
+    color: #a08060;
     text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid #b38b4d;
 }
 
-.bio-table td {
-    padding: 16px 8px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+.archive-table td {
+    padding: 14px 8px;
+    font-size: 14px;
+    border-bottom: 1px dashed rgba(179, 139, 77, 0.2);
 }
 
-/* 生徒ボタン */
+/* 蔵書インデックス（生徒ID）リンク */
 .student-btn {
-    font-size: 13px;
+    font-size: 14px;
     font-family: inherit;
     font-weight: bold;
-    color: #e2e8f0;
+    color: #eed6b3;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.2s;
 }
 
 .student-btn:hover {
-    color: #10b981;
+    color: #e5c185;
+    transform: translateX(3px);
 }
 
-/* 選択行：優雅なグリーンのグラデーション */
+/* 選択行：古いセピア紙が優しく光るような演出 */
 .row-selected td {
-    background-color: rgba(16, 185, 129, 0.06) !important;
-    border-bottom-color: rgba(16, 185, 129, 0.3);
+    background-color: rgba(179, 139, 77, 0.1) !important;
+    border-bottom-color: #b38b4d;
 }
 
 .row-selected .student-btn {
-    color: #10b981;
+    color: #e5c185;
+    text-shadow: 0 0 5px rgba(229, 193, 133, 0.4);
 }
 
-/* 成長度（回数）を示すバイオバッジ */
-.grow-badge {
-    background-color: rgba(16, 185, 129, 0.08);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+/* 貸出回数バッジ（真鍮プレート風） */
+.count-badge {
+    border: 1px solid rgba(179, 139, 77, 0.5);
+    background-color: #1f140d;
+    color: #e5c185;
     padding: 2px 8px;
-    border-radius: 6px;
+    border-radius: 2px;
     font-size: 11px;
     font-weight: bold;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
-/* 右側：培養データ詳細 */
-.specimen-title {
-    font-size: 15px;
+/* 右側：貸出カード風（特訓ログ） */
+.card-sheet-title {
+    font-size: 16px;
     font-weight: bold;
-    color: #10b981;
-    margin-bottom: 16px;
-    border-left: 3px solid #10b981;
-    padding-left: 10px;
+    color: #e5c185;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #b38b4d;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-sheet-stamp {
+    font-size: 11px;
+    color: #a08060;
+    border: 1px dashed #a08060;
+    padding: 1px 6px;
 }
 
 .log-list {
@@ -261,58 +261,65 @@ select:hover {
     gap: 16px;
 }
 
+/* 古びた図書カード風コンテナ */
 .log-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
+    background-color: #eed6b3; /* 羊皮紙のベージュ */
+    color: #271a10; /* 文字はインクの焦げ茶 */
+    border-radius: 2px;
     padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    transition: border-color 0.3s;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.4);
+    position: relative;
+    border-left: 6px solid #b38b4d; /* 貸出カードのインデックススタンプを表現 */
 }
 
-.log-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
+.log-card::before {
+    content: "APPROVED";
+    position: absolute;
+    right: 16px;
+    bottom: 8px;
+    font-size: 11px;
+    font-weight: 900;
+    color: rgba(139, 90, 43, 0.15); /* うっすらとした承認印 */
+    border: 2px solid rgba(139, 90, 43, 0.15);
+    padding: 2px 6px;
+    transform: rotate(-8deg);
 }
 
 .log-num {
     font-size: 10px;
-    color: #64748b;
+    font-weight: bold;
+    color: #8c6e51;
     letter-spacing: 0.1em;
+    margin-bottom: 4px;
 }
 
-.log-detail {
-    font-size: 13px;
-    color: #cbd5e1;
+.log-teacher {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
-.log-highlight {
-    color: #10b981;
+.log-date {
+    font-size: 11px;
+    color: #5c4331;
 }
 
-/* プレースホルダー */
-.empty-glass {
+/* 未選択：暗がりの中のキャンドルと古書 */
+.empty-library {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #64748b;
+    color: #8c6e51;
     text-align: center;
 }
 
 .empty-icon {
     font-size: 32px;
-    color: #10b981;
-    opacity: 0.3;
+    color: #b38b4d;
     margin-bottom: 16px;
-    animation: float 4s infinite ease-in-out;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    opacity: 0.6;
 }
 
 .empty-text {
@@ -326,42 +333,42 @@ select:hover {
 <body>
 
 <!-- ヘッダー -->
-<div class="bio-header">
+<div class="archive-header">
     <div class="brand-title">
-        <span class="brand-icon">🌱</span>
-        <span>MEISETSU // BIO-CONSOLE</span>
+        <span class="brand-icon">📜</span>
+        <span>THE ARCHIVE / 面接特訓目録</span>
     </div>
-    <div class="system-status">SYS_ECO: SECURE</div>
+    <div class="app-badge">Classics v1.0</div>
 </div>
 
 <!-- メインエリア -->
-<div class="bio-workspace">
+<div class="archive-workspace">
 
-    <!-- 左ガラスパネル -->
-    <div class="glass-panel">
+    <!-- 左キャビネット：生徒名簿 -->
+    <div class="cabinet-panel">
         <div class="panel-header">
-            <div class="panel-title">SPECIMEN LIST</div>
+            <div class="panel-title">📚 蔵書目録 (生徒索引)</div>
         </div>
         <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>SORT:</span>
+                    <span>並び替え:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">GROWTH_RATE (DESC)</option>
-                        <option value="id">SPECIMEN_ID (ASC)</option>
+                        <option value="count">特訓回数の多い順</option>
+                        <option value="id">名簿 ID 順</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-bio" onclick="refreshData()">RE-SCAN</button>
+                    <button class="btn-brass" onclick="refreshData()">図書整理 (同期)</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="bio-table" id="summaryTable">
+            <table class="archive-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>NAME (ID)</th>
-                        <th style="text-align: right; width: 120px;">GROWTH (TIMES)</th>
+                        <th>生徒識別番号</th>
+                        <th style="text-align: right; width: 120px;">貸出 (特訓) 回数</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -371,18 +378,18 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右ガラスパネル -->
-    <div class="glass-panel">
+    <!-- 右キャビネット：貸出記録 -->
+    <div class="cabinet-panel">
         <div class="panel-header">
-            <div class="panel-title">CHRONO-DATABASE</div>
+            <div class="panel-title">📖 貸出記録簿</div>
         </div>
         <div id="historyArea" class="panel-body">
             <!-- 未選択表示 -->
-            <div class="empty-glass">
-                <div class="empty-icon">🍀</div>
+            <div class="empty-library">
+                <div class="empty-icon">🕯️</div>
                 <p class="empty-text">
-                    ポッドが休止状態にあります。<br>
-                    左の検体を選択して、これまでの培養データを復元してください。
+                    書棚は静かに閉じられています。<br>
+                    左の識別番号を選択すると、過去の貸出（特訓）カードが引き出されます。
                 </p>
             </div>
         </div>
@@ -398,7 +405,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SCAN: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "整理時刻: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -432,11 +439,11 @@ function loadSummary(){
             <tr id="row-${student.id}">
                 <td>
                     <button class="student-btn" onclick="showHistory('${student.id}')">
-                        🟢 ${student.id}
+                        ✒️ ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="grow-badge">${student.count} G_LEVEL</span>
+                    <span class="count-badge">${student.count} 回</span>
                 </td>
             </tr>
             `;
@@ -448,7 +455,7 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.bio-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.archive-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -456,9 +463,9 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-glass">
-            <div class="empty-icon" style="animation: none;">🧬</div>
-            <p class="empty-text">波長を同調中。データをシーケンス化しています...</p>
+        <div class="empty-library">
+            <div class="empty-icon">⏳</div>
+            <p class="empty-text">奥の書架から、該当する貸出カードを運んでいます...</p>
         </div>
     `;
 
@@ -466,7 +473,10 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="specimen-title">RECORD FOR [ ${studentId} ]</div>
+        <div class="card-sheet-title">
+            <span>REGISTRY: ${studentId}</span>
+            <span class="card-sheet-stamp">ARCHIVED</span>
+        </div>
         <div class="log-list">
         `;
 
@@ -474,11 +484,9 @@ function showHistory(studentId){
             let date = new Date(data[i].date);
             html += `
             <div class="log-card">
-                <div class="log-num">SEQUENCE // 0${i+1}</div>
-                <div class="log-detail">
-                    SUPERVISOR: <span class="log-highlight">${data[i].teacher}</span> 先生<br>
-                    TIMESTAMP: ${date.toLocaleString("ja-JP")}
-                </div>
+                <div class="log-num">ENTRY NO. 0${i+1}</div>
+                <div class="log-teacher">指導司書：${data[i].teacher} 先生</div>
+                <div class="log-date">調製日時：${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
@@ -488,9 +496,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-glass" style="color: #ef4444;">
+            <div class="empty-library" style="color: #c97a7a;">
                 <div class="empty-icon">⚠️</div>
-                <p class="empty-text">バイオ通信エラー。シグナルが遮断されました。再スキャンしてください。</p>
+                <p class="empty-text">インデックスの復元に失敗しました。書物整理（同期）をもう一度実行してください。</p>
             </div>
         `;
     });
