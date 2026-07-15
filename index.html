@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SYS.TERMINAL // DATA_CONNECTION</title>
+<title>Workspace</title>
 
 <style>
 /* 共通リセット */
@@ -15,60 +15,51 @@
 }
 
 body {
-    /* 開発環境でよく使われる等幅フォントをベースに設定 */
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    background-color: #121212; /* 深いチャコールグレー */
-    color: #e0e0e0; /* オフホワイト */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #111111;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 16px;
-    font-size: 13px;
-    line-height: 1.5;
+    padding: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* ヘッダー：ターミナルのステータスバー風 */
-.term-header {
+/* シンプルなヘッダー（余白でゾーニング） */
+.header {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    padding: 8px 16px;
-    background-color: #1a1a1a;
-    border-bottom: 1px solid #333;
-    margin-bottom: 16px;
+    margin-bottom: 48px;
+    flex-shrink: 0;
 }
 
 .brand-title {
-    font-weight: bold;
-    color: #00bcd4; /* ターミナルシアン */
-    letter-spacing: 0.05em;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
-.brand-title::before {
-    content: "> ";
-    color: #4caf50; /* ターミナルグリーン */
-}
-
-.sys-info {
-    color: #888;
-    font-size: 11px;
+.app-status {
+    font-size: 12px;
+    color: #888888;
+    font-weight: 400;
 }
 
 /* 2カラムレイアウト */
-.term-workspace {
+.workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 16px;
+    gap: 64px; /* 広めの余白で情報の混ざりを防ぐ */
     width: 100%;
 }
 
-/* 各種パネル */
-.term-panel {
+/* パネル */
+.panel {
     flex: 1;
-    background-color: #1e1e1e;
-    border: 1px solid #333;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -76,257 +67,203 @@ body {
 }
 
 .panel-header {
-    background-color: #252526;
-    padding: 8px 16px;
-    border-bottom: 1px solid #333;
-    color: #aaa;
     font-size: 11px;
+    font-weight: 600;
+    color: #888888;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    margin-bottom: 24px;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 16px;
 }
 
-/* ツールバー */
+/* コントロール（余白と文字だけで構成） */
 .control-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px dashed #444;
+    margin-bottom: 32px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #888;
+    gap: 12px;
+    font-size: 13px;
+    color: #666666;
 }
 
-/* コマンドプロンプト風セレクトボックス */
+/* プレーンなドロップダウン */
 select {
-    background-color: #121212;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    padding: 4px 8px;
+    padding: 4px 0;
+    font-size: 13px;
     font-family: inherit;
-    font-size: 12px;
+    border: none;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: transparent;
+    color: #111111;
     outline: none;
     cursor: pointer;
+    transition: border-color 0.15s;
 }
 
-select:focus {
-    border-color: #00bcd4;
+select:hover {
+    border-color: #111111;
 }
 
-/* ソリッドなボタン */
-.btn-cmd {
-    background-color: transparent;
-    color: #00bcd4;
-    border: 1px solid #00bcd4;
-    padding: 4px 12px;
+/* 境界線のないテキストボタン */
+.btn-plain {
+    background: none;
+    border: none;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #111111;
     cursor: pointer;
-    transition: all 0.1s;
+    padding: 4px 0;
+    border-bottom: 1px solid #111111;
+    transition: opacity 0.15s;
 }
 
-.btn-cmd:hover {
-    background-color: #00bcd4;
-    color: #121212;
-}
-
-.btn-cmd:active {
-    transform: translateY(1px);
+.btn-plain:hover {
+    opacity: 0.6;
 }
 
 #updateTime {
     font-size: 10px;
-    color: #666;
-    margin-top: 4px;
+    color: #aaaaaa;
+    margin-top: 6px;
     text-align: right;
 }
 
-/* テーブルスタイル */
-.data-table {
+/* 線を極限まで省いたリスト（テーブル） */
+.list-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.data-table th {
-    padding: 8px;
-    color: #888;
+.list-table th {
+    padding: 8px 0;
     font-size: 11px;
-    font-weight: normal;
+    font-weight: 500;
+    color: #888888;
     text-align: left;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.data-table td {
-    padding: 10px 8px;
-    border-bottom: 1px solid #2a2a2a;
+.list-table td {
+    padding: 16px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #f9f9f9;
 }
 
-/* リストアイテム（ボタン） */
-.list-item-btn {
+/* リスト内のテキストリンク */
+.item-btn {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 400;
+    color: #111111;
     background: none;
     border: none;
-    color: #e0e0e0;
-    font-family: inherit;
-    font-size: 13px;
     cursor: pointer;
     text-align: left;
-    width: 100%;
-    display: flex;
-    align-items: center;
+    transition: opacity 0.15s;
 }
 
-.list-item-btn::before {
-    content: "[ ]";
-    color: #555;
-    margin-right: 8px;
-    font-size: 12px;
+.item-btn:hover {
+    opacity: 0.5;
 }
 
-.list-item-btn:hover {
-    color: #fff;
+/* 選択行：背景は変えず、文字の太さとわずかな左余白だけで表現 */
+.row-active .item-btn {
+    font-weight: 600;
+    padding-left: 8px;
+    border-left: 2px solid #111111;
 }
 
-.list-item-btn:hover::before {
-    color: #00bcd4;
+/* グレーのシンプルなカウント表示 */
+.count-text {
+    font-size: 13px;
+    color: #888888;
 }
 
-/* 選択状態 */
-.row-active td {
-    background-color: #2a2d33 !important;
+/* 右側：記録リスト */
+.history-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111111;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
 }
 
-.row-active .list-item-btn {
-    color: #00bcd4;
-}
-
-.row-active .list-item-btn::before {
-    content: "[x]";
-    color: #00bcd4;
-}
-
-/* カウントバッジ（四角いブロック） */
-.count-block {
-    background-color: #333;
-    color: #ccc;
-    padding: 2px 6px;
-    font-size: 11px;
-    display: inline-block;
-    min-width: 40px;
-    text-align: center;
-}
-
-/* 右パネル：ログ表示エリア */
-.log-header-title {
-    color: #4caf50;
-    font-size: 14px;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #333;
-}
-
-.log-container {
+.history-container {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
 }
 
-/* ログエントリ（1行のブロック） */
-.log-entry {
-    background-color: #1a1a1a;
-    border-left: 2px solid #555;
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.log-entry:hover {
-    border-left-color: #4caf50;
-    background-color: #222;
-}
-
-.log-meta {
+/* 枠線のないフラットなカード */
+.history-row {
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
-    color: #888;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.log-idx {
-    color: #00bcd4;
+.history-main {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111111;
 }
 
-.log-content {
-    color: #ccc;
-    font-size: 13px;
+.history-meta {
+    font-size: 12px;
+    color: #888888;
+    text-align: right;
 }
 
-.log-content span {
-    color: #fff;
-}
-
-/* ステート表示（プレースホルダー／ロード中） */
-.sys-state {
+/* 未選択状態（何もない空間を贅沢に使う） */
+.blank-state {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #666;
-    text-align: center;
+    color: #888888;
 }
 
-.cursor-blink {
-    display: inline-block;
-    width: 8px;
-    height: 14px;
-    background-color: #00bcd4;
-    animation: blink 1s step-end infinite;
-    margin-right: 8px;
-    vertical-align: middle;
+.blank-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+/* スタイリッシュなフェードローダー（CSSのみ） */
+.minimal-loader {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #111111;
+    border-radius: 50%;
+    border-right-color: transparent;
+    animation: rotate 0.6s linear infinite;
+    margin-bottom: 16px;
 }
 
-.sys-state-text {
-    font-size: 12px;
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* エラー時の表示 */
-.error-text {
-    color: #f44336;
+/* スクロールバーの非表示（モバイルライクな挙動） */
+.panel-body::-webkit-scrollbar {
+    display: none;
 }
-.error-text::before {
-    content: "ERR: ";
-}
-
-/* スクロールバーのカスタマイズ（Webkit） */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #121212; 
-}
-::-webkit-scrollbar-thumb {
-    background: #444; 
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #666; 
+.panel-body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 </style>
 
@@ -334,39 +271,39 @@ select:focus {
 
 <body>
 
-<!-- トップバー -->
-<div class="term-header">
-    <div class="brand-title">SYSTEM.TERMINAL</div>
-    <div class="sys-info">DATA_CONNECTION_ESTABLISHED // PORT:8080</div>
+<!-- ヘッダー -->
+<div class="header">
+    <div class="brand-title">Directory</div>
+    <div class="app-status">Standard Portal</div>
 </div>
 
 <!-- ワークスペース -->
-<div class="term-workspace">
+<div class="workspace">
 
-    <!-- パネル左：インデックス -->
-    <div class="term-panel">
-        <div class="panel-header">INDEX / STUDENTS</div>
+    <!-- 左パネル：リスト一覧 -->
+    <div class="panel">
+        <div class="panel-header">Students</div>
         <div class="panel-body">
             
             <div class="control-bar">
                 <div class="filter-group">
-                    SORT_BY:
+                    <span>Sort by</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">REC_COUNT (DESC)</option>
-                        <option value="id">STUDENT_ID (ASC)</option>
+                        <option value="count">Count</option>
+                        <option value="id">ID</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-cmd" onclick="refreshData()">EXECUTE_SYNC</button>
+                    <button class="btn-plain" onclick="refreshData()">Sync</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="data-table" id="summaryTable">
+            <table class="list-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>TARGET_ID</th>
-                        <th style="text-align: right; width: 80px;">RECORDS</th>
+                        <th>Identifier</th>
+                        <th style="text-align: right; width: 80px;">Sessions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -377,20 +314,16 @@ select:focus {
         </div>
     </div>
 
-    <!-- パネル右：詳細ログ -->
-    <div class="term-panel">
-        <div class="panel-header">OUTPUT / ACTIVITY_LOG</div>
+    <!-- 右パネル：履歴詳細 -->
+    <div class="panel">
+        <div class="panel-header">Activity</div>
         <div id="historyArea" class="panel-body">
             
             <!-- 初期状態 -->
-            <div class="sys-state">
-                <div>
-                    <span class="cursor-blink"></span>
-                    <span class="sys-state-text">WAITING_FOR_INPUT...</span>
-                </div>
-                <div style="margin-top: 8px; font-size: 11px;">
-                    Select a target ID from the index panel.
-                </div>
+            <div class="blank-state">
+                <p class="blank-text">
+                    Select a student ID to view session logs.
+                </p>
             </div>
 
         </div>
@@ -401,13 +334,12 @@ select:focus {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
-// 初期ロード
 loadSummary();
 
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYNC: " + now.toLocaleTimeString("en-US", { hour12: false });
+    document.getElementById("updateTime").innerHTML = "Updated: " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: false });
 }
 
 function loadSummary(){
@@ -440,12 +372,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="list-item-btn" onclick="showHistory('${student.id}')">
+                    <button class="item-btn" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="count-block">${student.count}</span>
+                    <span class="count-text">${student.count}</span>
                 </td>
             </tr>
             `;
@@ -456,8 +388,8 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // 選択行のハイライト変更
-    document.querySelectorAll('.data-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
+    // アクティブな行のスタイリング切り替え
+    document.querySelectorAll('.list-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-active');
@@ -465,11 +397,9 @@ function showHistory(studentId){
 
     // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="sys-state">
-            <div>
-                <span class="cursor-blink"></span>
-                <span class="sys-state-text">FETCHING_DATA [${studentId}]...</span>
-            </div>
+        <div class="blank-state" style="flex-direction: column;">
+            <div class="minimal-loader"></div>
+            <p class="blank-text">Loading ${studentId}...</p>
         </div>
     `;
 
@@ -477,30 +407,21 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="log-header-title">QUERY_RESULT // TARGET: ${studentId}</div>
-        <div class="log-container">
+        <div class="history-title">${studentId}</div>
+        <div class="history-container">
         `;
 
         for(let i = 0; i < data.length; i++){
-            // 日付を少し機械的なフォーマットに変換
             let d = new Date(data[i].date);
-            let dateStr = d.getFullYear() + "-" + 
-                          String(d.getMonth()+1).padStart(2,'0') + "-" + 
-                          String(d.getDate()).padStart(2,'0') + " " + 
-                          String(d.getHours()).padStart(2,'0') + ":" + 
-                          String(d.getMinutes()).padStart(2,'0') + ":" + 
-                          String(d.getSeconds()).padStart(2,'0');
-
-            let indexStr = String(i+1).padStart(3, '0');
+            let dateStr = d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
 
             html += `
-            <div class="log-entry">
-                <div class="log-meta">
-                    <span class="log-idx">SEQ_${indexStr}</span>
-                    <span>TS: ${dateStr}</span>
+            <div class="history-row">
+                <div class="history-main">
+                    Instructor: ${data[i].teacher}
                 </div>
-                <div class="log-content">
-                    OPERATOR: <span>${data[i].teacher}</span>
+                <div class="history-meta">
+                    ${dateStr}
                 </div>
             </div>
             `;
@@ -511,8 +432,8 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="sys-state">
-                <div class="sys-state-text error-text">CONNECTION_FAILED. TRY_AGAIN.</div>
+            <div class="blank-state">
+                <p class="blank-text" style="color: #ff0000;">Failed to load data. Please try again.</p>
             </div>
         `;
     });
