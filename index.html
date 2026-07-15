@@ -14,301 +14,406 @@
     padding: 0;
 }
 
+/* スクロールバーもガラスに馴染む極細デザイン */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 body {
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-    background-color: #f7f5f0; /* 生成り（ウォームグレー） */
-    color: #2f3e36; /* 深いオリーブブラウン */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Arial, sans-serif;
+    background-color: #0f1322; /* ベースは深い夜空のネイビー */
+    color: #f8fafc;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
-/* ぬくもりのあるナチュラルヘッダー */
+/* 背景に配置する美しいオーラ（ぼかしグラデーション） */
+body::before, body::after {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    opacity: 0.55;
+    pointer-events: none;
+}
+body::before {
+    top: -10%;
+    left: -10%;
+    background: radial-gradient(circle, #4f46e5 0%, transparent 80%);
+    animation: float-slow 20s infinite alternate ease-in-out;
+}
+body::after {
+    bottom: -10%;
+    right: -10%;
+    background: radial-gradient(circle, #06b6d4 0%, transparent 80%);
+    animation: float-slow 25s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes float-slow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(80px, 50px) scale(1.1); }
+}
+
+/* Apple風 グラスモフィズム（すりガラス）の共通クラス */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* トップヘッダー */
 .app-header {
-    background-color: #ffffff;
-    height: 64px;
+    height: 68px;
     padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 2px solid #e9e5db;
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     flex-shrink: 0;
 }
 
-.brand-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #3a5a40; /* セージグリーン */
+.brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    letter-spacing: 0.02em;
+    gap: 12px;
 }
 
 .brand-icon {
     font-size: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.app-badge {
-    background-color: #f4ebe1; /* やわらかなベージュ */
-    color: #b56576; /* くすみピンク・テラコッタ */
-    font-size: 11px;
+.brand-name {
+    font-size: 15px;
     font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
 }
 
-/* メインフレーム（2カラム） */
-.app-content {
+.user-badge {
+    background: rgba(255, 255, 255, 0.07);
+    color: #e2e8f0;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* メイン2カラム配置 */
+.app-viewport {
     display: flex;
     flex: 1;
     overflow: hidden;
-    padding: 28px;
-    gap: 28px;
-    max-width: 1400px;
+    padding: 24px;
+    gap: 24px;
+    max-width: 1500px;
     width: 100%;
     margin: 0 auto;
 }
 
-/* 温かみのある白カード */
-.natural-card {
+/* 左右のガラスボード */
+.board-card {
     flex: 1;
-    background-color: #ffffff;
-    border-radius: 16px;
-    border: 2px solid #e9e5db;
-    box-shadow: 0 8px 16px rgba(47, 62, 54, 0.03);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
 }
 
-.card-header {
-    padding: 20px 28px;
-    background-color: #fbfbfa;
-    border-bottom: 2px solid #e9e5db;
+.board-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     flex-shrink: 0;
 }
 
-.card-title {
+.board-title {
     font-size: 15px;
     font-weight: 700;
-    color: #3a5a40;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #ffffff;
+    letter-spacing: 0.02em;
 }
 
-.card-body {
+.board-body {
     overflow-y: auto;
     flex: 1;
     padding: 24px 28px;
 }
 
-/* 操作バー */
-.control-panel {
+/* コントロールエリア */
+.controls-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-.filter-group {
+.sort-box {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.filter-label {
+.sort-label {
     font-size: 12px;
-    font-weight: 700;
-    color: #58705f;
+    font-weight: 500;
+    color: #94a3b8;
 }
 
-/* コロンとした可愛いセレクト＆ボタン */
+/* 磨りガラススタイルのコントロールパーツ */
 select {
     padding: 8px 16px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    border: 2px solid #e9e5db;
-    border-radius: 20px;
-    background-color: #ffffff;
-    color: #2f3e36;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: 12px;
     outline: none;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 select:hover {
-    border-color: #cbd1c5;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-.btn-natural {
-    padding: 8px 18px;
-    font-size: 13px;
-    font-weight: 700;
-    background-color: #3a5a40;
+select option {
+    background-color: #171d31; /* ドロップダウンメニューの背景 */
     color: #ffffff;
-    border: none;
-    border-radius: 20px;
+}
+
+.btn-glass {
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 8px rgba(58, 90, 64, 0.15);
 }
 
-.btn-natural:hover {
-    background-color: #2f4733;
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(58, 90, 64, 0.1);
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-glass:active {
+    transform: translateY(0);
 }
 
 #updateTime {
-    font-size: 11px;
-    color: #8fa89b;
+    font-size: 10px;
+    color: #64748b;
     margin-top: 4px;
     text-align: right;
 }
 
-/* 素朴で綺麗なテーブル */
-.natural-table {
+/* テーブルデザイン（極細グリッド） */
+.glass-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* 行ごとの隙間 */
+    margin-top: -10px;
 }
 
-.natural-table th {
+.glass-table th {
     padding: 12px 16px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #58705f;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     text-align: left;
-    border-bottom: 2px solid #e9e5db;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.natural-table td {
+.glass-table td {
     padding: 14px 16px;
-    border-bottom: 1px solid #f2efea;
-    transition: all 0.15s;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.25s ease;
 }
 
-.natural-table tr:hover td {
-    background-color: #fbfbfa;
+.glass-table td:first-child {
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
-/* 生徒IDのボタンスタイル */
-.student-link-btn {
-    font-size: 14px;
+.glass-table td:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    text-align: right;
+}
+
+/* ホバーでガラスが浮き上がる質感 */
+.glass-table tr:hover td {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.id-click-btn {
+    font-size: 13px;
     font-weight: 700;
-    color: #2f3e36;
+    color: #f8fafc;
     background: none;
     border: none;
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: #cbd1c5;
-    text-underline-offset: 4px;
-    transition: all 0.15s;
-    padding: 4px 0;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
 }
 
-.student-link-btn:hover {
-    color: #3a5a40;
-    text-decoration-color: #3a5a40;
+.id-click-btn:hover {
+    color: #38bdf8;
 }
 
-/* 選択された生徒のアクティブ表示 */
-.row-selected td {
-    background-color: #f4f7f4 !important;
+/* 選択行のガラスオーラエフェクト */
+.row-active td {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(56, 189, 248, 0.3) !important; /* ライトブルーのエッジ */
 }
 
-.row-selected .student-link-btn {
-    color: #3a5a40;
-    text-decoration-color: #3a5a40;
+.row-active .id-click-btn {
+    color: #38bdf8;
 }
 
-/* ほっこりテラコッタの丸badge */
-.warm-badge {
-    background-color: #f7ede2; /* 薄いアプリコット */
-    color: #f28482; /* テラコッタピンク */
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+/* 半透明ガラスチップ */
+.glass-chip {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 11px;
     font-weight: 700;
     display: inline-block;
 }
 
-.row-selected .warm-badge {
-    background-color: #f28482;
-    color: #ffffff;
+.row-active .glass-chip {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.25);
 }
 
-/* 右側：詳細履歴のウッドテイスト風リスト */
-.history-title {
+/* 履歴画面のアクリル風カードリスト */
+.history-meta-title {
     font-size: 15px;
     font-weight: 700;
-    color: #3a5a40;
+    color: #ffffff;
     margin-bottom: 20px;
 }
 
-.history-card-group {
+.history-glass-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.history-item-box {
-    background-color: #fbfbfa;
-    border: 2px solid #e9e5db;
-    border-radius: 12px;
-    padding: 16px 20px;
+.history-glass-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 18px 22px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.2s;
 }
 
-.history-meta {
+.history-glass-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.history-content-left {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.history-count-tag {
+.history-tag {
+    font-size: 9px;
+    font-weight: 700;
+    color: #38bdf8;
+    letter-spacing: 0.1em;
+}
+
+.teacher-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.date-text {
     font-size: 11px;
-    font-weight: 700;
-    color: #b5838d; /* くすみピンク */
-    text-transform: uppercase;
-}
-
-.history-teacher {
-    font-size: 14px;
-    font-weight: 700;
-    color: #2f3e36;
-}
-
-.history-time {
-    font-size: 12px;
-    color: #7f9c8d;
+    color: #94a3b8;
 }
 
 /* プレースホルダー */
-.warm-empty-state {
+.glass-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #8fa89b;
+    color: #64748b;
     text-align: center;
 }
 
-.warm-empty-icon {
+.glass-empty-icon {
     font-size: 32px;
     margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.warm-empty-text {
+.glass-empty-text {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
 }
 </style>
 
@@ -316,62 +421,62 @@ select:hover {
 
 <body>
 
-<!-- ヘッダー -->
+<!-- アプリヘッダー -->
 <div class="app-header">
-    <div class="brand-title">
-        <span class="brand-icon">✏️</span>
-        <span>面接練習きろく</span>
+    <div class="brand">
+        <div class="brand-icon">❄️</div>
+        <span class="brand-name">INTERVIEW MIRAGE</span>
     </div>
-    <span class="app-badge">先生用ノート</span>
+    <span class="user-badge">FACULTY MEMBER</span>
 </div>
 
 <!-- メインエリア -->
-<div class="app-content">
+<div class="app-viewport">
 
     <!-- 左パネル -->
-    <div class="natural-card">
-        <div class="card-header">
-            <div class="card-title">📖 生徒一覧</div>
+    <div class="board-card glass-panel">
+        <div class="board-header">
+            <div class="board-title">STUDENTS</div>
         </div>
-        <div class="card-body">
-            <div class="control-panel">
-                <div class="filter-group">
-                    <span class="filter-label">並び替え</span>
+        <div class="board-body">
+            <div class="controls-container">
+                <div class="sort-box">
+                    <span class="sort-label">SORT</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">面接回数が多い順</option>
-                        <option value="id">生徒ID順</option>
+                        <option value="count">面接回数 順</option>
+                        <option value="id">生徒ID 順</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-natural" onclick="refreshData()">リスト更新</button>
+                    <button class="btn-glass" onclick="refreshData()">RELOAD</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="natural-table" id="summaryTable">
+            <table class="glass-table" id="summaryTable">
                 <thead>
                     <tr>
                         <th>生徒ID</th>
-                        <th style="text-align: right; width: 100px;">面接回数</th>
+                        <th style="text-align: right; width: 100px;">練習回数</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JSによりデータが展開されます -->
+                    <!-- JSにより動的に挿入されます -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- 右パネル -->
-    <div class="natural-card">
-        <div class="card-header">
-            <div class="card-title">🔍 練習の履歴</div>
+    <div class="board-card glass-panel">
+        <div class="board-header">
+            <div class="board-title">HISTORY</div>
         </div>
-        <div id="historyArea" class="card-body">
-            <!-- 未選択時の表示 -->
-            <div class="warm-empty-state">
-                <div class="warm-empty-icon">☕</div>
-                <p class="warm-empty-text">生徒IDを選ぶと、ここに面接の履歴が表示されます。</p>
+        <div id="historyArea" class="board-body">
+            <!-- 初期表示のプレースホルダー -->
+            <div class="glass-empty">
+                <div class="glass-empty-icon">💎</div>
+                <p class="glass-empty-text">生徒IDを選択すると、バックエンドから履歴を投影します。</p>
             </div>
         </div>
     </div>
@@ -419,12 +524,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="student-link-btn" onclick="showHistory('${student.id}')">
+                    <button class="id-click-btn" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="warm-badge">${student.count} 回</span>
+                    <span class="glass-chip">${student.count} 回</span>
                 </td>
             </tr>
             `;
@@ -435,18 +540,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.natural-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブな生徒行の強調
+    document.querySelectorAll('.glass-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-selected');
+        selectedRow.classList.add('row-active');
     }
 
-    // ロード表示
+    // ガラス状のなめらかなロードアニメーション代わり
     document.getElementById("historyArea").innerHTML = `
-        <div class="warm-empty-state">
-            <div class="warm-empty-icon">🌱</div>
-            <p class="warm-empty-text">のんびり読み込んでいます...</p>
+        <div class="glass-empty">
+            <div class="glass-empty-icon">❄️</div>
+            <p class="glass-empty-text">セッション同期中...</p>
         </div>
     `;
 
@@ -454,21 +559,21 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <h2 class="history-title">
-            🌿 ${studentId} さんの面接ログ
+        <h2 class="history-meta-title">
+             ${studentId} のログ
         </h2>
-        <div class="history-card-group">
+        <div class="history-glass-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="history-item-box">
-                <div class="history-meta">
-                    <span class="history-count-tag">Lesson 0${i+1}</span>
-                    <span class="history-teacher">担当：${data[i].teacher} 先生</span>
+            <div class="history-glass-item">
+                <div class="history-content-left">
+                    <span class="history-tag">SESSION 0${i+1}</span>
+                    <span class="teacher-name">面接官: ${data[i].teacher} 先生</span>
                 </div>
-                <div class="history-time">
+                <div class="date-text">
                     ${date.toLocaleString("ja-JP")}
                 </div>
             </div>
@@ -480,9 +585,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="warm-empty-state" style="color: #e07a5f;">
-                <div class="warm-empty-icon">🍂</div>
-                <p class="warm-empty-text">接続エラーが起きました。もう一度お試しください。</p>
+            <div class="glass-empty" style="color: #f43f5e;">
+                <div class="glass-empty-icon">⚠️</div>
+                <p class="glass-empty-text">同期に失敗しました。再接続してください。</p>
             </div>
         `;
     });
