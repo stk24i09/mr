@@ -4,361 +4,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 統合指導カルテ台帳 // スプレッドシート・ビュー</title>
+<title>📱 モバイルカルテ // 現場アクティブ・ボード</title>
 
 <style>
-/* 共通リセット＆等幅・システムフォント */
+/* 共通リセット＆タッチデバイス最適化フォント */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent; /* タップ時の青枠防止 */
 }
 
 body {
-    font-family: Consolas, "Liberation Mono", Courier, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-    background-color: #f8f9fa; /* スプレッドシートの背景グレー */
-    color: #202124; /* Google標準のテキスト色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+    background-color: #f0f4f8; /* 軽快なライトブルーグレー */
+    color: #1e293b;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    user-select: none;
 }
 
-/* ヘッダー：スプレッドシートの操作バー風 */
-.sheet-header {
-    height: 48px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
+/* ヘッダー：スポーツウェアやスマートウォッチを意識した軽快なデザイン */
+.active-header {
+    height: 56px;
+    background-color: #0284c7; /* スカイブルー */
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
     flex-shrink: 0;
 }
 
-.sheet-title-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.sheet-icon {
-    background-color: #107c41; /* Excel/スプレッドシートを象徴するグリーン */
-    color: #ffffff;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.sheet-title {
+.active-title {
     font-size: 15px;
-    font-weight: 600;
-    color: #3c4043;
-}
-
-.sheet-badge {
-    font-size: 11px;
-    background-color: #e6f4ea;
-    color: #137333;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-/* ツールバー */
-.sheet-toolbar {
-    height: 40px;
-    background-color: #f1f3f4;
-    border-bottom: 1px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    gap: 16px;
-    flex-shrink: 0;
-}
-
-.tool-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #5f6368;
-}
-
-select {
-    background-color: #ffffff;
-    border: 1px solid #dadce0;
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 4px;
-    color: #3c4043;
-    outline: none;
-    cursor: pointer;
-}
-
-select:focus {
-    border-color: #1a73e8;
-}
-
-/* 同期ボタン（スプレッドシートの更新ボタン風） */
-.btn-refresh {
-    background-color: #107c41;
-    color: #ffffff;
-    border: 1px solid #0f753d;
-    padding: 4px 12px;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
+    font-weight: 800;
+    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.btn-refresh:hover {
-    background-color: #0e6c38;
-}
-
-.update-text {
+.sync-badge {
+    background-color: rgba(255, 255, 255, 0.25);
+    padding: 4px 10px;
+    border-radius: 20px;
     font-size: 11px;
-    color: #80868b;
-}
-
-/* メインワークスペース */
-.sheet-workspace {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    width: 100%;
-}
-
-/* 各グリッドシート */
-.sheet-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: #ffffff;
-    border-right: 1px solid #e0e0e0;
-}
-
-/* 行・列番号を含むスプレッドシートテーブル */
-.grid-wrapper {
-    flex: 1;
-    overflow: auto;
-}
-
-.spreadsheet {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-/* スプレッドシートのヘッダー列 (A, B, C...) */
-.spreadsheet th {
-    background-color: #f8f9fa;
-    color: #5f6368;
-    font-weight: normal;
-    font-size: 11px;
-    border: 1px solid #e0e0e0;
-    text-align: center;
-    height: 25px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-/* 行番号列 (1, 2, 3...) */
-.row-number {
-    background-color: #f8f9fa;
-    color: #5f6368;
-    font-size: 11px;
-    text-align: center;
-    width: 40px;
-    border: 1px solid #e0e0e0;
-    user-select: none;
-}
-
-/* 通常のデータセル */
-.spreadsheet td {
-    border: 1px solid #e0e0e0;
-    padding: 6px 10px;
-    font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* データ行のインタラクション */
-.data-row {
+    font-weight: bold;
     cursor: pointer;
 }
 
-.data-row:hover {
-    background-color: #f1f3f4;
-}
-
-/* スプレッドシートのアクティブセル風選択表示 */
-.data-row.active-row {
-    background-color: #e8f0fe !important; /* スプレッドシートの選択行ブルー */
-}
-
-.data-row.active-row td {
-    border-top: 1px solid #1a73e8;
-    border-bottom: 1px solid #1a73e8;
-}
-
-.student-name-cell {
-    font-weight: bold;
-    color: #1a73e8;
-}
-
-/* データ件数バー（ミニプログレスバー風） */
-.progress-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.progress-bar {
+/* メインエリア：タブレットに最適なグリッド配置 */
+.active-workspace {
     flex: 1;
-    height: 6px;
-    background-color: #e8eaed;
-    border-radius: 3px;
-    overflow: hidden;
+    overflow-y: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    align-content: start;
 }
 
-.progress-fill {
-    height: 100%;
-    background-color: #107c41;
-}
-
-.count-text {
-    font-size: 11px;
-    font-weight: bold;
-    color: #3c4043;
-    width: 35px;
-    text-align: right;
-}
-
-/* 右側：セル詳細風のカルテ表示 */
-.detail-panel {
-    width: 45%;
+/* 生徒タイルカード：押しやすさを追求 */
+.student-tile {
     background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.1s, border-color 0.1s, background-color 0.1s;
 }
 
-.detail-header {
-    height: 25px;
-    background-color: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    border-left: none;
-    font-size: 11px;
-    color: #5f6368;
+/* タップ・クリック時のフィードバック（押し心地） */
+.student-tile:active {
+    transform: scale(0.96);
+}
+
+.student-tile.selected {
+    border-color: #0284c7;
+    background-color: #f0f9ff;
+}
+
+.tile-icon {
+    font-size: 24px;
+    background-color: #f1f5f9;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    padding-left: 12px;
-    font-weight: normal;
+    justify-content: center;
 }
 
-.detail-body {
+.tile-id {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+
+/* 回数に応じた目立つ警告バッジ */
+.tile-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+/* 注意生徒のタイル（赤） */
+.student-tile.alert-tile {
+    background-color: #fef2f2;
+    border-color: #fee2e2;
+}
+.student-tile.alert-tile .tile-badge {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+/* 通常生徒 */
+.tile-badge-normal {
+    background-color: #e2e8f0;
+    color: #475569;
+}
+
+/* 📋 ドロワー（引き出し）式カルテ */
+.drawer {
+    position: fixed;
+    right: -450px; /* 初期状態は画面の外 */
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 420px;
+    background-color: #ffffff;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer.open {
+    right: 0; /* 画面内に入り込む */
+}
+
+.drawer-header {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.drawer-title {
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.drawer-close {
+    background-color: rgba(255,255,255,0.15);
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.drawer-body {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
 }
 
-.detail-sheet-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #107c41;
+/* スマホ用タイムライン風履歴カード */
+.timeline-card {
+    border-left: 3px solid #0284c7;
+    background-color: #f8fafc;
+    padding: 14px;
+    border-radius: 0 8px 8px 0;
     margin-bottom: 12px;
-    border-bottom: 2px solid #107c41;
-    padding-bottom: 6px;
 }
 
-/* 詳細ログ（1件のレコードを1行のスプレッドシート行風に） */
-.log-row-card {
-    background-color: #ffffff;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    overflow: hidden;
-}
-
-.log-row-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dadce0;
-    padding: 6px 12px;
+.timeline-meta {
     font-size: 11px;
-    font-weight: bold;
-    color: #5f6368;
-    display: flex;
-    justify-content: space-between;
+    color: #64748b;
+    margin-bottom: 6px;
 }
 
-.log-row-body {
-    padding: 10px 12px;
+.timeline-content {
     font-size: 13px;
     line-height: 1.5;
 }
 
-/* スプレッドシート未選択状態 */
-.sheet-empty-state {
+/* ドロワーの背景オーバーレイ */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 90;
+    transition: opacity 0.2s;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ローディング */
+.loader-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    color: #9aa0a6;
-    text-align: center;
+    height: 200px;
 }
-
-.sheet-empty-icon {
-    font-size: 32px;
-    color: #dadce0;
-    margin-bottom: 8px;
-}
-
-.sheet-empty-text {
-    font-size: 12px;
-}
-
-/* スプレッドシート調ローディング */
-.sheet-spinner {
-    width: 24px;
-    height: 24px;
-    border: 2px solid #e8eaed;
-    border-top-color: #107c41;
+.pulse-spinner {
+    width: 32px;
+    height: 32px;
+    background-color: #0284c7;
     border-radius: 50%;
-    animation: spin 0.8s infinite linear;
-    margin-bottom: 8px;
+    animation: pulse 1s infinite ease-in-out;
 }
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* スクロールバー */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #f1f3f4;
-}
-::-webkit-scrollbar-thumb {
-    background: #c1c4c6;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #a1a4a6;
+@keyframes pulse {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
 }
 </style>
 
@@ -366,154 +251,92 @@ select:focus {
 
 <body>
 
-<!-- スプレッドシート風ヘッダー -->
-<div class="sheet-header">
-    <div class="sheet-title-group">
-        <div class="sheet-icon">田</div>
-        <div class="sheet-title">生徒指導カルテ台帳_2026.xlsx</div>
-        <span class="sheet-badge">教員用閲覧モード</span>
-    </div>
+<!-- ヘッダー -->
+<div class="active-header">
+    <div class="active-title">📱 指導ログ・現場タッチ</div>
+    <div class="sync-badge" onclick="loadSummary()">🔄 同期更新</div>
 </div>
 
-<!-- ツールバー -->
-<div class="sheet-toolbar">
-    <div class="tool-item">
-        <span>並び替え:</span>
-        <select id="sortSelect" onchange="loadSummary()">
-            <option value="count">指導回数（降順）</option>
-            <option value="id">生徒ID（昇順）</option>
-        </select>
-    </div>
-    <div style="border-left: 1px solid #cbd5e1; height: 16px;"></div>
-    <button class="btn-refresh" onclick="refreshData()">🔄 再読み込み</button>
-    <div class="update-text" id="updateTime"></div>
+<!-- メインのグリッドボード -->
+<div class="active-workspace" id="tileBoard">
+    <!-- JSでタイル状に生成 -->
 </div>
 
-<!-- メインエリア -->
-<div class="sheet-workspace">
+<!-- ドロワー用の暗幕オーバーレイ -->
+<div class="overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 
-    <!-- 左スプレッド（名簿） -->
-    <div class="sheet-container">
-        <div class="grid-wrapper">
-            <table class="spreadsheet" id="summaryTable">
-                <thead>
-                    <tr>
-                        <th style="width: 40px;"></th>
-                        <th style="width: 40px;">A</th>
-                        <th>B</th>
-                        <th style="width: 150px;">C</th>
-                    </tr>
-                    <tr>
-                        <th class="row-number"></th>
-                        <th>連番</th>
-                        <th>生徒識別ID (生徒ID)</th>
-                        <th>累積対応件数</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- JS展開 -->
-                </tbody>
-            </table>
-        </div>
+<!-- 引き出し（ドロワー）カルテ -->
+<div class="drawer" id="studentDrawer">
+    <div class="drawer-header">
+        <div class="drawer-title" id="drawerTitle">👤 カルテ展開中</div>
+        <button class="drawer-close" onclick="closeDrawer()">閉じる</button>
     </div>
-
-    <!-- 右スプレッド（詳細） -->
-    <div class="detail-panel">
-        <div class="detail-header">
-            D1 : 選択したセルの指導ログ履歴
-        </div>
-        <div id="historyArea" class="detail-body">
-            
-            <div class="sheet-empty-state">
-                <div class="sheet-empty-icon">📊</div>
-                <p class="sheet-empty-text">
-                    データ行が選択されていません。<br>
-                    左側のスプレッドシートから行（生徒ID）をクリックしてください。
-                </p>
-            </div>
-
-        </div>
+    <div class="drawer-body" id="drawerBody">
+        <!-- JSで指導履歴を流し込み -->
     </div>
-
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
+// 初期ロード
 loadSummary();
 
-function refreshData(){
-    loadSummary();
-    let now = new Date();
-    document.getElementById("updateTime").innerHTML = "最終同期: " + now.toLocaleTimeString("ja-JP");
-}
-
 function loadSummary(){
+    const board = document.getElementById("tileBoard");
+    board.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; color: #64748b; padding-top: 40px; font-size: 13px;">
+            最新の名簿と同期中...
+        </div>
+    `;
+
     fetch(API_URL + "?mode=summary")
     .then(response => response.json())
     .then(data => {
         let html = "";
         let students = [];
-        let maxCount = 1; // プログレスバー（視覚化）用
         
         for(let id in data){
-            students.push({
-                id: id,
-                count: data[id]
-            });
-            if(data[id] > maxCount) maxCount = data[id];
+            students.push({ id: id, count: data[id] });
         }
 
-        const sortType = document.getElementById("sortSelect").value;
+        // デフォルトで指導数の多い順
+        students.sort((a, b) => b.count - a.count);
 
-        if(sortType == "count"){
-            students.sort((a, b) => b.count - a.count);
-        } else {
-            students.sort((a, b) => {
-                const numA = parseInt(a.id.match(/\d+$/)[0]);
-                const numB = parseInt(b.id.match(/\d+$/)[0]);
-                return numA - numB;
-            });
-        }
-
-        students.forEach((student, index) => {
-            // 指導数に基づいた簡易バー表示のパーセント計算
-            let percent = (student.count / maxCount) * 100;
+        students.forEach(student => {
+            // 5回以上の指導がある生徒は「要注視」として色分け
+            const isAlert = student.count >= 5;
+            const cardClass = isAlert ? "student-tile alert-tile" : "student-tile";
+            const badgeClass = isAlert ? "tile-badge" : "tile-badge tile-badge-normal";
 
             html += `
-            <tr class="data-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
-                <td class="row-number">${index + 1}</td>
-                <td style="text-align: center; color: #80868b;">${index + 1}</td>
-                <td class="student-name-cell">👤 ${student.id}</td>
-                <td>
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${percent}%;"></div>
-                        </div>
-                        <span class="count-text">${student.count} 件</span>
-                    </div>
-                </td>
-            </tr>
+            <div class="${cardClass}" id="tile-${student.id}" onclick="openDrawer('${student.id}')">
+                <div class="tile-icon">${isAlert ? "⚠️" : "👤"}</div>
+                <div class="tile-id">${student.id}</div>
+                <div class="${badgeClass}">${student.count} 回対応</div>
+            </div>
             `;
         });
 
-        document.querySelector("#summaryTable tbody").innerHTML = html;
+        board.innerHTML = html;
     });
 }
 
-function showHistory(studentId){
-    // 選択行ハイライト
-    document.querySelectorAll('.spreadsheet tbody tr').forEach(tr => tr.classList.remove('active-row'));
-    const selectedRow = document.getElementById(`row-${studentId}`);
-    if(selectedRow) {
-        selectedRow.classList.add('active-row');
-    }
+function openDrawer(studentId) {
+    // 選択タイルの強調
+    document.querySelectorAll('.student-tile').forEach(el => el.classList.remove('selected'));
+    const targetTile = document.getElementById(`tile-${studentId}`);
+    if (targetTile) targetTile.classList.add('selected');
 
-    // ロード中表示
-    document.getElementById("historyArea").innerHTML = `
-        <div class="sheet-empty-state">
-            <div class="sheet-spinner"></div>
-            <p class="sheet-empty-text">シートを再計算中... (${studentId})</p>
+    // ドロワーと暗幕を展開
+    document.getElementById("studentDrawer").classList.add("open");
+    document.getElementById("drawerOverlay").classList.add("show");
+    
+    document.getElementById("drawerTitle").innerText = `📄 ${studentId} のカルテ`;
+    document.getElementById("drawerBody").innerHTML = `
+        <div class="loader-container">
+            <div class="pulse-spinner"></div>
+            <p style="margin-top: 16px; font-size: 12px; color: #64748b;">端末内ログを照合中...</p>
         </div>
     `;
 
@@ -521,36 +344,42 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="detail-sheet-title">📊 記録台帳シート: ${studentId}</div>
+            <div style="font-size: 12px; font-weight: bold; color: #0284c7; margin-bottom: 12px;">
+                総事歴数：${data.length}件
+            </div>
         `;
 
         for(let i = 0; i < data.length; i++){
             let d = new Date(data[i].date);
-            let dateStr = d.toLocaleDateString("ja-JP", { year: 'numeric', month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
+            let dateStr = d.toLocaleDateString("ja-JP", { month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
 
             html += `
-            <div class="log-row-card">
-                <div class="log-row-header">
-                    <span>行No. ${i+1}</span>
-                    <span>🕒 記録日付: ${dateStr}</span>
+            <div class="timeline-card">
+                <div class="timeline-meta">
+                    🕒 ${dateStr}
                 </div>
-                <div class="log-row-body">
-                    担当指導者（教職員）: <strong>${data[i].teacher} 先生</strong>
+                <div class="timeline-content">
+                    指導対応担当者: <strong>${data[i].teacher} 先生</strong>
                 </div>
             </div>
             `;
         }
 
-        document.getElementById("historyArea").innerHTML = html;
+        document.getElementById("drawerBody").innerHTML = html;
     })
     .catch(error => {
-        document.getElementById("historyArea").innerHTML = `
-            <div class="sheet-empty-state" style="color: #d93025;">
-                <div class="sheet-empty-icon">⚠️</div>
-                <p class="sheet-empty-text">データの展開に失敗しました。更新ボタンを押してください。</p>
+        document.getElementById("drawerBody").innerHTML = `
+            <div style="text-align: center; color: #ef4444; padding: 40px 16px; font-size: 12px;">
+                ⚠️ データの取得に失敗しました。<br>通信環境の良い場所で再試行してください。
             </div>
         `;
     });
+}
+
+function closeDrawer() {
+    document.getElementById("studentDrawer").classList.remove("open");
+    document.getElementById("drawerOverlay").classList.remove("show");
+    document.querySelectorAll('.student-tile').forEach(el => el.classList.remove('selected'));
 }
 </script>
 
