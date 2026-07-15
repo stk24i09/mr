@@ -4,280 +4,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📱 モバイル対応 // 児童生徒指導カルテ</title>
+<title>📂 システムバインダー // 児童生徒指導記録簿</title>
 
 <style>
-/* 共通リセット＆モダンモバイルフォント */
+/* 共通リセット＆手帳・フォント */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent; /* タップ時の青枠を消す */
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f8fafc; /* 優しく明るいスレートグレー */
-    color: #0f172a;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background-color: #e5e0d8; /* 机の木目を意識した温かみのあるグレーベージュ */
+    color: #2c3e50;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
+    padding: 24px;
 }
 
-/* ヘッダー：スマホでも押しやすいコンパクト設計 */
-.mobile-header {
-    background-color: #0f172a; /* 引き締まったダークネイビー */
-    color: #ffffff;
-    padding: 12px 16px;
+/* ヘッダー：バインダーの背表紙・ラベルプレート風 */
+.binder-header {
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 0 20px;
+    background-color: #2e5a44; /* モスグリーン（黒板調） */
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+    border-bottom: 3px solid #1e3c2d;
+    flex-shrink: 0;
 }
 
 .brand-title {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.status-indicator {
+.brand-label {
+    background-color: #f5f3ef;
+    color: #2e5a44;
     font-size: 11px;
-    background-color: #10b981; /* 稼働中グリーン */
+    font-weight: bold;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.user-tag {
+    font-size: 12px;
+    color: #e5e0d8;
     font-weight: 500;
 }
 
-/* メインレイアウト（PCでは2カラム、タブレット以下では1カラムに自動可変） */
-.main-layout {
+/* 2カラムレイアウト */
+.binder-workspace {
     display: flex;
-    flex-direction: row;
-    gap: 16px;
-    padding: 16px;
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
     flex: 1;
+    overflow: hidden;
+    gap: 20px;
+    width: 100%;
 }
 
-/* 各セクション共通 */
-.section-panel {
+/* バインダーの「見開きページ」を再現したパネル */
+.binder-page {
     flex: 1;
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    background-color: #fdfcfb; /* ルーズリーフの紙の白 */
+    border: 1px solid #dcd8d0;
+    border-radius: 8px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+    position: relative;
 }
 
-.section-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #334155;
-    margin-bottom: 12px;
-    border-left: 4px solid #3b82f6;
-    padding-left: 8px;
+/* バインダーのリング孔（左側のページ用） */
+.binder-page-left::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background-image: radial-gradient(circle, #ccc 30%, transparent 35%);
+    background-size: 100% 30px;
+    opacity: 0.7;
 }
 
-/* 操作パネル（並び替え・同期） */
-.utility-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background-color: #f1f5f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 16px;
+/* バインダーのリング孔（右側のページ用） */
+.binder-page-right::before {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background-image: radial-gradient(circle, #ccc 30%, transparent 35%);
+    background-size: 100% 30px;
+    opacity: 0.7;
 }
 
-.btn-sync {
-    background-color: #3b82f6;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-
-.btn-sync:active {
-    background-color: #2563eb;
-}
-
-.sort-selector {
-    width: 100%;
-    background-color: #ffffff;
-    border: 1px solid #cbd5e1;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #334155;
-    outline: none;
-}
-
-/* 生徒リスト（タッチしやすいグリッドカードレイアウト） */
-.student-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* スマホでは縦1列 */
-    gap: 10px;
-}
-
-/* 生徒カード（ボタン全体を大きく） */
-.student-card {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 14px;
+/* ヘッダー */
+.page-header {
+    background-color: #faf8f5;
+    padding: 16px 24px;
+    border-bottom: 2px solid #e2ded8;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
-    transition: all 0.2s;
 }
 
-.student-card:hover {
-    background-color: #f8fafc;
-}
-
-.student-card:active {
-    transform: scale(0.98);
-}
-
-.student-info {
+.page-title {
+    font-size: 14px;
     font-weight: 700;
-    font-size: 15px;
-    color: #1e293b;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 12px; /* リング孔を避けるマージン */
 }
 
-/* 選択されたカードの強力な視覚効果 */
-.student-card.selected {
-    background-color: #eff6ff;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+.page-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 24px;
 }
 
-.student-card.selected .student-info {
-    color: #2563eb;
+/* 整理されたコントロールバー */
+.control-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    background-color: #f7f5f0;
+    border-radius: 6px;
+    padding: 10px 16px;
+    border: 1px solid #e2ded8;
 }
 
-/* 指導数シグナルバッジ */
-.badge-count {
+.control-label {
     font-size: 12px;
     font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    background-color: #e2e8f0;
-    color: #475569;
+    color: #718096;
 }
 
-/* 5回以上指導がある生徒は少し目立つ警告色に */
-.badge-count.high-alert {
-    background-color: #fef3c7; /* 薄黄色 */
-    color: #d97706; /* オレンジ */
-    border: 1px solid #fcd34d;
+/* クラシックな手帳風セレクト */
+select {
+    background-color: #ffffff;
+    color: #2c3e50;
+    border: 1px solid #cbd5e0;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
 }
 
-/* 右パネル：指導履歴（公文カルテ調） */
-.history-container {
+/* クラシックなボタン */
+.btn-classic {
+    background-color: #2e5a44;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: background-color 0.15s;
+}
+
+.btn-classic:hover {
+    background-color: #244735;
+}
+
+#updateTime {
+    font-size: 11px;
+    color: #a0aec0;
+    margin-top: 4px;
+    text-align: right;
+}
+
+/* 名簿テーブル（罫線ノート風） */
+.ledger-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ledger-table th {
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #a0aec0;
+    text-align: left;
+    border-bottom: 2px solid #cbd5e0;
+}
+
+/* ノートの1行 */
+.ledger-row {
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.ledger-row:hover {
+    background-color: #f7f5f0;
+}
+
+.ledger-row td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #e2ded8;
+}
+
+/* インデックス風のアクティブ行 */
+.ledger-row.selected-row {
+    background-color: #f0f4f1 !important; /* 優しい緑のマーカー色 */
+}
+
+.student-id {
+    font-weight: bold;
+    color: #2e5a44;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 指導数バッジ */
+.record-count {
+    background-color: #e2ded8;
+    color: #4a5568;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+
+.selected-row .record-count {
+    background-color: #2e5a44;
+    color: #ffffff;
+}
+
+/* 右側：ルーズリーフに書き留めた記録風 */
+.report-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #2e5a44;
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.record-stack {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.history-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+/* 公文・手帳の記録用紙カード */
+.record-card {
+    background-color: #ffffff;
+    border: 1px solid #e2ded8;
+    border-radius: 4px;
+    padding: 16px;
+    /* 本物の紙のような薄い境界影 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 
-.history-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #64748b;
-    margin-bottom: 6px;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 6px;
-}
-
-.history-instructor {
-    font-weight: bold;
-    color: #0f172a;
+.record-main {
     font-size: 13px;
+    color: #2d3748;
+    line-height: 1.6;
+    margin-bottom: 8px;
 }
 
-/* アイドル状態・ローディング */
-.state-box {
+.record-main strong {
+    color: #1a202c;
+    background-image: linear-gradient(transparent 60%, #fff3cd 40%); /* 蛍光イエローマーカー風 */
+}
+
+.record-meta {
+    font-size: 11px;
+    color: #718096;
+    text-align: right;
+}
+
+/* 白紙・未選択状態 */
+.blank-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #a0aec0;
     text-align: center;
-    padding: 40px 20px;
-    color: #94a3b8;
 }
 
-.state-icon {
-    font-size: 36px;
+.blank-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.blank-text {
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* シンプルなロード表示 */
+.loader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e2ded8;
+    border-top-color: #2e5a44;
+    border-radius: 50%;
+    animation: rotate 0.8s infinite linear;
     margin-bottom: 12px;
 }
 
-.state-text {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.loading-spinner {
-    width: 28px;
-    height: 28px;
-    border: 3px solid #e2e8f0;
-    border-top-color: #3b82f6;
-    border-radius: 50%;
-    animation: spin 0.8s infinite linear;
-    margin: 0 auto 12px;
-}
-
-@keyframes spin {
+@keyframes rotate {
     to { transform: rotate(360deg); }
-}
-
-/* 💻 タブレット以上の大画面でのレイアウト調整 */
-@media (min-width: 768px) {
-    body {
-        overflow: hidden; /* PCでは画面内にぴったり収める */
-    }
-    .main-layout {
-        height: calc(100vh - 80px);
-    }
-    .section-panel {
-        height: 100%;
-        overflow-y: auto;
-    }
-    .student-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 横に並べる */
-    }
-    .utility-bar {
-        flex-direction: row;
-        align-items: center;
-    }
-    .btn-sync {
-        width: auto;
-    }
 }
 </style>
 
@@ -285,44 +342,70 @@ body {
 
 <body>
 
-<!-- スマホ最適化ヘッダー -->
-<div class="mobile-header">
-    <div class="brand-title">🏫 児童生徒指導カルテ</div>
-    <div class="status-indicator">オンライン</div>
+<!-- バインダーの背表紙風ヘッダー -->
+<div class="binder-header">
+    <div class="brand-title">
+        <span class="brand-label">R8-Log</span>
+        <span>児童生徒指導カルテ・ファイリングシステム</span>
+    </div>
+    <div class="user-tag">教員用ポータル</div>
 </div>
 
-<!-- メインエリア -->
-<div class="main-layout">
+<!-- バインダー見開きワークスペース -->
+<div class="binder-workspace">
 
-    <!-- 左セクション：名簿（タップしやすい大きめサイズ） -->
-    <div class="section-panel">
-        <div class="section-title">👤 指導対象 IDリスト</div>
-        
-        <div class="utility-bar">
-            <select id="sortSelect" class="sort-selector" onchange="loadSummary()">
-                <option value="count">指導回数が多い順</option>
-                <option value="id">生徒ID（昇順）</option>
-            </select>
-            <button class="btn-sync" onclick="refreshData()">🔄 同期する</button>
+    <!-- 左ページ：名簿一覧 -->
+    <div class="binder-page binder-page-left">
+        <div class="page-header">
+            <div class="page-title">📁 指導対象生徒一覧</div>
         </div>
+        <div class="page-body">
+            
+            <div class="control-bar">
+                <div>
+                    <span class="control-label">整列:</span>
+                    <select id="sortSelect" onchange="loadSummary()">
+                        <option value="count">指導件数の多い順</option>
+                        <option value="id">識別ID（昇順）</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-classic" onclick="refreshData()">同期更新</button>
+                    <div id="updateTime"></div>
+                </div>
+            </div>
 
-        <div class="student-grid" id="summaryContainer">
-            <!-- JSで動的展開 -->
+            <table class="ledger-table" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th style="padding-left: 12px;">児童生徒ID</th>
+                        <th style="text-align: right; padding-right: 12px; width: 100px;">累積件数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS展開 -->
+                </tbody>
+            </table>
+
         </div>
     </div>
 
-    <!-- 右セクション：個別指導実績 -->
-    <div class="section-panel" id="historyPanel">
-        <div class="section-title">📝 指導履歴詳細</div>
-        
-        <div id="historyArea">
-            <div class="state-box">
-                <div class="state-icon">👈</div>
-                <p class="state-text">
-                    左側（または上部）のリストから<br>
-                    生徒をタップして履歴を開いてください。
+    <!-- 右ページ：指導内容詳細 -->
+    <div class="binder-page binder-page-right">
+        <div class="page-header">
+            <div class="page-title">📝 個別指導経過記録</div>
+        </div>
+        <div id="historyArea" class="page-body">
+            
+            <!-- 初期白紙状態 -->
+            <div class="blank-state">
+                <div class="blank-icon">📒</div>
+                <p class="blank-text">
+                    <strong>記録ファイルが選択されていません</strong><br>
+                    左側の名簿から生徒ID行をクリックして、カルテを展開してください。
                 </p>
             </div>
+
         </div>
     </div>
 
@@ -331,22 +414,15 @@ body {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
-// 初期起動
 loadSummary();
 
 function refreshData(){
     loadSummary();
+    let now = new Date();
+    document.getElementById("updateTime").innerHTML = "更新: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
-    // 読み込み中表示
-    document.getElementById("summaryContainer").innerHTML = `
-        <div class="state-box" style="grid-column: 1/-1;">
-            <div class="loading-spinner"></div>
-            <p class="state-text">名簿を読み込み中...</p>
-        </div>
-    `;
-
     fetch(API_URL + "?mode=summary")
     .then(response => response.json())
     .then(data => {
@@ -373,59 +449,59 @@ function loadSummary(){
         }
 
         students.forEach(student => {
-            // 指導数が5回以上ならハイライトクラスを適用
-            const countClass = student.count >= 5 ? "badge-count high-alert" : "badge-count";
-            
             html += `
-            <div class="student-card" id="card-${student.id}" onclick="showHistory('${student.id}')">
-                <div class="student-info">👤 ${student.id}</div>
-                <div class="${countClass}">${student.count} 回</div>
-            </div>
+            <tr class="ledger-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
+                <td>
+                    <div class="student-id">
+                        📄 ${student.id}
+                    </div>
+                </td>
+                <td style="text-align: right; padding-right: 12px;">
+                    <span class="record-count">${student.count} 件</span>
+                </td>
+            </tr>
             `;
         });
 
-        document.getElementById("summaryContainer").innerHTML = html;
+        document.querySelector("#summaryTable tbody").innerHTML = html;
     });
 }
 
 function showHistory(studentId){
-    // カードの選択表示切り替え
-    document.querySelectorAll('.student-card').forEach(card => card.classList.remove('selected'));
-    const targetCard = document.getElementById(`card-${studentId}`);
-    if(targetCard) {
-        targetCard.classList.add('selected');
+    // 行選択状態の更新
+    document.querySelectorAll('.ledger-table tbody tr').forEach(tr => tr.classList.remove('selected-row'));
+    const selectedRow = document.getElementById(`row-${studentId}`);
+    if(selectedRow) {
+        selectedRow.classList.add('selected-row');
     }
 
-    // 読み込み中アニメーション
+    // 読み込み中
     document.getElementById("historyArea").innerHTML = `
-        <div class="state-box">
-            <div class="loading-spinner"></div>
-            <p class="state-text">${studentId} の指導記録を取得中...</p>
+        <div class="blank-state">
+            <div class="loader"></div>
+            <p class="blank-text">記録簿を閲覧用ラックから取り出しています...</p>
         </div>
     `;
-
-    // モバイル端末でのスクロールアシスト（タップしたあとに自動で履歴まで滑らかスクロール）
-    if (window.innerWidth < 768) {
-        document.getElementById("historyPanel").scrollIntoView({ behavior: 'smooth' });
-    }
 
     fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
     .then(response => response.json())
     .then(data => {
-        let html = `<div class="history-container">`;
+        let html = `
+        <div class="report-title">■ 個人記録カード: ${studentId}</div>
+        <div class="record-stack">
+        `;
 
         for(let i = 0; i < data.length; i++){
             let d = new Date(data[i].date);
             let dateStr = d.toLocaleDateString("ja-JP", { year: 'numeric', month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
 
             html += `
-            <div class="history-card">
-                <div class="history-meta">
-                    <span>${dateStr}</span>
-                    <span>記録ID: #${i+1}</span>
+            <div class="record-card">
+                <div class="record-main">
+                    担当指導者: <strong>${data[i].teacher} 先生</strong>
                 </div>
-                <div class="history-instructor">
-                    👩‍🏫 担当：${data[i].teacher} 先生
+                <div class="record-meta">
+                    記録日時: ${dateStr}
                 </div>
             </div>
             `;
@@ -436,9 +512,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="state-box" style="color: #ef4444;">
-                <div class="state-icon">⚠️</div>
-                <p class="state-text">通信エラー。もう一度同期をタップしてください。</p>
+            <div class="blank-state" style="color: #c53030;">
+                <div class="blank-icon">⚠️</div>
+                <p class="blank-text">読み込みエラーが発生しました。ネットワーク環境を確認してください。</p>
             </div>
         `;
     });
