@@ -4,12 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>冒険の書 // 面接とっくんクエスト</title>
-
-<!-- 日本語ドットフォントの読み込み -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+<title>Lounge / Interview Record</title>
 
 <style>
 /* 共通リセット */
@@ -20,282 +15,297 @@
 }
 
 body {
-    /* レトロゲーム風ドットフォント */
-    font-family: 'DotGothic16', "Courier New", Courier, monospace;
-    background-color: #0b0b16; /* 宇宙や闇を感じるダークネイビー */
-    /* ドット絵風の背景グリッド */
-    background-image: radial-gradient(#202040 10%, transparent 10%);
-    background-size: 16px 16px;
-    color: #ffffff;
+    /* シックで気品のあるフォント選定 */
+    font-family: "Times New Roman", Georgia, "Yu Mincho", "游明朝", serif;
+    background-color: #0a0705; /* 深夜のバーの暗闇 */
+    color: #f5f5f4; /* わずかに温かみのある白 */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 24px;
-    image-rendering: pixelated; /* ドットのシャープさを強調 */
+    padding: 28px;
+    letter-spacing: 0.08em;
 }
 
-/* ヘッダー：ゲームのタイトル画面ロゴ風 */
-.game-header {
-    background-color: #000000;
-    border: 4px solid #ffffff;
-    outline: 4px solid #000000;
+/* ヘッダー：ヴィンテージネオン看板風 */
+.bar-header {
+    border-bottom: 1px solid rgba(217, 119, 6, 0.3);
     height: 64px;
-    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
     flex-shrink: 0;
-    box-shadow: 0 8px 0 rgba(0,0,0,0.4);
 }
 
 .brand-title {
-    font-size: 20px;
-    color: #ffff00; /* レトロゴールド */
-    text-shadow: 2px 2px 0px #ff0000;
-    letter-spacing: 2px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #f5f5f4;
+    text-shadow: 0 0 8px rgba(217, 119, 6, 0.6), 0 0 20px rgba(217, 119, 6, 0.4); /* 琥珀色のネオングロウ */
+    font-style: italic;
 }
 
-.system-status {
-    font-size: 14px;
-    color: #00ff00; /* セーブ完了グリーン */
+.brand-title span {
+    color: #d97706; /* アンバーゴールド */
+}
+
+.bar-status {
+    font-size: 11px;
+    color: #a8a29e;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
 }
 
 /* 2カラムレイアウト */
-.game-workspace {
+.bar-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 20px;
+    gap: 32px;
     width: 100%;
 }
 
-/* クラシックRPGコマンドウィンドウ */
-.rpg-window {
+/* ラウンジシートのようなシックなカード */
+.lounge-card {
     flex: 1;
-    background: linear-gradient(180deg, #000080 0%, #000030 100%); /* 王道の青いウインドウ */
-    border: 4px solid #ffffff;
-    outline: 4px solid #000000;
-    border-radius: 4px;
+    background-color: rgba(18, 13, 10, 0.8); /* わずかに透ける漆黒 */
+    border: 1px solid rgba(217, 119, 6, 0.15);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.4s ease;
 }
 
-.window-header {
-    background-color: #000000;
-    padding: 8px 16px;
-    border-bottom: 4px solid #ffffff;
-    font-size: 14px;
-    color: #ffff00;
-    letter-spacing: 1px;
+.lounge-card:hover {
+    border-color: rgba(217, 119, 6, 0.4);
 }
 
-.window-body {
+.card-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+    flex-shrink: 0;
+}
+
+.card-title {
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    color: #d97706;
+    text-transform: uppercase;
+}
+
+.card-body {
     overflow-y: auto;
     flex: 1;
-    padding: 20px;
+    padding: 24px;
 }
 
-/* コントロール（コマンド選択メニュー風） */
+/* コントロールパネル */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 2px dashed #ffffff;
-    padding: 12px;
+    margin-bottom: 24px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 12px;
 }
 
-/* レトロデザインなセレクト */
+.filter-label {
+    font-size: 11px;
+    color: #a8a29e;
+}
+
+/* 落ち着いた琥珀のセレクト＆ボタン */
 select {
-    padding: 6px 12px;
-    font-size: 14px;
+    padding: 8px 14px;
+    font-size: 12px;
     font-family: inherit;
-    border: 2px solid #ffffff;
-    background-color: #000000;
-    color: #ffffff;
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    border-radius: 6px;
+    background-color: #120d0a;
+    color: #f5f5f4;
     outline: none;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
-/* コマンド実行（たたく）ボタン */
-.btn-pixel {
-    padding: 6px 16px;
-    font-size: 14px;
+select:hover {
+    border-color: #d97706;
+}
+
+.btn-lounge {
+    padding: 8px 18px;
+    font-size: 12px;
     font-family: inherit;
-    background-color: #000000;
-    color: #ffffff;
-    border: 2px solid #ffffff;
-    box-shadow: 3px 3px 0px #ffffff;
+    font-weight: bold;
+    background-color: transparent;
+    color: #d97706;
+    border: 1px solid #d97706;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.3s ease;
 }
 
-.btn-pixel:hover {
-    background-color: #ffff00;
-    color: #000000;
-    border-color: #000000;
-    box-shadow: 3px 3px 0px #000000;
-}
-
-.btn-pixel:active {
-    transform: translate(3px, 3px);
-    box-shadow: none;
+.btn-lounge:hover {
+    background-color: #d97706;
+    color: #0a0705;
+    box-shadow: 0 0 12px rgba(217, 119, 6, 0.5);
 }
 
 #updateTime {
-    font-size: 12px;
-    color: #aaaaaa;
+    font-size: 11px;
+    color: #78716c;
     margin-top: 6px;
+    text-align: right;
+    font-style: italic;
 }
 
-/* ステータステーブル */
-.rpg-table {
+/* メニュー表風テーブル */
+.bar-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.rpg-table th {
-    padding: 10px;
-    font-size: 14px;
-    color: #00ff00;
+.bar-table th {
+    padding: 12px 8px;
+    font-size: 11px;
+    color: #78716c;
+    text-transform: uppercase;
     text-align: left;
-    border-bottom: 4px double #ffffff;
+    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
 }
 
-.rpg-table td {
-    padding: 12px 10px;
-    font-size: 16px;
-    border-bottom: 2px dotted rgba(255,255,255,0.2);
+.bar-table td {
+    padding: 16px 8px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(217, 119, 6, 0.05);
 }
 
-/* 選択行：点滅するようなゴールドカラー */
-.row-selected td {
-    background-color: rgba(255, 255, 0, 0.15) !important;
-}
-
-.row-selected .student-btn::before {
-    content: "▶ "; /* コマンド選択カーソル */
-    color: #ffff00;
-    animation: bounce 0.6s infinite alternate;
-    display: inline-block;
-}
-
-@keyframes bounce {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(4px); }
-}
-
-/* ギルドメンバーボタン */
+/* キャスト（生徒名）ボタン：静かな美しさ */
 .student-btn {
-    font-size: 16px;
+    font-size: 14px;
     font-family: inherit;
-    color: #ffffff;
+    color: #f5f5f4;
     background: none;
     border: none;
     cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
     text-align: left;
 }
 
-.student-btn::before {
-    content: "  "; /* 未選択時は等幅スペース */
-}
-
 .student-btn:hover {
-    color: #ffff00;
+    color: #d97706;
+    transform: translateX(4px);
 }
 
-/* ステータスバー風回数ゲージ */
-.status-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: flex-end;
+/* 選択されたシート：優しく光るアンバーのハイライト */
+.row-selected td {
+    background-color: rgba(217, 119, 6, 0.08) !important;
+    border-bottom-color: rgba(217, 119, 6, 0.4);
 }
 
-.level-text {
-    color: #ffaa00;
+.row-selected .student-btn {
+    color: #d97706;
     font-weight: bold;
 }
 
-.hp-gauge {
-    width: 60px;
-    height: 10px;
-    background-color: #555555;
-    border: 1px solid #ffffff;
-    position: relative;
-    overflow: hidden;
+/* 琥珀色のショット数バッジ */
+.count-badge {
+    font-size: 12px;
+    font-style: italic;
+    color: #d97706;
+    background-color: rgba(217, 119, 6, 0.1);
+    padding: 2px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(217, 119, 6, 0.2);
 }
 
-.hp-fill {
-    height: 100%;
-    background-color: #00ff00; /* 回数が多いほど緑、少ないと赤…を簡易表現 */
+/* 右側：ボトルキープ（ログ）表示 */
+.log-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #f5f5f4;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+    padding-bottom: 12px;
+    font-style: italic;
 }
 
-/* 右側：冒険の記録（ログ） */
-.quest-title {
-    font-size: 18px;
-    color: #ffff00;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #ffffff;
-    padding-bottom: 8px;
-}
-
-.quest-list {
+.log-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.quest-card {
-    background-color: rgba(0,0,0,0.5);
-    border: 2px solid #ffffff;
-    padding: 16px;
-    position: relative;
+.log-card {
+    background-color: rgba(217, 119, 6, 0.02);
+    border: 1px solid rgba(217, 119, 6, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s;
 }
 
-.quest-num {
+.log-card:hover {
+    background-color: rgba(217, 119, 6, 0.04);
+    border-color: rgba(217, 119, 6, 0.25);
+}
+
+.log-num {
+    font-size: 10px;
+    color: #78716c;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.log-teacher {
+    font-size: 15px;
+    color: #f5f5f4;
+}
+
+.log-date {
+    font-size: 11px;
+    color: #a8a29e;
+}
+
+/* 空白状態：キャンドルが静かに佇むプレースホルダー */
+.empty-lounge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #78716c;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 24px;
+    color: #d97706;
+    margin-bottom: 16px;
+    opacity: 0.6;
+    animation: flicker 2s infinite ease-in-out; /* キャンドルのような揺らぎ */
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 0.4; transform: scale(0.98); }
+    50% { opacity: 0.8; transform: scale(1.02); }
+}
+
+.empty-text {
     font-size: 12px;
-    color: #ff5555; /* 赤色のクエストナンバー */
-    margin-bottom: 6px;
-}
-
-.quest-detail {
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.quest-meta {
-    color: #00ffff;
-}
-
-/* 待機時のメッセージボックス風表示 */
-.rpg-idle {
-    font-size: 16px;
     line-height: 1.8;
-    color: #ffffff;
-}
-
-.text-blink {
-    animation: blink 1s infinite steps(1);
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
 }
 </style>
 
@@ -304,37 +314,39 @@ select {
 <body>
 
 <!-- ヘッダー -->
-<div class="game-header">
-    <div class="brand-title">⚔️ 面接とっくんクエスト</div>
-    <div class="system-status">PARTY ACTIVE // SAVE 01</div>
+<div class="bar-header">
+    <div class="brand-title">THE <span>LOUNGE</span></div>
+    <div class="bar-status">Midnight Edition // 2:00 AM</div>
 </div>
 
 <!-- メインエリア -->
-<div class="game-workspace">
+<div class="bar-workspace">
 
-    <!-- 左パネル -->
-    <div class="rpg-window">
-        <div class="window-header">▼ ギルドメンバー (なまえ)</div>
-        <div class="window-body">
+    <!-- 左パネル：ボトル棚 -->
+    <div class="lounge-card">
+        <div class="card-header">
+            <div class="card-title">Selected Guests</div>
+        </div>
+        <div class="card-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>ならびかえ:</span>
+                    <span class="filter-label">Sort by</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">レベリング順（多）</option>
-                        <option value="id">名簿の番号順</option>
+                        <option value="count">Active Order</option>
+                        <option value="id">Alphabetical</option>
                     </select>
                 </div>
-                <div style="text-align: right;">
-                    <button class="btn-pixel" onclick="refreshData()">しらべる</button>
+                <div>
+                    <button class="btn-lounge" onclick="refreshData()">Refill</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="rpg-table" id="summaryTable">
+            <table class="bar-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>なまえ (ID)</th>
-                        <th style="text-align: right; width: 150px;">つよさ (Lv)</th>
+                        <th>Guest Name</th>
+                        <th style="text-align: right; width: 120px;">Sessions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -344,15 +356,19 @@ select {
         </div>
     </div>
 
-    <!-- 右パネル -->
-    <div class="rpg-window">
-        <div class="window-header">▼ ぼうけんのきろく</div>
-        <div id="historyArea" class="window-body">
-            <!-- 待機画面 -->
-            <div class="rpg-idle">
-                * おお、冒険者たちよ！<br>
-                * 左のリストから仲間をえらび、これまでの特訓ログをロードするのじゃ。<br>
-                <span class="text-blink">▼</span>
+    <!-- 右パネル：ボトルキープ履歴 -->
+    <div class="lounge-card">
+        <div class="card-header">
+            <div class="card-title">Chronicle Book</div>
+        </div>
+        <div id="historyArea" class="card-body">
+            <!-- 未選択時の表示 -->
+            <div class="empty-lounge">
+                <div class="empty-icon">🕯️</div>
+                <p class="empty-text">
+                    静寂の中に、記録が眠っています。<br>
+                    ゲストを選択すると、琥珀色の履歴が蘇ります。
+                </p>
             </div>
         </div>
     </div>
@@ -367,7 +383,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "記録時間: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "Updated " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -397,12 +413,6 @@ function loadSummary(){
         }
 
         students.forEach(student => {
-            // 回数に応じてHPバー（的なもの）の幅と色を決定 (MAX 10回想定)
-            let percent = Math.min((student.count / 10) * 100, 100);
-            let barColor = "#00ff00"; // 緑（通常）
-            if(percent < 30) barColor = "#ff0000"; // 赤（ピンチ）
-            else if(percent < 60) barColor = "#ffff00"; // 黄色（警告）
-
             html += `
             <tr id="row-${student.id}">
                 <td>
@@ -411,12 +421,7 @@ function loadSummary(){
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <div class="status-bar-container">
-                        <span class="level-text">Lv ${student.count}</span>
-                        <div class="hp-gauge">
-                            <div class="hp-fill" style="width: ${percent}%; background-color: ${barColor};"></div>
-                        </div>
-                    </div>
+                    <span class="count-badge">${student.count} shots</span>
                 </td>
             </tr>
             `;
@@ -427,18 +432,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ選択行の切り替え
-    document.querySelectorAll('.rpg-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブ行の切り替え
+    document.querySelectorAll('.bar-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
     }
 
-    // ロード中表示
+    // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="rpg-idle">
-            * '${studentId}' の ぼうけんのしょを よみこんでいます...<br>
-            * じゅもんを となえています...<span class="text-blink">⏳</span>
+        <div class="empty-lounge">
+            <div class="empty-icon">🥃</div>
+            <p class="empty-text">グラスを傾け、サーバーから抽出中...</p>
         </div>
     `;
 
@@ -446,19 +451,19 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="quest-title">🛡️ ${studentId} のクリア済みクエスト</div>
-        <div class="quest-list">
+        <div class="log-header">
+            <span>The Footsteps of ${studentId}</span>
+        </div>
+        <div class="log-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="quest-card">
-                <div class="quest-num">[QUEST 0${i+1}]</div>
-                <div class="quest-detail">
-                    ギルドマスター <span class="quest-meta">${data[i].teacher}</span> が特訓を認可。<br>
-                    討伐日時：<span class="quest-meta">${date.toLocaleString("ja-JP")}</span>
-                </div>
+            <div class="log-card">
+                <div class="log-num">Session // 0${i+1}</div>
+                <div class="log-teacher">Coached by ${data[i].teacher}</div>
+                <div class="log-date">Time / ${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
@@ -468,10 +473,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="rpg-idle" style="color: #ff5555;">
-                * つうしんエラー！<br>
-                * おおっと、冒険の書は 消えてしまいました（一時的な切断です）。<br>
-                * もう一度「しらべる」コマンドを実行するのじゃ！
+            <div class="empty-lounge" style="color: #ef4444;">
+                <div class="empty-icon">💔</div>
+                <p class="empty-text">ボトルの取得に失敗しました。もう一度、注文（更新）してください。</p>
             </div>
         `;
     });
