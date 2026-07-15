@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TACTICAL_CONSOLE://MEISETSU_CORE_v9</title>
+<title>TWILIGHT LINE // 乗車特訓記録</title>
 
 <style>
 /* 共通リセット */
@@ -15,322 +15,320 @@
 }
 
 body {
-    /* 近未来的なサンセリフフォント */
-    font-family: "Segoe UI", Roboto, "Helvetica Neue", "Hiragino Kaku Gothic ProN", sans-serif;
-    background-color: #030812; /* 漆黒に近いスペースブルー */
-    /* 近未来グリッド背景 */
-    background-image: 
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    color: #a5f3fc; /* 淡いシアン */
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Segoe UI", sans-serif;
+    /* 夕陽から夜に沈みゆくグラデーション背景 */
+    background: linear-gradient(135deg, #2b1055 0%, #75225b 40%, #b53e4c 75%, #e16b4c 100%);
+    color: #f7ebe1; /* 温かみのあるオフホワイト */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 20px;
-    letter-spacing: 0.08em;
+    padding: 24px;
+    letter-spacing: 0.05em;
 }
 
-/* ヘッダー：ホログラムインターフェース */
-.hud-header {
-    border-bottom: 2px solid #00f0ff;
+/* ヘッダー：レトロな駅名標風 */
+.station-header {
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 0 10px;
+    margin-bottom: 24px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(247, 235, 225, 0.2);
     flex-shrink: 0;
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
 .brand-title {
-    font-size: 18px;
-    font-weight: 900;
-    color: #00f0ff;
-    letter-spacing: 3px;
-}
-
-.brand-title span {
-    color: #ff6b00; /* 警告オレンジ */
-}
-
-.system-status {
-    font-size: 11px;
-    background-color: rgba(0, 240, 255, 0.1);
-    border: 1px solid #00f0ff;
-    padding: 3px 12px;
-    border-radius: 2px;
-    color: #00f0ff;
+    font-size: 20px;
     font-weight: bold;
-    box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+    color: #f7ebe1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 24px;
+    animation: sway 4s infinite ease-in-out; /* 電車の揺れ */
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+.station-status {
+    font-size: 11px;
+    background-color: rgba(247, 235, 225, 0.15);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
 }
 
 /* 2カラムレイアウト */
-.hud-workspace {
+.train-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
 }
 
-/* タクティカルホロパネル */
-.hud-panel {
+/* 車窓（スモークガラス）をイメージしたコンテナ */
+.window-panel {
     flex: 1;
-    background: rgba(4, 15, 30, 0.65);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 240, 255, 0.2);
-    border-radius: 4px;
+    background: rgba(18, 9, 26, 0.65); /* 濃い紫がかったガラス */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247, 235, 225, 0.15);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05), inset 0 0 15px rgba(0, 240, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.window-panel:hover {
+    border-color: rgba(225, 107, 76, 0.5); /* 夕暮れオレンジの微光 */
 }
 
 .panel-header {
-    background-color: rgba(0, 240, 255, 0.08);
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-    font-size: 11px;
-    color: #00f0ff;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(247, 235, 225, 0.1);
+    flex-shrink: 0;
+}
+
+.panel-title {
+    font-size: 13px;
     font-weight: bold;
-    letter-spacing: 2px;
-    display: flex;
-    justify-content: space-between;
+    color: #e16b4c; /* 夕陽オレンジ */
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 20px;
+    padding: 24px;
 }
 
-/* コントロール（パラメータ調整風） */
+/* コントロール（切符売り場風のUI） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
-    background-color: rgba(0, 240, 255, 0.02);
-    border: 1px solid rgba(0, 240, 255, 0.1);
-    padding: 10px;
+    margin-bottom: 24px;
+    background-color: rgba(247, 235, 225, 0.04);
+    border: 1px solid rgba(247, 235, 225, 0.1);
+    border-radius: 12px;
+    padding: 12px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 11px;
-    color: #00f0ff;
+    font-size: 12px;
+    color: #cbb9ad;
 }
 
-/* シアンのアウトラインセレクト */
+/* 落ち着いたスモーキーセレクト */
 select {
-    padding: 5px 10px;
-    font-size: 11px;
+    padding: 6px 12px;
+    font-size: 12px;
     font-family: inherit;
-    border: 1px solid #00f0ff;
-    background-color: #030812;
-    color: #00f0ff;
+    border: 1px solid rgba(247, 235, 225, 0.2);
+    border-radius: 6px;
+    background-color: #12091a;
+    color: #f7ebe1;
     outline: none;
     cursor: pointer;
 }
 
 select:hover {
-    background-color: rgba(0, 240, 255, 0.1);
+    border-color: #e16b4c;
 }
 
-/* タクティカルボタン */
-.btn-hud {
-    padding: 5px 15px;
-    font-size: 11px;
+/* 特急券のような旅情ボタン */
+.btn-ticket {
+    padding: 6px 16px;
+    font-size: 12px;
     font-family: inherit;
     font-weight: bold;
-    background-color: transparent;
-    color: #ff6b00;
-    border: 1px solid #ff6b00;
+    background-color: rgba(225, 107, 76, 0.2);
+    color: #e16b4c;
+    border: 1px solid #e16b4c;
+    border-radius: 6px;
     cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
+    transition: all 0.3s;
 }
 
-.btn-hud:hover {
-    background-color: #ff6b00;
-    color: #030812;
-    box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
+.btn-ticket:hover {
+    background-color: #e16b4c;
+    color: #12091a;
+    box-shadow: 0 0 15px rgba(225, 107, 76, 0.4);
 }
 
 #updateTime {
-    font-size: 10px;
-    color: rgba(0, 240, 255, 0.5);
+    font-size: 11px;
+    color: #cbb9ad;
     margin-top: 4px;
 }
 
-/* フライトログテーブル */
-.hud-table {
+/* タイムテーブル（時刻表）風のリスト */
+.train-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.hud-table th {
-    padding: 8px;
-    font-size: 11px;
-    color: #00f0ff;
-    text-align: left;
-    border-bottom: 2px solid #00f0ff;
-}
-
-.hud-table td {
+.train-table th {
     padding: 12px 8px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.08);
+    font-size: 11px;
+    color: #cbb9ad;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid rgba(247, 235, 225, 0.2);
 }
 
-/* ターゲットロックオン（選択時） */
-.row-selected td {
-    background-color: rgba(255, 107, 0, 0.08) !important;
-    border-bottom-color: #ff6b00;
+.train-table td {
+    padding: 16px 8px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(247, 235, 225, 0.05);
 }
 
-.row-selected .student-btn {
-    color: #ff6b00 !important;
-    font-weight: bold;
-}
-
-.row-selected .student-btn::before {
-    content: "[LOCK] ";
-    color: #ff6b00;
-}
-
-/* ターゲットリンク */
+/* 乗車券風ボタン（生徒名） */
 .student-btn {
-    font-size: 13px;
+    font-size: 14px;
     font-family: inherit;
-    color: #00f0ff;
+    font-weight: bold;
+    color: #f7ebe1;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-}
-
-.student-btn::before {
-    content: "[SCAN] ";
-    color: rgba(0, 240, 255, 0.4);
+    transition: color 0.3s, transform 0.2s;
 }
 
 .student-btn:hover {
-    color: #ff6b00;
-    text-shadow: 0 0 8px rgba(255, 107, 0, 0.4);
+    color: #e16b4c;
+    transform: translateX(4px);
 }
 
-/* ステータスドット */
-.status-dot-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: flex-end;
+/* 選択行：夕焼けがガラスに反射したような優しいオレンジハイライト */
+.row-selected td {
+    background-color: rgba(225, 107, 76, 0.08) !important;
+    border-bottom-color: rgba(225, 107, 76, 0.4);
 }
 
-.frequency-bar {
-    width: 50px;
-    height: 6px;
-    background-color: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.3);
+.row-selected .student-btn {
+    color: #e16b4c;
+    text-shadow: 0 0 8px rgba(225, 107, 76, 0.3);
 }
 
-.frequency-fill {
-    height: 100%;
-    background-color: #00f0ff;
-    box-shadow: 0 0 8px #00f0ff;
-}
-
-/* 右側：ターゲットログ解析 */
-.analysis-title {
-    font-size: 14px;
+/* 乗車カウントバッジ */
+.ticket-badge {
+    background-color: rgba(225, 107, 76, 0.1);
+    color: #e16b4c;
+    border: 1px solid rgba(225, 107, 76, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
     font-weight: bold;
-    color: #ff6b00;
-    margin-bottom: 16px;
-    border-bottom: 1px solid #ff6b00;
-    padding-bottom: 8px;
-    text-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
 }
 
-.analysis-list {
+/* 右側：古い紙のきっぷ風 履歴 */
+.ticket-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #e16b4c;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(247, 235, 225, 0.2);
+    padding-bottom: 8px;
+}
+
+.ticket-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-.analysis-card {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 240, 255, 0.15);
-    padding: 14px;
+/* レトロな硬券きっぷ風カード */
+.ticket-card {
+    background-color: #eeddc5; /* レトロなアイボリー色の硬券 */
+    color: #2b1a10; /* インクのようなこげ茶色 */
+    border-radius: 4px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     position: relative;
+    border-left: 10px solid #c8a27b; /* 切符のパンチ穴代わりの飾りライン */
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
 
-.analysis-card:hover {
-    border-color: #00f0ff;
-    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.1);
+/* きっぷの改札はさみ穴（パンチ）を疑似的に表現 */
+.ticket-card::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: #12091a; /* 背後のガラスの色で削り取る */
+    border-radius: 50%;
 }
 
-.analysis-num {
+.ticket-num {
     font-size: 10px;
-    color: rgba(0, 240, 255, 0.5);
-    margin-bottom: 4px;
+    font-weight: bold;
+    color: #8c765c;
+    letter-spacing: 0.15em;
 }
 
-.analysis-data {
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-.analysis-highlight {
-    color: #00f0ff;
+.ticket-main {
+    font-size: 14px;
     font-weight: bold;
 }
 
-/* スタンバイ（未選択）画面 */
-.hud-idle {
+.ticket-date {
+    font-size: 11px;
+    color: #5c4a3b;
+    border-top: 1px dashed rgba(43, 26, 16, 0.2);
+    padding-top: 6px;
+}
+
+/* 未選択：車窓からの景色 */
+.scenery-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: rgba(0, 240, 255, 0.4);
+    color: #cbb9ad;
     text-align: center;
 }
 
-.hud-radar {
-    width: 60px;
-    height: 60px;
-    border: 2px solid rgba(0, 240, 255, 0.2);
-    border-radius: 50%;
+.scenery-icon {
+    font-size: 32px;
     margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
+    opacity: 0.5;
+    animation: sunset-float 6s infinite ease-in-out;
 }
 
-.hud-radar::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.4) 0deg, transparent 90deg);
-    border-radius: 50%;
-    animation: radar-sweep 4s infinite linear;
+@keyframes sunset-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
 }
 
-@keyframes radar-sweep {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.hud-idle-text {
-    font-size: 11px;
+.scenery-text {
+    font-size: 12px;
     line-height: 1.8;
 }
 </style>
@@ -340,40 +338,42 @@ select:hover {
 <body>
 
 <!-- ヘッダー -->
-<div class="hud-header">
-    <div class="brand-title">TACTICAL // <span>COGNITIVE_HUB</span></div>
-    <div class="system-status">SECTOR_STATUS: STABLE</div>
+<div class="station-header">
+    <div class="brand-title">
+        <span class="brand-icon">🚂</span>
+        <span>TWILIGHT LINE // 特訓乗車ログ</span>
+    </div>
+    <div class="station-status">NEXT STATION // FUTURE</div>
 </div>
 
 <!-- メインエリア -->
-<div class="hud-workspace">
+<div class="train-workspace">
 
-    <!-- 左ホロパネル -->
-    <div class="hud-panel">
+    <!-- 左車窓：乗客名簿 -->
+    <div class="window-panel">
         <div class="panel-header">
-            <span>[TARGETS_ACQUIRED]</span>
-            <span>GRID_SEC: A-04</span>
+            <div class="panel-title">👥 PASSENGER REGISTRY (乗客名簿)</div>
         </div>
         <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>SORT_ALGORITHM:</span>
+                    <span>時刻表ソート:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">FREQ_DENSITY (DESC)</option>
-                        <option value="id">SECTOR_ID (ASC)</option>
+                        <option value="count">特訓乗車数の多い順</option>
+                        <option value="id">乗客 ID 順</option>
                     </select>
                 </div>
-                <div style="text-align: right;">
-                    <button class="btn-hud" onclick="refreshData()">re-align</button>
+                <div>
+                    <button class="btn-ticket" onclick="refreshData()">ダイヤ改正 (同期)</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="hud-table" id="summaryTable">
+            <table class="train-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>SECTOR ID</th>
-                        <th style="text-align: right; width: 130px;">METRIC INTENSITY</th>
+                        <th>乗客識別 ID</th>
+                        <th style="text-align: right; width: 120px;">乗車 (特訓) 回数</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -383,19 +383,18 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右ホロパネル -->
-    <div class="hud-panel">
+    <!-- 右車窓：きっぷホルダー -->
+    <div class="window-panel">
         <div class="panel-header">
-            <span>[ANALYSIS_SHEETS]</span>
-            <span>LOCK_ON: STANDBY</span>
+            <div class="panel-title">🎫 TICKET HOLDER (使用済み乗車券)</div>
         </div>
         <div id="historyArea" class="panel-body">
             <!-- 未選択表示 -->
-            <div class="hud-idle">
-                <div class="hud-radar"></div>
-                <p class="hud-idle-text">
-                    [WARNING] SYSTEM IDLE<br>
-                    ターゲットを選択し、データ・フィードを同期してください。
+            <div class="scenery-state">
+                <div class="scenery-icon">🌇</div>
+                <p class="scenery-text">
+                    車窓の外には夕焼け空が広がっています。<br>
+                    左の乗客IDを選択し、これまでの乗車特訓券（ログ）を取り出してください。
                 </p>
             </div>
         </div>
@@ -411,7 +410,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYNC_TIME: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "改正時刻: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -441,23 +440,15 @@ function loadSummary(){
         }
 
         students.forEach(student => {
-            // カウントバー計算 (最大10回想定)
-            let percent = Math.min((student.count / 10) * 100, 100);
-
             html += `
             <tr id="row-${student.id}">
                 <td>
                     <button class="student-btn" onclick="showHistory('${student.id}')">
-                        ${student.id}
+                        🎫 ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <div class="status-dot-container">
-                        <span style="color: #00f0ff; font-weight: bold;">${student.count}</span>
-                        <div class="frequency-bar">
-                            <div class="frequency-fill" style="width: ${percent}%;"></div>
-                        </div>
-                    </div>
+                    <span class="ticket-badge">${student.count} 回乗車</span>
                 </td>
             </tr>
             `;
@@ -469,7 +460,7 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.hud-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.train-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -477,12 +468,9 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="hud-idle">
-            <div class="hud-radar" style="border-color: #ff6b00;"></div>
-            <p class="hud-idle-text" style="color: #ff6b00;">
-                [SYNCHRONIZING] TARGET LOCK ACQUIRED...<br>
-                DOWNLOADING ${studentId} LOG-DATA PACKETS.
-            </p>
+        <div class="scenery-state">
+            <div class="scenery-icon">🚂</div>
+            <p class="scenery-text">カタン、コトン。改札機をとおして履歴を発券しています...</p>
         </div>
     `;
 
@@ -490,19 +478,17 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="analysis-title">[ TARGET LOCK: ${studentId} // RETRIEVED_LOGS ]</div>
-        <div class="analysis-list">
+        <div class="ticket-title">ROUTE LOGS // ${studentId} の旅路</div>
+        <div class="ticket-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="analysis-card">
-                <div class="analysis-num">TELEMETRY DATA PACKET // 0${i+1}</div>
-                <div class="analysis-data">
-                    OPERATOR: <span class="analysis-highlight">${data[i].teacher}</span> CO-PILOT<br>
-                    TIMESTAMP: <span style="color: #ffffff;">${date.toLocaleString("ja-JP")}</span>
-                </div>
+            <div class="ticket-card">
+                <div class="ticket-num">TICKET NO. 0${i+1}</div>
+                <div class="ticket-main">担当車掌：${data[i].teacher} 先生</div>
+                <div class="ticket-date">乗車確認：${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
@@ -512,12 +498,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="hud-idle" style="color: #ff3c00;">
-                <div class="hud-radar" style="border-color: #ff3c00;"></div>
-                <p class="hud-idle-text">
-                    [CONNECTION FAILURE] DATASTREAM INTERRUPTED.<br>
-                    PLEASE TRIGGER "RE-ALIGN" COMMAND TO RESET INTERFACE.
-                </p>
+            <div class="scenery-state" style="color: #ff9e9e;">
+                <div class="scenery-icon">⚠️</div>
+                <p class="scenery-text">通信信号が途絶えました。ダイヤ改正（同期）を実行してください。</p>
             </div>
         `;
     });
