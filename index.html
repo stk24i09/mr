@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📻 MidNight Lo-Fi Chill // Record Station</title>
+<title>📖 MIDNIGHT BIBLIOTHEQUE // 図書貸出管理システム</title>
 
 <style>
 /* 共通リセット */
@@ -15,61 +15,58 @@
 }
 
 body {
-    /* 丸みのある優しいフォント */
-    font-family: "Helvetica Neue", Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
-    background-color: #110f18; /* 深夜の室内を思わせるアッシュブラック */
+    /* クラシックで可読性の高いフォント構成 */
+    font-family: "Georgia", "Times New Roman", "YuMincho", "Hiragino Mincho ProN", serif;
+    background-color: #070f0d; /* 深夜の図書館を思わせる超深緑 */
     background-image: 
-        radial-gradient(circle at 80% 20%, rgba(255, 154, 98, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
-    color: #e2e0e9;
+        radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+    color: #f1ebd9; /* 年月を経た羊皮紙のようなオフホワイト */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     padding: 24px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
 }
 
-/* ヘッダー：深夜ラジオのON AIRサイン風 */
-.lofi-header {
+/* ヘッダー：書庫の重厚な看板プレート風 */
+.lib-header {
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
     padding: 0 10px;
-    border-bottom: 1.5px dashed rgba(167, 139, 250, 0.2);
+    border-bottom: 2px double #d4af37; /* 真鍮（ゴールド）のダブルライン */
     flex-shrink: 0;
 }
 
 .brand-title {
     font-size: 18px;
-    font-weight: 700;
-    color: #ff9a62; /* 暖かいアンバーオレンジ */
+    font-weight: bold;
+    color: #d4af37; /* 琥珀ゴールド */
     display: flex;
     align-items: center;
-    gap: 8px;
-    text-shadow: 0 0 10px rgba(255, 154, 98, 0.3);
+    gap: 12px;
+    text-transform: uppercase;
 }
 
-.on-air {
-    font-size: 10px;
-    background-color: #ef4444;
-    color: #ffffff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    animation: pulse 2.5s infinite;
+.brand-icon {
+    font-size: 20px;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+.lib-status {
+    font-size: 11px;
+    font-family: sans-serif;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 3px 10px;
+    color: #d4af37;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
 }
 
 /* 2カラムレイアウト */
-.lofi-workspace {
+.lib-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
@@ -77,47 +74,46 @@ body {
     width: 100%;
 }
 
-/* カフェテーブルをイメージした温かいパネル */
-.lofi-panel {
+/* 飾り縁付きの重厚な書架パネル */
+.lib-panel {
     flex: 1;
-    background: rgba(24, 22, 35, 0.75);
+    background: rgba(15, 26, 23, 0.85); /* ダークオーク＆グリーン */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(167, 139, 250, 0.15);
-    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .panel-header {
-    background-color: rgba(167, 139, 250, 0.04);
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(167, 139, 250, 0.1);
-    font-size: 12px;
-    color: #a78bfa;
+    background-color: rgba(212, 175, 55, 0.03);
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    font-size: 11px;
     font-weight: bold;
-    letter-spacing: 0.1em;
+    color: #d4af37;
+    letter-spacing: 0.15em;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 20px;
+    padding: 24px;
 }
 
-/* コントロール（ラジカセのつまみ風） */
+/* コントロール（アンティークデスク調） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
-    background-color: rgba(255, 154, 98, 0.03);
-    border: 1px solid rgba(255, 154, 98, 0.1);
-    border-radius: 10px;
+    margin-bottom: 24px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.15);
     padding: 12px;
 }
 
@@ -125,212 +121,209 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
-    color: #c0bdd3;
+    font-size: 11px;
+    font-family: sans-serif;
+    color: #c9bfab;
 }
 
-/* 丸くてマットなセレクトボックス */
+/* クラシックなセレクト */
 select {
-    padding: 6px 12px;
-    font-size: 12px;
-    font-family: inherit;
-    border: 1px solid rgba(167, 139, 250, 0.3);
-    border-radius: 8px;
-    background-color: #181623;
-    color: #e2e0e9;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-family: sans-serif;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    background-color: #0c1613;
+    color: #f1ebd9;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s;
 }
 
 select:hover {
-    border-color: #ff9a62;
+    border-color: #d4af37;
 }
 
-/* チルなカセットレーベル調ボタン */
-.btn-chill {
-    padding: 6px 14px;
+/* 書斎ボタン */
+.btn-lib {
+    padding: 5px 14px;
     font-size: 11px;
-    font-family: inherit;
+    font-family: sans-serif;
     font-weight: bold;
-    background-color: rgba(167, 139, 250, 0.1);
-    color: #a78bfa;
-    border: 1px solid #a78bfa;
-    border-radius: 8px;
+    background-color: transparent;
+    color: #d4af37;
+    border: 1px solid #d4af37;
     cursor: pointer;
+    text-transform: uppercase;
     transition: all 0.2s;
 }
 
-.btn-chill:hover {
-    background-color: #a78bfa;
-    color: #110f18;
-    box-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+.btn-lib:hover {
+    background-color: #d4af37;
+    color: #070f0d;
 }
 
 #updateTime {
     font-size: 10px;
-    color: #8c88a5;
+    font-family: sans-serif;
+    color: #8a8271;
     margin-top: 4px;
 }
 
-/* チルな手書き風テーブル */
-.lofi-table {
+/* 図書台帳（テーブル） */
+.lib-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.lofi-table th {
+.lib-table th {
     padding: 10px 8px;
     font-size: 11px;
-    color: #8c88a5;
+    color: #d4af37;
+    text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid rgba(167, 139, 250, 0.15);
+    border-bottom: 1px solid #d4af37;
 }
 
-.lofi-table td {
+.lib-table td {
     padding: 14px 8px;
     font-size: 13px;
-    border-bottom: 1px solid rgba(167, 139, 250, 0.05);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
 }
 
-/* 音楽トラックを選択するようなボタン（生徒名） */
+/* 本の著者やタイトルを選択するようなボタン（生徒名） */
 .student-btn {
-    font-size: 13.5px;
-    font-family: inherit;
+    font-size: 14px;
+    font-family: "Georgia", serif;
     font-weight: bold;
-    color: #e2e0e9;
+    color: #f1ebd9;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.2s;
+    transition: color 0.2s, padding-left 0.2s;
 }
 
 .student-btn::before {
-    content: "♪";
-    color: rgba(167, 139, 250, 0.5);
+    content: "📖 ";
+    color: rgba(212, 175, 55, 0.5);
 }
 
 .student-btn:hover {
-    color: #ff9a62;
+    color: #d4af37;
+    padding-left: 4px;
 }
 
-/* 選択中のトラック：ココアのような温かいカラー */
+/* 選択行：羊皮紙のインクが滲むような深い琥珀カラー */
 .row-selected td {
-    background-color: rgba(255, 154, 98, 0.05) !important;
-    border-bottom-color: rgba(255, 154, 98, 0.3);
+    background-color: rgba(212, 175, 55, 0.04) !important;
+    border-bottom-color: #d4af37;
 }
 
 .row-selected .student-btn {
-    color: #ff9a62;
+    color: #d4af37;
 }
 
 .row-selected .student-btn::before {
-    content: "▶";
-    color: #ff9a62;
-    animation: spin-slow 4s infinite linear; /* レコード風 */
+    content: "🔖 ";
+    color: #d4af37;
 }
 
-/* 再生カウント表示 */
-.track-badge {
-    background-color: rgba(167, 139, 250, 0.08);
-    color: #a78bfa;
-    border: 1px solid rgba(167, 139, 250, 0.2);
+/* 閲覧回数バッジ */
+.book-count {
+    font-family: sans-serif;
+    border: 1px solid rgba(212, 175, 55, 0.3);
     padding: 2px 8px;
-    border-radius: 20px;
     font-size: 10px;
-    font-weight: bold;
+    color: #d4af37;
 }
 
-/* 右側：カフェのメモ用紙・カセットインデックス風 */
-.history-title {
-    font-size: 14px;
+/* 右側：アンティークな貸出カード風 */
+.card-title {
+    font-size: 15px;
     font-weight: bold;
-    color: #ff9a62;
-    margin-bottom: 18px;
-    border-bottom: 1px solid rgba(255, 154, 98, 0.2);
+    color: #d4af37;
+    margin-bottom: 20px;
+    border-bottom: 2px double rgba(212, 175, 55, 0.4);
     padding-bottom: 8px;
 }
 
-.cassette-list {
+.index-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
 }
 
-/* カセットのインデックスカード風の癒やしデザイン */
-.cassette-card {
-    background-color: #201e2d;
-    border-left: 4px solid #ff9a62;
-    border-radius: 6px;
-    padding: 14px 16px;
+/* アンティークの蔵書インデックス・貸出カード */
+.lib-card {
+    background-color: #1a1510; /* 革張りの背表紙のようなブラウン */
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 16px;
     position: relative;
-    box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 6px 15px rgba(0,0,0,0.4);
 }
 
-.cassette-card:hover {
-    background-color: #242233;
+.lib-card:hover {
+    border-color: #d4af37;
 }
 
-.cassette-side {
+.lib-card-corner {
     position: absolute;
-    top: 14px;
-    right: 16px;
-    font-size: 10px;
-    font-weight: bold;
-    color: rgba(167, 139, 250, 0.6);
-    background: rgba(167, 139, 250, 0.1);
-    padding: 1px 6px;
-    border-radius: 3px;
+    top: 0; right: 0;
+    width: 24px; height: 24px;
+    background: linear-gradient(225deg, #d4af37 10%, transparent 11%);
 }
 
-.cassette-num {
-    font-size: 10px;
-    color: #8c88a5;
-    margin-bottom: 4px;
+.card-index {
+    font-size: 9px;
+    font-family: sans-serif;
+    color: #8a8271;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
 }
 
-.cassette-teacher {
+.card-main {
     font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.card-main span {
+    color: #d4af37;
     font-weight: bold;
-    color: #e2e0e9;
-    margin-bottom: 4px;
 }
 
-.cassette-date {
+.card-date {
     font-size: 11px;
-    color: #8c88a5;
+    font-family: sans-serif;
+    color: #8a8271;
 }
 
-/* 未選択：窓辺で眠る猫 */
-.chill-state {
+/* 未選択：沈黙の図書室 */
+.reading-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #8c88a5;
+    color: #8a8271;
     text-align: center;
 }
 
-.chill-cat {
-    font-size: 44px;
+.reading-icon {
+    font-size: 32px;
     margin-bottom: 16px;
-    animation: cat-breathe 4s infinite ease-in-out;
-    transform-origin: bottom center;
+    animation: book-sway 3s infinite ease-in-out;
 }
 
-@keyframes cat-breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05) translateY(-2px); }
+@keyframes book-sway {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-4px) rotate(4deg); }
 }
 
-.chill-text {
-    font-size: 12px;
-    line-height: 1.8;
+.reading-text {
+    font-size: 11px;
+    font-family: "YuMincho", "Hiragino Mincho ProN", serif;
+    line-height: 2;
 }
 </style>
 
@@ -339,42 +332,42 @@ select:hover {
 <body>
 
 <!-- ヘッダー -->
-<div class="lofi-header">
+<div class="lib-header">
     <div class="brand-title">
-        <span>☕</span>
-        <span>MIDNIGHT LO-FI // COGNITIVE LAB</span>
+        <span class="brand-icon">⚜️</span>
+        <span>MIDNIGHT BIBLIOTHEQUE // COGNITIVE RECORD</span>
     </div>
-    <div class="on-air">CHILLING</div>
+    <div class="lib-status">ARCHIVE_ROOM_02</div>
 </div>
 
 <!-- メインエリア -->
-<div class="lofi-workspace">
+<div class="lib-workspace">
 
-    <!-- 左パネル：トラック（生徒）選択 -->
-    <div class="lofi-panel">
+    <!-- 左パネル：蔵書棚（生徒一覧） -->
+    <div class="lib-panel">
         <div class="panel-header">
-            <span>💿 TRACK LIST (生徒名簿)</span>
+            <span>📚 CATALOGUE INDEX (蔵書索引)</span>
         </div>
         <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>再生ソート:</span>
+                    <span>配置順:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">特訓回数の多い順</option>
-                        <option value="id">生徒 ID 順</option>
+                        <option value="count">貸出・記録回数の多い順</option>
+                        <option value="id">資料 ID 順</option>
                     </select>
                 </div>
-                <div style="text-align: right;">
-                    <button class="btn-chill" onclick="refreshData()">再チューニング</button>
+                <div>
+                    <button class="btn-lib" onclick="refreshData()">目録を更新</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="lofi-table" id="summaryTable">
+            <table class="lib-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>生徒識別 ID</th>
-                        <th style="text-align: right; width: 100px;">特訓数</th>
+                        <th>資料識別 ID</th>
+                        <th style="text-align: right; width: 110px;">記録数</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -384,18 +377,18 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右パネル：カセットインデックス（履歴） -->
-    <div class="lofi-panel">
+    <!-- 右パネル：貸出カード（指導履歴） -->
+    <div class="lib-panel">
         <div class="panel-header">
-            <span>📝 CASSETTE INDEX (指導履歴)</span>
+            <span>🔖 CARD INDEX (貸出履歴カード)</span>
         </div>
         <div id="historyArea" class="panel-body">
-            <!-- チルな未選択画面 -->
-            <div class="chill-state">
-                <div class="chill-cat">🐈‍⬛💤</div>
-                <p class="chill-text">
-                    静かな雨音が聞こえています。<br>
-                    左の生徒を選択して、レコード針を落としてください。
+            <!-- 未選択画面 -->
+            <div class="reading-state">
+                <div class="reading-icon">🕯️</div>
+                <p class="reading-text">
+                    静粛にお願いいたします。<br>
+                    左の資料を選択して、貸出記録（指導履歴）をお取り寄せください。
                 </p>
             </div>
         </div>
@@ -411,7 +404,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "TUNED: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "LAST_ALIGN: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -449,7 +442,7 @@ function loadSummary(){
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="track-badge">${student.count} tracks</span>
+                    <span class="book-count">${student.count} VOL</span>
                 </td>
             </tr>
             `;
@@ -461,17 +454,17 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.lofi-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.lib-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
     }
 
-    // チルなロード表示
+    // 重厚なロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="chill-state">
-            <div class="chill-cat" style="animation: cat-breathe 1s infinite ease-in-out;">🎧</div>
-            <p class="chill-text">カセットテープを A 面から B 面にひっくり返しています...</p>
+        <div class="reading-state">
+            <div class="reading-icon">📜</div>
+            <p class="reading-text">地下書庫より、${studentId} の貸出票を取得しています...</p>
         </div>
     `;
 
@@ -479,18 +472,21 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="history-title">📻 ARCHIVE SESSIONS // ${studentId}</div>
-        <div class="cassette-list">
+        <div class="card-title">REGISTRY // ${studentId} の読書記録</div>
+        <div class="index-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="cassette-card">
-                <span class="cassette-side">SIDE B_0${i+1}</span>
-                <div class="cassette-num">TRACK NO. 0${i+1}</div>
-                <div class="cassette-teacher">SESSION WITH: ${data[i].teacher} 先生</div>
-                <div class="cassette-date">RECORDED: ${date.toLocaleString("ja-JP")}</div>
+            <div class="lib-card">
+                <div class="lib-card-corner"></div>
+                <div class="card-index">INDEX-LOG #0${i+1}</div>
+                <div class="card-main">
+                    担当司書：<span>${data[i].teacher}</span> 先生<br>
+                    指導、対話、およびその観察。
+                </div>
+                <div class="card-date">閲覧記録日時：${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
@@ -500,9 +496,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="chill-state" style="color: #ef4444;">
-                <div class="chill-cat">⚠️</div>
-                <p class="chill-text">電波が少し乱れたようです。もう一度「再チューニング」を試してみてください。</p>
+            <div class="reading-state" style="color: #ff8888;">
+                <div class="reading-icon">⚠️</div>
+                <p class="reading-text">書庫へのアクセスに失敗しました。更新ボタンをお試しください。</p>
             </div>
         `;
     });
