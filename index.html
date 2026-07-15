@@ -86,7 +86,7 @@ select{
 
 <div class="sortArea">
 
-並び替え：
+<label for="sortSelect">並び替え：</label>
 
 <select id="sortSelect" onchange="loadSummary()">
 
@@ -119,9 +119,7 @@ select{
 
 <h2>面接履歴</h2>
 
-<p>
-生徒IDをクリックしてください。
-</p>
+<p>生徒IDをクリックしてください。</p>
 
 </div>
 
@@ -140,18 +138,18 @@ function loadSummary(){
 
 fetch(API_URL + "?mode=summary")
 
-.then(response=>response.json())
+.then(response => response.json())
 
-.then(data=>{
+.then(data => {
 
-let html=`
+let html = `
 <tr>
 <th>生徒ID</th>
 <th>面接回数</th>
 </tr>
 `;
 
-let students=[];
+let students = [];
 
 for(let id in data){
 
@@ -165,7 +163,7 @@ count:data[id]
 
 }
 
-const sortType=
+const sortType =
 document.getElementById("sortSelect").value;
 
 // 面接回数順
@@ -184,11 +182,11 @@ else{
 
 students.sort(function(a,b){
 
-return a.id.localeCompare(
-b.id,
-'ja',
-{numeric:true}
-);
+// 生徒IDの最後の数字を取得
+const numA = parseInt(a.id.match(/\d+$/)[0]);
+const numB = parseInt(b.id.match(/\d+$/)[0]);
+
+return numA - numB;
 
 });
 
@@ -196,16 +194,14 @@ b.id,
 
 students.forEach(function(student){
 
-html+=`
+html += `
 
 <tr>
 
 <td>
 
 <span
-
 class="student-link"
-
 onclick="showHistory('${student.id}')">
 
 ${student.id}
@@ -226,7 +222,7 @@ ${student.count}回
 
 });
 
-document.getElementById("summaryTable").innerHTML=
+document.getElementById("summaryTable").innerHTML =
 html;
 
 });
@@ -237,27 +233,21 @@ function showHistory(studentId){
 
 fetch(
 
-API_URL+
+API_URL +
 
-"?mode=history&id="+
+"?mode=history&id=" +
 
 encodeURIComponent(studentId)
 
 )
 
-.then(response=>response.json())
+.then(response => response.json())
 
-.then(data=>{
+.then(data => {
 
-let html=`
+let html = `
 
-<h2>
-
-${studentId}
-
-の面接履歴
-
-</h2>
+<h2>${studentId} の面接履歴</h2>
 
 <table>
 
@@ -275,31 +265,17 @@ ${studentId}
 
 for(let i=0;i<data.length;i++){
 
-let date=
+let date = new Date(data[i].date);
 
-new Date(data[i].date);
-
-html+=`
+html += `
 
 <tr>
 
-<td>
+<td>${i+1}回目</td>
 
-${i+1}回目
+<td>${date.toLocaleString("ja-JP")}</td>
 
-</td>
-
-<td>
-
-${date.toLocaleString("ja-JP")}
-
-</td>
-
-<td>
-
-${data[i].teacher}
-
-</td>
+<td>${data[i].teacher}</td>
 
 </tr>
 
@@ -307,9 +283,9 @@ ${data[i].teacher}
 
 }
 
-html+="</table>";
+html += "</table>";
 
-document.getElementById("historyArea").innerHTML=
+document.getElementById("historyArea").innerHTML =
 html;
 
 });
