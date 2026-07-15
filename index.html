@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROOT://MEISETSU_CORE_v3.9</title>
+<title>ARCHIVE / INTERVIEW RECORD</title>
 
 <style>
 /* 共通リセット */
@@ -15,243 +15,286 @@
 }
 
 body {
-    /* 開発者用の等幅フォント */
-    font-family: "Courier New", Courier, Monaco, "Consolas", "MS Gothic", monospace;
-    background-color: #050505; /* 深い闇 */
-    color: #39ff14; /* ネオングリーン（サイバーフォントカラー） */
+    /* 幾何学的で洗練されたサンセリフフォント */
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Segoe UI", sans-serif;
+    background-color: #fafafa; /* ニュートラルな超高輝度グレー */
+    color: #18181b; /* 漆黒に近いダークグレー */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 16px;
-    position: relative;
+    padding: 32px;
+    letter-spacing: 0.05em;
 }
 
-/* CRTモニターの走査線ノイズを表現するオーバーレイ */
-body::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 999;
-    background-size: 100% 4px, 6px 100%;
-    pointer-events: none;
-}
-
-/* ヘッダー：システムのシェルプロンプト風 */
-.terminal-header {
-    border-bottom: 2px solid #39ff14;
-    height: 50px;
-    padding: 0 16px;
+/* ヘッダー：インダストリアルなブランドロゴ風 */
+.app-header {
+    border-bottom: 2px solid #18181b;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 32px;
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 1px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
 }
 
-.system-status {
-    font-size: 11px;
-    color: #ffffff;
-    background-color: #004400;
-    padding: 2px 8px;
-    border: 1px solid #39ff14;
+.app-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #71717a;
+    text-transform: uppercase;
 }
 
 /* 2カラムレイアウト */
-.terminal-workspace {
+.app-content {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 16px;
+    gap: 32px;
     width: 100%;
 }
 
-/* ターミナルパネル */
-.terminal-panel {
+/* マガジン調のスッキリしたカード */
+.editorial-card {
     flex: 1;
-    border: 1px solid #39ff14;
-    background-color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 0px; /* あえて角丸をなくし、ミニマルでソリッドな印象に */
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.15);
+    transition: border-color 0.3s ease;
 }
 
-.panel-header {
-    background-color: #111111;
-    padding: 6px 16px;
-    border-bottom: 1px solid #39ff14;
+.editorial-card:hover {
+    border-color: #18181b;
+}
+
+.card-header {
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #f4f4f5;
+    flex-shrink: 0;
+}
+
+.card-title {
     font-size: 11px;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #71717a;
+    text-transform: uppercase;
 }
 
-.panel-body {
+.card-body {
     overflow-y: auto;
     flex: 1;
-    padding: 16px;
+    padding: 24px;
 }
 
-/* コントロール（コンソールコマンド風） */
+/* コントロール：余白を活かした配置 */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 16px;
-    background-color: #080808;
-    border: 1px dashed #39ff14;
-    padding: 10px;
+    margin-bottom: 24px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 11px;
+    gap: 12px;
 }
 
-/* 黒背景にグリーンのセレクト */
+.filter-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #a1a1aa;
+}
+
+/* ミニマルなセレクト＆ボタン */
 select {
-    padding: 4px 8px;
+    padding: 8px 12px;
     font-size: 11px;
     font-family: inherit;
-    border: 1px solid #39ff14;
-    background-color: #000000;
-    color: #39ff14;
+    letter-spacing: 0.05em;
+    border: 1px solid #e4e4e7;
+    border-radius: 0px;
+    background-color: #ffffff;
+    color: #18181b;
     outline: none;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
-/* コマンド実行ボタン */
-.btn-console {
-    padding: 4px 12px;
+select:hover {
+    border-color: #18181b;
+}
+
+.btn-magazine {
+    padding: 8px 16px;
     font-size: 11px;
     font-family: inherit;
-    background-color: #003300;
-    color: #39ff14;
-    border: 1px solid #39ff14;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background-color: #18181b;
+    color: #ffffff;
+    border: 1px solid #18181b;
     cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.btn-console:hover {
-    background-color: #39ff14;
-    color: #000000;
+.btn-magazine:hover {
+    background-color: #ffffff;
+    color: #18181b;
 }
 
 #updateTime {
-    font-size: 9px;
-    color: #888888;
-    margin-top: 4px;
+    font-size: 10px;
+    color: #a1a1aa;
+    margin-top: 6px;
+    text-align: right;
+    letter-spacing: 0.05em;
 }
 
-/* ログ調テーブル */
-.term-table {
+/* テーブルスタイル */
+.editorial-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.term-table th {
-    padding: 8px;
+.editorial-table th {
+    padding: 12px 8px;
     font-size: 11px;
-    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #71717a;
+    text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid #39ff14;
+    border-bottom: 2px solid #18181b;
 }
 
-.term-table td {
-    padding: 10px 8px;
-    font-size: 12px;
-    border-bottom: 1px solid #111111;
+.editorial-table td {
+    padding: 16px 8px;
+    font-size: 13px;
+    border-bottom: 1px solid #f4f4f5;
 }
 
-/* 選択時のハッカー風反転ハイライト */
-.row-selected td {
-    background-color: #39ff14 !important;
-    color: #000000 !important;
-}
-
-.row-selected .student-btn {
-    color: #000000 !important;
-}
-
-/* コマンドライン実行のような生徒リンク */
+/* 生徒名リンク：タイポグラフィとしての見せ方 */
 .student-btn {
-    font-size: 12px;
+    font-size: 13px;
     font-family: inherit;
-    color: #39ff14;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #18181b;
     background: none;
     border: none;
     cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
     text-align: left;
 }
 
-.student-btn::before {
-    content: "$ cat ./profiles/";
-}
-
 .student-btn:hover {
-    text-decoration: underline;
+    opacity: 0.6;
+    transform: translateX(4px); /* ホバー時に少しだけ右にスライド */
 }
 
-/* 進捗バー表示（[#####.....]） */
-.progress-bar {
-    font-weight: bold;
+/* 選択行：美しいセージグリーンの極薄ハイライト */
+.row-selected td {
+    background-color: #f1f5f2 !important; /* 洗練されたセージグリーン */
+    border-bottom-color: #18181b;
 }
 
-/* 右側：コマンドログ展開エリア */
-.cmd-line {
-    color: #ffffff;
-    font-size: 12px;
-    margin-bottom: 16px;
-}
-
-.log-entry {
-    border-left: 2px solid #39ff14;
-    padding-left: 12px;
-    margin-bottom: 16px;
+/* 上品な回数インジケーター */
+.count-badge {
     font-size: 11px;
+    font-weight: 700;
+    color: #18181b;
+    border-bottom: 1px solid #18181b; /* 太線ではなく、文字の下線のみで主張 */
+    padding-bottom: 2px;
 }
 
-.log-meta {
-    color: #888888;
-    margin-bottom: 4px;
+/* 右側：エディトリアル調ログ */
+.log-header {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #18181b;
+    padding-bottom: 12px;
+    text-transform: uppercase;
 }
 
-.log-value {
-    color: #ffffff;
+.log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-/* 待機プレースホルダー（点滅カーソル） */
-.terminal-idle {
-    font-size: 12px;
-    color: #888888;
-    line-height: 1.8;
+.log-card {
+    border: 1px solid #e4e4e7;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    background-color: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.cursor-blink {
-    display: inline-block;
-    width: 8px;
-    height: 15px;
-    background-color: #39ff14;
-    animation: blink 1s infinite steps(1);
-    vertical-align: middle;
-    margin-left: 4px;
+.log-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+.log-num {
+    font-size: 9px;
+    font-weight: 700;
+    color: #a1a1aa;
+    letter-spacing: 0.15em;
+}
+
+.log-teacher {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.log-date {
+    font-size: 11px;
+    color: #71717a;
+}
+
+/* 未選択の空白美 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #a1a1aa;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+}
+
+.empty-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
 }
 </style>
 
@@ -260,62 +303,58 @@ select {
 <body>
 
 <!-- ヘッダー -->
-<div class="terminal-header">
-    <div class="brand-title">CORE-SHELL://MEISETSU_DATABASE_CLI</div>
-    <div class="system-status">SYS_STATUS: ONLINE</div>
+<div class="app-header">
+    <div class="brand-title">INDEX // RECORD</div>
+    <span class="app-badge">ISSUE NO.26</span>
 </div>
 
 <!-- メインエリア -->
-<div class="terminal-workspace">
+<div class="app-content">
 
     <!-- 左パネル -->
-    <div class="terminal-panel">
-        <div class="panel-header">
-            <span>[STUDENT_INDEX_MODULE]</span>
-            <span>MEM_USE: 4.2%</span>
+    <div class="editorial-card">
+        <div class="card-header">
+            <div class="card-title">STUDENT REGISTRY</div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span>QUERY_SORT:</span>
+                    <span class="filter-label">SORT_BY</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">SESSION_COUNT (DESC)</option>
-                        <option value="id">SYSTEM_ID (ASC)</option>
+                        <option value="count">PRACTICE COUNT</option>
+                        <option value="id">STUDENT ID</option>
                     </select>
                 </div>
-                <div style="text-align: right;">
-                    <button class="btn-console" onclick="refreshData()">re-execute</button>
+                <div>
+                    <button class="btn-magazine" onclick="refreshData()">SYNC</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="term-table" id="summaryTable">
+            <table class="editorial-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>TARGET_NODE_ID</th>
-                        <th style="text-align: right; width: 140px;">METRIC_SESSIONS</th>
+                        <th>STUDENT ID</th>
+                        <th style="text-align: right; width: 120px;">FREQUENCY</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 動的挿入 -->
+                    <!-- JSで展開 -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- 右パネル -->
-    <div class="terminal-panel">
-        <div class="panel-header">
-            <span>[SHELL_OUTPUT]</span>
-            <span>TTY: PTS/01</span>
+    <div class="editorial-card">
+        <div class="card-header">
+            <div class="card-title">ARCHIVED LOGS</div>
         </div>
-        <div id="historyArea" class="panel-body">
-            <!-- 待機画面 -->
-            <div class="terminal-idle">
-                meisetsu-server login: root<br>
-                Last login: Wed Jul 15 14:30:08 on console<br><br>
-                $ select_target_node --run<br>
-                Waiting for target selection input<span class="cursor-blink"></span>
+        <div id="historyArea" class="card-body">
+            <!-- 未選択時の表示 -->
+            <div class="empty-state">
+                <div class="empty-icon">—</div>
+                <p class="empty-text">SELECT ID TO STREAM RECORDS</p>
             </div>
         </div>
     </div>
@@ -330,7 +369,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYS_TIME: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "UPDATED: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -360,11 +399,6 @@ function loadSummary(){
         }
 
         students.forEach(student => {
-            // カウントバーの視覚化 ([#####.....])
-            let filled = Math.min(student.count, 10);
-            let empty = Math.max(0, 10 - filled);
-            let bar = "[" + "#".repeat(filled) + ".".repeat(empty) + "]";
-
             html += `
             <tr id="row-${student.id}">
                 <td>
@@ -372,8 +406,8 @@ function loadSummary(){
                         ${student.id}
                     </button>
                 </td>
-                <td style="text-align: right;" class="progress-bar">
-                    ${bar} [${student.count}]
+                <td style="text-align: right;">
+                    <span class="count-badge">${student.count} SESSIONS</span>
                 </td>
             </tr>
             `;
@@ -384,8 +418,8 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ選択行の表示
-    document.querySelectorAll('.term-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブ行の切り替え
+    document.querySelectorAll('.editorial-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -393,10 +427,9 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="terminal-idle">
-            $ query_logs --id="${studentId}"<br>
-            [STATUS] REQUEST SENT. RETRIEVING DATA FROM REMOTE API...<br>
-            Please wait<span class="cursor-blink"></span>
+        <div class="empty-state">
+            <div class="empty-icon">LOADING</div>
+            <p class="empty-text">RETRIEVING ENCRYPTED HISTORIES FOR ${studentId}...</p>
         </div>
     `;
 
@@ -404,31 +437,31 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="cmd-line">
-            $ query_logs --id="${studentId}" --display=all<br>
-            [SUCCESS] RESOLVED ${data.length} MATCHING LOG ENTRIES.
+        <div class="log-header">
+            <span>CHRONICLE OF ${studentId}</span>
         </div>
+        <div class="log-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="log-entry">
-                <div class="log-meta"># RECORD_INDEX [0${i+1}]</div>
-                <div>EXAMINER: <span class="log-value">${data[i].teacher}</span></div>
-                <div>TIMESTAMP: <span class="log-value">${date.toLocaleString("ja-JP")}</span></div>
+            <div class="log-card">
+                <div class="log-num">0${i+1} / RECORD</div>
+                <div class="log-teacher">EXAMINER: ${data[i].teacher}</div>
+                <div class="log-date">DATE: ${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
 
+        html += "</div>";
         document.getElementById("historyArea").innerHTML = html;
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="terminal-idle" style="color: #ff0000;">
-                $ status --check<br>
-                [ERROR] CONNECTION TIMED OUT OR REMOTE HOST RESOLUTION FAILED.<br>
-                EXECUTE 're-execute' TO RESET CORE.
+            <div class="empty-state" style="color: #ef4444;">
+                <div class="empty-icon">CRITICAL ERROR</div>
+                <p class="empty-text">NETWORK ISSUES DETECTED. PLEASE SYNC AGAIN.</p>
             </div>
         `;
     });
