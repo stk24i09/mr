@@ -4,7 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARCHIVE / INTERVIEW RECORD</title>
+<title>冒険の書 // 面接とっくんクエスト</title>
+
+<!-- 日本語ドットフォントの読み込み -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
 <style>
 /* 共通リセット */
@@ -15,286 +20,282 @@
 }
 
 body {
-    /* 幾何学的で洗練されたサンセリフフォント */
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Segoe UI", sans-serif;
-    background-color: #fafafa; /* ニュートラルな超高輝度グレー */
-    color: #18181b; /* 漆黒に近いダークグレー */
+    /* レトロゲーム風ドットフォント */
+    font-family: 'DotGothic16', "Courier New", Courier, monospace;
+    background-color: #0b0b16; /* 宇宙や闇を感じるダークネイビー */
+    /* ドット絵風の背景グリッド */
+    background-image: radial-gradient(#202040 10%, transparent 10%);
+    background-size: 16px 16px;
+    color: #ffffff;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 32px;
-    letter-spacing: 0.05em;
+    padding: 24px;
+    image-rendering: pixelated; /* ドットのシャープさを強調 */
 }
 
-/* ヘッダー：インダストリアルなブランドロゴ風 */
-.app-header {
-    border-bottom: 2px solid #18181b;
-    height: 60px;
+/* ヘッダー：ゲームのタイトル画面ロゴ風 */
+.game-header {
+    background-color: #000000;
+    border: 4px solid #ffffff;
+    outline: 4px solid #000000;
+    height: 64px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     flex-shrink: 0;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.4);
 }
 
 .brand-title {
     font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    color: #ffff00; /* レトロゴールド */
+    text-shadow: 2px 2px 0px #ff0000;
+    letter-spacing: 2px;
 }
 
-.app-badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: #71717a;
-    text-transform: uppercase;
+.system-status {
+    font-size: 14px;
+    color: #00ff00; /* セーブ完了グリーン */
 }
 
 /* 2カラムレイアウト */
-.app-content {
+.game-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 32px;
+    gap: 20px;
     width: 100%;
 }
 
-/* マガジン調のスッキリしたカード */
-.editorial-card {
+/* クラシックRPGコマンドウィンドウ */
+.rpg-window {
     flex: 1;
-    background-color: #ffffff;
-    border: 1px solid #e4e4e7;
-    border-radius: 0px; /* あえて角丸をなくし、ミニマルでソリッドな印象に */
+    background: linear-gradient(180deg, #000080 0%, #000030 100%); /* 王道の青いウインドウ */
+    border: 4px solid #ffffff;
+    outline: 4px solid #000000;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    transition: border-color 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
 }
 
-.editorial-card:hover {
-    border-color: #18181b;
+.window-header {
+    background-color: #000000;
+    padding: 8px 16px;
+    border-bottom: 4px solid #ffffff;
+    font-size: 14px;
+    color: #ffff00;
+    letter-spacing: 1px;
 }
 
-.card-header {
-    padding: 24px 24px 16px 24px;
-    border-bottom: 1px solid #f4f4f5;
-    flex-shrink: 0;
-}
-
-.card-title {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: #71717a;
-    text-transform: uppercase;
-}
-
-.card-body {
+.window-body {
     overflow-y: auto;
     flex: 1;
-    padding: 24px;
+    padding: 20px;
 }
 
-/* コントロール：余白を活かした配置 */
+/* コントロール（コマンド選択メニュー風） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px dashed #ffffff;
+    padding: 12px;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    font-size: 14px;
 }
 
-.filter-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #a1a1aa;
-}
-
-/* ミニマルなセレクト＆ボタン */
+/* レトロデザインなセレクト */
 select {
-    padding: 8px 12px;
-    font-size: 11px;
+    padding: 6px 12px;
+    font-size: 14px;
     font-family: inherit;
-    letter-spacing: 0.05em;
-    border: 1px solid #e4e4e7;
-    border-radius: 0px;
-    background-color: #ffffff;
-    color: #18181b;
+    border: 2px solid #ffffff;
+    background-color: #000000;
+    color: #ffffff;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-select:hover {
-    border-color: #18181b;
-}
-
-.btn-magazine {
-    padding: 8px 16px;
-    font-size: 11px;
+/* コマンド実行（たたく）ボタン */
+.btn-pixel {
+    padding: 6px 16px;
+    font-size: 14px;
     font-family: inherit;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    background-color: #18181b;
+    background-color: #000000;
     color: #ffffff;
-    border: 1px solid #18181b;
+    border: 2px solid #ffffff;
+    box-shadow: 3px 3px 0px #ffffff;
     cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
+    transition: all 0.1s;
 }
 
-.btn-magazine:hover {
-    background-color: #ffffff;
-    color: #18181b;
+.btn-pixel:hover {
+    background-color: #ffff00;
+    color: #000000;
+    border-color: #000000;
+    box-shadow: 3px 3px 0px #000000;
+}
+
+.btn-pixel:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
 }
 
 #updateTime {
-    font-size: 10px;
-    color: #a1a1aa;
+    font-size: 12px;
+    color: #aaaaaa;
     margin-top: 6px;
-    text-align: right;
-    letter-spacing: 0.05em;
 }
 
-/* テーブルスタイル */
-.editorial-table {
+/* ステータステーブル */
+.rpg-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.editorial-table th {
-    padding: 12px 8px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #71717a;
-    text-transform: uppercase;
+.rpg-table th {
+    padding: 10px;
+    font-size: 14px;
+    color: #00ff00;
     text-align: left;
-    border-bottom: 2px solid #18181b;
+    border-bottom: 4px double #ffffff;
 }
 
-.editorial-table td {
-    padding: 16px 8px;
-    font-size: 13px;
-    border-bottom: 1px solid #f4f4f5;
+.rpg-table td {
+    padding: 12px 10px;
+    font-size: 16px;
+    border-bottom: 2px dotted rgba(255,255,255,0.2);
 }
 
-/* 生徒名リンク：タイポグラフィとしての見せ方 */
+/* 選択行：点滅するようなゴールドカラー */
+.row-selected td {
+    background-color: rgba(255, 255, 0, 0.15) !important;
+}
+
+.row-selected .student-btn::before {
+    content: "▶ "; /* コマンド選択カーソル */
+    color: #ffff00;
+    animation: bounce 0.6s infinite alternate;
+    display: inline-block;
+}
+
+@keyframes bounce {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(4px); }
+}
+
+/* ギルドメンバーボタン */
 .student-btn {
-    font-size: 13px;
+    font-size: 16px;
     font-family: inherit;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #18181b;
+    color: #ffffff;
     background: none;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
     text-align: left;
 }
 
+.student-btn::before {
+    content: "  "; /* 未選択時は等幅スペース */
+}
+
 .student-btn:hover {
-    opacity: 0.6;
-    transform: translateX(4px); /* ホバー時に少しだけ右にスライド */
+    color: #ffff00;
 }
 
-/* 選択行：美しいセージグリーンの極薄ハイライト */
-.row-selected td {
-    background-color: #f1f5f2 !important; /* 洗練されたセージグリーン */
-    border-bottom-color: #18181b;
+/* ステータスバー風回数ゲージ */
+.status-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
 }
 
-/* 上品な回数インジケーター */
-.count-badge {
-    font-size: 11px;
-    font-weight: 700;
-    color: #18181b;
-    border-bottom: 1px solid #18181b; /* 太線ではなく、文字の下線のみで主張 */
-    padding-bottom: 2px;
+.level-text {
+    color: #ffaa00;
+    font-weight: bold;
 }
 
-/* 右側：エディトリアル調ログ */
-.log-header {
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #18181b;
-    padding-bottom: 12px;
-    text-transform: uppercase;
+.hp-gauge {
+    width: 60px;
+    height: 10px;
+    background-color: #555555;
+    border: 1px solid #ffffff;
+    position: relative;
+    overflow: hidden;
 }
 
-.log-list {
+.hp-fill {
+    height: 100%;
+    background-color: #00ff00; /* 回数が多いほど緑、少ないと赤…を簡易表現 */
+}
+
+/* 右側：冒険の記録（ログ） */
+.quest-title {
+    font-size: 18px;
+    color: #ffff00;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #ffffff;
+    padding-bottom: 8px;
+}
+
+.quest-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.log-card {
-    border: 1px solid #e4e4e7;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.quest-card {
+    background-color: rgba(0,0,0,0.5);
+    border: 2px solid #ffffff;
+    padding: 16px;
     position: relative;
-    background-color: #ffffff;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.log-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.quest-num {
+    font-size: 12px;
+    color: #ff5555; /* 赤色のクエストナンバー */
+    margin-bottom: 6px;
 }
 
-.log-num {
-    font-size: 9px;
-    font-weight: 700;
-    color: #a1a1aa;
-    letter-spacing: 0.15em;
-}
-
-.log-teacher {
+.quest-detail {
     font-size: 14px;
-    font-weight: 700;
+    line-height: 1.6;
 }
 
-.log-date {
-    font-size: 11px;
-    color: #71717a;
+.quest-meta {
+    color: #00ffff;
 }
 
-/* 未選択の空白美 */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #a1a1aa;
-    text-align: center;
-}
-
-.empty-icon {
+/* 待機時のメッセージボックス風表示 */
+.rpg-idle {
     font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 12px;
-    letter-spacing: 0.1em;
+    line-height: 1.8;
+    color: #ffffff;
 }
 
-.empty-text {
-    font-size: 11px;
-    letter-spacing: 0.1em;
+.text-blink {
+    animation: blink 1s infinite steps(1);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
 }
 </style>
 
@@ -303,39 +304,37 @@ select:hover {
 <body>
 
 <!-- ヘッダー -->
-<div class="app-header">
-    <div class="brand-title">INDEX // RECORD</div>
-    <span class="app-badge">ISSUE NO.26</span>
+<div class="game-header">
+    <div class="brand-title">⚔️ 面接とっくんクエスト</div>
+    <div class="system-status">PARTY ACTIVE // SAVE 01</div>
 </div>
 
 <!-- メインエリア -->
-<div class="app-content">
+<div class="game-workspace">
 
     <!-- 左パネル -->
-    <div class="editorial-card">
-        <div class="card-header">
-            <div class="card-title">STUDENT REGISTRY</div>
-        </div>
-        <div class="card-body">
+    <div class="rpg-window">
+        <div class="window-header">▼ ギルドメンバー (なまえ)</div>
+        <div class="window-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span class="filter-label">SORT_BY</span>
+                    <span>ならびかえ:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">PRACTICE COUNT</option>
-                        <option value="id">STUDENT ID</option>
+                        <option value="count">レベリング順（多）</option>
+                        <option value="id">名簿の番号順</option>
                     </select>
                 </div>
-                <div>
-                    <button class="btn-magazine" onclick="refreshData()">SYNC</button>
+                <div style="text-align: right;">
+                    <button class="btn-pixel" onclick="refreshData()">しらべる</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="editorial-table" id="summaryTable">
+            <table class="rpg-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>STUDENT ID</th>
-                        <th style="text-align: right; width: 120px;">FREQUENCY</th>
+                        <th>なまえ (ID)</th>
+                        <th style="text-align: right; width: 150px;">つよさ (Lv)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -346,15 +345,14 @@ select:hover {
     </div>
 
     <!-- 右パネル -->
-    <div class="editorial-card">
-        <div class="card-header">
-            <div class="card-title">ARCHIVED LOGS</div>
-        </div>
-        <div id="historyArea" class="card-body">
-            <!-- 未選択時の表示 -->
-            <div class="empty-state">
-                <div class="empty-icon">—</div>
-                <p class="empty-text">SELECT ID TO STREAM RECORDS</p>
+    <div class="rpg-window">
+        <div class="window-header">▼ ぼうけんのきろく</div>
+        <div id="historyArea" class="window-body">
+            <!-- 待機画面 -->
+            <div class="rpg-idle">
+                * おお、冒険者たちよ！<br>
+                * 左のリストから仲間をえらび、これまでの特訓ログをロードするのじゃ。<br>
+                <span class="text-blink">▼</span>
             </div>
         </div>
     </div>
@@ -369,7 +367,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "UPDATED: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "記録時間: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -399,6 +397,12 @@ function loadSummary(){
         }
 
         students.forEach(student => {
+            // 回数に応じてHPバー（的なもの）の幅と色を決定 (MAX 10回想定)
+            let percent = Math.min((student.count / 10) * 100, 100);
+            let barColor = "#00ff00"; // 緑（通常）
+            if(percent < 30) barColor = "#ff0000"; // 赤（ピンチ）
+            else if(percent < 60) barColor = "#ffff00"; // 黄色（警告）
+
             html += `
             <tr id="row-${student.id}">
                 <td>
@@ -407,7 +411,12 @@ function loadSummary(){
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="count-badge">${student.count} SESSIONS</span>
+                    <div class="status-bar-container">
+                        <span class="level-text">Lv ${student.count}</span>
+                        <div class="hp-gauge">
+                            <div class="hp-fill" style="width: ${percent}%; background-color: ${barColor};"></div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             `;
@@ -418,18 +427,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.editorial-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // アクティブ選択行の切り替え
+    document.querySelectorAll('.rpg-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
     }
 
-    // ロード表示
+    // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-state">
-            <div class="empty-icon">LOADING</div>
-            <p class="empty-text">RETRIEVING ENCRYPTED HISTORIES FOR ${studentId}...</p>
+        <div class="rpg-idle">
+            * '${studentId}' の ぼうけんのしょを よみこんでいます...<br>
+            * じゅもんを となえています...<span class="text-blink">⏳</span>
         </div>
     `;
 
@@ -437,19 +446,19 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="log-header">
-            <span>CHRONICLE OF ${studentId}</span>
-        </div>
-        <div class="log-list">
+        <div class="quest-title">🛡️ ${studentId} のクリア済みクエスト</div>
+        <div class="quest-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="log-card">
-                <div class="log-num">0${i+1} / RECORD</div>
-                <div class="log-teacher">EXAMINER: ${data[i].teacher}</div>
-                <div class="log-date">DATE: ${date.toLocaleString("ja-JP")}</div>
+            <div class="quest-card">
+                <div class="quest-num">[QUEST 0${i+1}]</div>
+                <div class="quest-detail">
+                    ギルドマスター <span class="quest-meta">${data[i].teacher}</span> が特訓を認可。<br>
+                    討伐日時：<span class="quest-meta">${date.toLocaleString("ja-JP")}</span>
+                </div>
             </div>
             `;
         }
@@ -459,9 +468,10 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-state" style="color: #ef4444;">
-                <div class="empty-icon">CRITICAL ERROR</div>
-                <p class="empty-text">NETWORK ISSUES DETECTED. PLEASE SYNC AGAIN.</p>
+            <div class="rpg-idle" style="color: #ff5555;">
+                * つうしんエラー！<br>
+                * おおっと、冒険の書は 消えてしまいました（一時的な切断です）。<br>
+                * もう一度「しらべる」コマンドを実行するのじゃ！
             </div>
         `;
     });
