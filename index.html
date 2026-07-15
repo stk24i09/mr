@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>面接練習データ管理 - LAB EDITION</title>
+<title>面接とっくんクラブ</title>
 
 <style>
 /* 共通リセット */
@@ -15,106 +15,103 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
-    /* 深い宇宙空間のようなダークグラデーション */
-    background: radial-gradient(circle at 50% 50%, #0d111c 0%, #05070c 100%);
-    color: #e2e8f0;
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    background-color: #FFDEE9; /* あまーいストロベリーピンク */
+    background-image: radial-gradient(#ffb6c1 20%, transparent 20%), radial-gradient(#ffb6c1 20%, transparent 20%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px; /* ポップなドット背景 */
+    color: #2D2D2D;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     padding: 24px;
-    position: relative;
 }
 
-/* 背景のSF調極細グリッド */
-body::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 30px 30px;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* ヘッダー：極薄のフローティングバー */
+/* ヘッダー：おもちゃのパッケージ風ステッカー */
 .app-header {
-    z-index: 2;
-    background: rgba(13, 17, 28, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    height: 56px;
+    background-color: #3B82F6; /* スカイブルー */
+    border: 4px solid #2D2D2D;
+    box-shadow: 6px 6px 0px #2D2D2D;
+    height: 64px;
     padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-    border-radius: 12px;
+    border-radius: 16px;
     flex-shrink: 0;
+    transform: rotate(-1deg); /* ちょっぴり傾けてルーズに */
 }
 
 .brand-title {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    color: #38bdf8; /* フューチャーブルー */
-    text-transform: uppercase;
+    font-size: 22px;
+    font-weight: 900;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 0px #2D2D2D;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 28px;
+    animation: wiggle 2s infinite ease-in-out;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
 }
 
 .app-badge {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 4px 12px;
-    border-radius: 6px;
+    background-color: #FBBF24; /* レモンイエロー */
+    color: #2D2D2D;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 6px 14px;
+    border: 3px solid #2D2D2D;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px #2D2D2D;
 }
 
 /* 2カラムレイアウト */
 .app-content {
-    z-index: 2;
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 24px;
+    gap: 28px;
     width: 100%;
 }
 
-/* 磨りガラス調のフューチャリスティック・カード */
-.glass-card {
+/* ぷっくり丸っこいカード */
+.pop-card {
     flex: 1;
-    background: rgba(13, 17, 28, 0.45);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: #FFFFFF;
+    border: 4px solid #2D2D2D;
+    border-radius: 24px;
+    box-shadow: 8px 8px 0px #2D2D2D;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    transition: border-color 0.3s;
-}
-
-.glass-card:hover {
-    border-color: rgba(56, 189, 248, 0.2); /* ほのかに青く光る */
+    transition: transform 0.15s ease;
 }
 
 .card-header {
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #34D399; /* メロンソーダ */
+    border-bottom: 4px solid #2D2D2D;
     flex-shrink: 0;
 }
 
 .card-title {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 900;
+    color: #2D2D2D;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .card-body {
@@ -135,181 +132,229 @@ body::after {
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .filter-label {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    font-weight: 900;
 }
 
-/* スマートなセレクト＆ボタン */
+/* おもちゃ風の選択メニュー＆ボタン */
 select {
-    padding: 8px 16px;
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    background-color: rgba(13, 17, 28, 0.8);
-    color: rgba(255, 255, 255, 0.8);
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 900;
+    border: 3px solid #2D2D2D;
+    border-radius: 14px;
+    background-color: #FFFFFF;
+    color: #2D2D2D;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
+    box-shadow: 3px 3px 0px #2D2D2D;
+    transition: all 0.1s;
 }
 
-select:hover {
-    border-color: rgba(56, 189, 248, 0.4);
+select:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #2D2D2D;
 }
 
-.btn-lab {
-    padding: 8px 16px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    background-color: rgba(56, 189, 248, 0.1);
-    color: #38bdf8;
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    border-radius: 8px;
+.btn-pop {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 900;
+    background-color: #FF6B6B; /* ジューシーレッド */
+    color: #FFFFFF;
+    border: 3px solid #2D2D2D;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    box-shadow: 4px 4px 0px #2D2D2D;
+    text-shadow: 1px 1px 0px #2D2D2D;
+    transition: all 0.1s;
 }
 
-.btn-lab:hover {
-    background-color: rgba(56, 189, 248, 0.2);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+.btn-pop:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0px #2D2D2D;
+}
+
+.btn-pop:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0px #2D2D2D;
 }
 
 #updateTime {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.3);
+    font-size: 11px;
+    font-weight: 900;
+    color: #888;
     margin-top: 6px;
     text-align: right;
-    letter-spacing: 0.05em;
 }
 
-/* ミニマル・テーブル */
-.lab-table {
+/* 丸いポップなテーブル */
+.pop-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* 行と行の間にスキマを作る */
 }
 
-.lab-table th {
-    padding: 12px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.4);
+.pop-table th {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 900;
+    color: #888;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.lab-table td {
-    padding: 16px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+.pop-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 900;
+    background-color: #F3F4F6;
+    border-top: 3px solid #2D2D2D;
+    border-bottom: 3px solid #2D2D2D;
 }
 
-/* 生徒IDリンク */
+.pop-table td:first-child {
+    border-left: 3px solid #2D2D2D;
+    border-radius: 14px 0 0 14px;
+}
+
+.pop-table td:last-child {
+    border-right: 3px solid #2D2D2D;
+    border-radius: 0 14px 14px 0;
+}
+
+/* 生徒名ボタン：ステッカー風 */
 .student-btn {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    color: #38bdf8;
-    background: none;
-    border: none;
+    font-size: 15px;
+    font-weight: 900;
+    color: #2D2D2D;
+    background: #FBBF24; /* ひよこイエロー */
+    border: 2px solid #2D2D2D;
+    padding: 4px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: color 0.2s;
+    box-shadow: 2px 2px 0px #2D2D2D;
+    transition: all 0.1s;
 }
 
 .student-btn:hover {
-    color: #7dd3fc;
-    text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    background-color: #F59E0B;
+    transform: scale(1.05);
 }
 
-/* 選択行のネオンフィードバック */
+/* 行選択時 */
 .row-selected td {
-    background-color: rgba(56, 189, 248, 0.04) !important;
-    border-bottom-color: rgba(56, 189, 248, 0.2);
+    background-color: #E0F2FE !important; /* さわやかライトブルー */
 }
 
-/* カウント表示：小さなカプセル型 */
-.lab-badge {
-    background-color: rgba(56, 189, 248, 0.05);
-    color: #38bdf8;
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
+/* まるいバッジ */
+.pop-badge {
+    background-color: #EC4899; /* ビビッドピンク */
+    color: #FFFFFF;
+    border: 2px solid #2D2D2D;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 900;
+    box-shadow: 2px 2px 0px #2D2D2D;
 }
 
-/* 右側：特訓ログリスト */
-.log-header {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    margin-bottom: 24px;
-    color: #e2e8f0;
+/* 右側：履歴のふせん風リスト */
+.history-title {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    background-color: #FFFF99; /* まるで本物の黄色いふせん */
+    border: 3px solid #2D2D2D;
+    padding: 6px 16px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0px #2D2D2D;
+    display: inline-block;
+    transform: rotate(-1.5deg);
 }
 
-.log-list {
+.history-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-.log-card {
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+.history-item {
+    background-color: #FFFFFF;
+    border: 3px solid #2D2D2D;
+    border-radius: 16px;
     padding: 16px 20px;
+    box-shadow: 4px 4px 0px #2D2D2D;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background 0.2s;
+    position: relative;
 }
 
-.log-card:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+/* ふせんピンをイメージしたワンポイント */
+.history-item::before {
+    content: "📌";
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    font-size: 16px;
 }
 
-.log-num {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.3);
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.log-teacher {
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.log-date {
+.history-number {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.4);
+    font-weight: 900;
+    color: #3B82F6;
 }
 
-/* 静かな未選択プレースホルダー */
-.empty-state {
+.history-teacher {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.history-date {
+    font-size: 12px;
+    font-weight: 900;
+    color: #6B7280;
+}
+
+/* キャラクター風待機画面 */
+.pop-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: rgba(255, 255, 255, 0.25);
     text-align: center;
 }
 
-.empty-icon {
-    font-size: 24px;
-    margin-bottom: 12px;
-    color: rgba(56, 189, 248, 0.4);
+.pop-empty-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+    animation: float 3s infinite ease-in-out;
 }
 
-.empty-text {
-    font-size: 11px;
-    letter-spacing: 0.1em;
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+.pop-empty-text {
+    font-size: 14px;
+    font-weight: 900;
+    background-color: #FEE2E2;
+    border: 3px solid #2D2D2D;
+    padding: 8px 16px;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px #2D2D2D;
 }
 </style>
 
@@ -319,38 +364,41 @@ select:hover {
 
 <!-- ヘッダー -->
 <div class="app-header">
-    <div class="brand-title">SYSTEM // ANALYTICS</div>
-    <span class="app-badge">SECURE CONSOLE</span>
+    <div class="brand-title">
+        <span class="brand-icon">📣</span>
+        <span>MEISETSU STAR CLUB!</span>
+    </div>
+    <span class="app-badge">COACH PANEL</span>
 </div>
 
 <!-- メインエリア -->
 <div class="app-content">
 
     <!-- 左パネル -->
-    <div class="glass-card">
+    <div class="pop-card">
         <div class="card-header">
-            <div class="card-title">STUDENTS INDEX</div>
+            <div class="card-title">🎖️ MEMBER ARCHIVES</div>
         </div>
         <div class="card-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span class="filter-label">SORT</span>
+                    <span class="filter-label">ならべかえ:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">PRACTICE COUNT</option>
-                        <option value="id">STUDENT ID</option>
+                        <option value="count">特訓数が多い順</option>
+                        <option value="id">名簿IDの順</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-lab" onclick="refreshData()">SYNC</button>
+                    <button class="btn-pop" onclick="refreshData()">更新する！</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="lab-table" id="summaryTable">
+            <table class="pop-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>STUDENT ID</th>
-                        <th style="text-align: right; width: 120px;">RECORDED</th>
+                        <th>生徒ID</th>
+                        <th style="text-align: right; width: 120px;">とっくん回数</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -361,15 +409,15 @@ select:hover {
     </div>
 
     <!-- 右パネル -->
-    <div class="glass-card">
-        <div class="card-header">
-            <div class="card-title">DATA STREAM</div>
+    <div class="pop-card">
+        <div class="card-header" style="background-color: #F87171;">
+            <div class="card-title" style="color: white;">📖 TRAINING NOTES</div>
         </div>
         <div id="historyArea" class="card-body">
             <!-- 未選択時の表示 -->
-            <div class="empty-state">
-                <div class="empty-icon">☉</div>
-                <p class="empty-text">SELECT STUDENT PROFILE TO STREAM LOGS</p>
+            <div class="pop-empty">
+                <div class="pop-empty-icon">🍦</div>
+                <p class="pop-empty-text">生徒IDをクリックして、日々の成長履歴を見よう！</p>
             </div>
         </div>
     </div>
@@ -384,7 +432,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "LAST SYNC: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = now.toLocaleTimeString("ja-JP") + " お待たせ！";
 }
 
 function loadSummary(){
@@ -422,7 +470,7 @@ function loadSummary(){
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="lab-badge">${student.count} SESSIONS</span>
+                    <span class="pop-badge">${student.count} 突破！</span>
                 </td>
             </tr>
             `;
@@ -434,7 +482,7 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.lab-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.pop-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -442,9 +490,9 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-state">
-            <div class="empty-icon">◌</div>
-            <p class="empty-text">ESTABLISHING STREAM FOR ${studentId} ...</p>
+        <div class="pop-empty">
+            <div class="pop-empty-icon">🪁</div>
+            <p class="pop-empty-text">データをひっぱってきています...</p>
         </div>
     `;
 
@@ -452,21 +500,23 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="log-header">
-            <span>// PROFILE: ${studentId}</span>
-        </div>
-        <div class="log-list">
+        <h2 class="history-title">
+            📝 ${studentId} の特訓カルテ
+        </h2>
+        <div class="history-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let date = new Date(data[i].date);
             html += `
-            <div class="log-card">
-                <div>
-                    <div class="log-num">SESSION 0${i+1}</div>
-                    <div class="log-teacher">CONDUCTED BY: ${data[i].teacher} SENSEI</div>
+            <div class="history-item">
+                <div class="history-info">
+                    <span class="history-number">STEP 0${i+1}</span>
+                    <span class="history-teacher">${data[i].teacher} 先生と挑戦！</span>
                 </div>
-                <div class="log-date">${date.toLocaleString("ja-JP")}</div>
+                <div class="history-date">
+                    ${date.toLocaleString("ja-JP")}
+                </div>
             </div>
             `;
         }
@@ -476,9 +526,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-state" style="color: #ef4444;">
-                <div class="empty-icon">▲</div>
-                <p class="empty-text">STREAMING INTERRUPTED. SYSTEM OFFLINE.</p>
+            <div class="pop-empty" style="color: #EF4444;">
+                <div class="pop-empty-icon">💥</div>
+                <p class="pop-empty-text">接続エラー！もう一回更新してみてね。</p>
             </div>
         `;
     });
