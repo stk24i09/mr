@@ -63,6 +63,15 @@ th{
     background:#fafafa;
 }
 
+.sortArea{
+    margin-bottom:15px;
+}
+
+select{
+    padding:5px;
+    font-size:16px;
+}
+
 </style>
 
 </head>
@@ -71,32 +80,52 @@ th{
 
 <div class="container">
 
-    <div class="left-panel">
+<div class="left-panel">
 
-        <h1>面接練習回数一覧</h1>
+<h1>面接練習回数一覧</h1>
 
-        <table id="summaryTable">
+<div class="sortArea">
 
-            <tr>
-                <th>生徒ID</th>
-                <th>面接回数</th>
-            </tr>
+並び替え：
 
-        </table>
+<select id="sortSelect" onchange="loadSummary()">
 
-    </div>
+<option value="count">
+面接回数順
+</option>
 
-    <div class="right-panel">
+<option value="id">
+生徒ID順
+</option>
 
-        <div id="historyArea">
+</select>
 
-            <h2>面接履歴</h2>
+</div>
 
-            <p>生徒IDをクリックしてください。</p>
+<table id="summaryTable">
 
-        </div>
+<tr>
+<th>生徒ID</th>
+<th>面接回数</th>
+</tr>
 
-    </div>
+</table>
+
+</div>
+
+<div class="right-panel">
+
+<div id="historyArea">
+
+<h2>面接履歴</h2>
+
+<p>
+生徒IDをクリックしてください。
+</p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -109,95 +138,186 @@ loadSummary();
 
 function loadSummary(){
 
-    fetch(API_URL + "?mode=summary")
+fetch(API_URL + "?mode=summary")
 
-    .then(response => response.json())
+.then(response=>response.json())
 
-    .then(data => {
+.then(data=>{
 
-        let html =
-        `
-        <tr>
-            <th>生徒ID</th>
-            <th>面接回数</th>
-        </tr>
-        `;
+let html=`
+<tr>
+<th>生徒ID</th>
+<th>面接回数</th>
+</tr>
+`;
 
-        for(let id in data){
+let students=[];
 
-            html +=
-            `
-            <tr>
-                <td>
-                    <span
-                    class="student-link"
-                    onclick="showHistory('${id}')">
-                    ${id}
-                    </span>
-                </td>
+for(let id in data){
 
-                <td>${data[id]}回</td>
-            </tr>
-            `;
-        }
+students.push({
 
-        document.getElementById("summaryTable").innerHTML =
-        html;
+id:id,
 
-    });
+count:data[id]
+
+});
+
+}
+
+const sortType=
+document.getElementById("sortSelect").value;
+
+// 面接回数順
+if(sortType=="count"){
+
+students.sort(function(a,b){
+
+return b.count-a.count;
+
+});
+
+}
+
+// 生徒ID順
+else{
+
+students.sort(function(a,b){
+
+return a.id.localeCompare(
+b.id,
+'ja',
+{numeric:true}
+);
+
+});
+
+}
+
+students.forEach(function(student){
+
+html+=`
+
+<tr>
+
+<td>
+
+<span
+
+class="student-link"
+
+onclick="showHistory('${student.id}')">
+
+${student.id}
+
+</span>
+
+</td>
+
+<td>
+
+${student.count}回
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("summaryTable").innerHTML=
+html;
+
+});
 
 }
 
 function showHistory(studentId){
 
-    fetch(
-        API_URL +
-        "?mode=history&id=" +
-        encodeURIComponent(studentId)
-    )
+fetch(
 
-    .then(response => response.json())
+API_URL+
 
-    .then(data => {
+"?mode=history&id="+
 
-        let html =
-        `
-        <h2>${studentId} の面接履歴</h2>
+encodeURIComponent(studentId)
 
-        <table>
+)
 
-            <tr>
-                <th>回数</th>
-                <th>日時</th>
-                <th>担当先生</th>
-            </tr>
-        `;
+.then(response=>response.json())
 
-        for(let i=0;i<data.length;i++){
+.then(data=>{
 
-            let date =
-            new Date(data[i].date);
+let html=`
 
-            html +=
-            `
-            <tr>
-                <td>${i+1}回目</td>
-                <td>${date.toLocaleString("ja-JP")}</td>
-                <td>${data[i].teacher}</td>
-            </tr>
-            `;
-        }
+<h2>
 
-        html += "</table>";
+${studentId}
 
-        document.getElementById("historyArea").innerHTML =
-        html;
+の面接履歴
 
-    });
+</h2>
+
+<table>
+
+<tr>
+
+<th>回数</th>
+
+<th>日時</th>
+
+<th>担当先生</th>
+
+</tr>
+
+`;
+
+for(let i=0;i<data.length;i++){
+
+let date=
+
+new Date(data[i].date);
+
+html+=`
+
+<tr>
+
+<td>
+
+${i+1}回目
+
+</td>
+
+<td>
+
+${date.toLocaleString("ja-JP")}
+
+</td>
+
+<td>
+
+${data[i].teacher}
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+html+="</table>";
+
+document.getElementById("historyArea").innerHTML=
+html;
+
+});
 
 }
 
 </script>
 
 </body>
+
 </html>
