@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Archive / Records</title>
+<title>Glassmorphism Terminal</title>
 
 <style>
 /* 共通リセット */
@@ -15,83 +15,88 @@
 }
 
 body {
-    /* 游明朝やセリフ体、クラシックなフォントスタック */
-    font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Georgia", serif;
-    background-color: #fcfbfa; /* 生成りの紙の白 */
-    color: #1c2024; /* 深い炭色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* 宇宙の星雲をイメージした美麗グラデーション背景 */
+    background: radial-gradient(circle at 20% 30%, #251845 0%, #0a0a16 70%), 
+                radial-gradient(circle at 80% 80%, #0d3831 0%, transparent 50%);
+    background-attachment: fixed;
+    color: #f3f4f6;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 40px;
+    padding: 32px;
     -webkit-font-smoothing: antialiased;
 }
 
-/* ヘッダー：書物の標題紙のような美しさ */
-.editorial-header {
+/* ヘッダー */
+.glass-header {
+    height: 50px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #1c2024; /* 細い黒の一本線 */
-    margin-bottom: 32px;
+    padding: 0 16px;
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-.brand-subtitle {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+.app-status {
     font-size: 11px;
-    letter-spacing: 0.15em;
-    color: #706e6b;
-    text-transform: uppercase;
+    font-weight: 500;
+    color: #9ca3af;
+    letter-spacing: 0.5px;
 }
 
-/* メイン：2カラム */
-.editorial-layout {
+/* 2カラムレイアウト */
+.glass-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 40px;
+    gap: 24px;
     width: 100%;
 }
 
-/* パネル */
-.editorial-panel {
+/* 磨りガラス風パネル */
+.glass-panel {
     flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-.panel-title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: #706e6b;
-    margin-bottom: 24px;
+.panel-header {
+    padding: 24px 24px 12px 24px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* 控えめなドットマーク */
-.panel-title::before {
-    content: "•";
-    color: #4a5d4e; /* 静かなオリーブ */
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding-right: 12px; /* スクロールバーとの隙間 */
+    padding: 0 24px 24px 24px;
 }
 
 /* 操作エリア */
@@ -101,196 +106,204 @@ body {
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* 操作系はサンセリフ */
 }
 
-.filter-label {
-    font-size: 12px;
-    color: #706e6b;
-    letter-spacing: 0.05em;
-}
-
-/* 書物の索引のようなクラシック・プルダウン */
+/* シースルーのセレクトボックス */
 select {
-    background-color: transparent;
-    color: #1c2024;
-    border: none;
-    border-bottom: 1px solid #c8c6c2;
-    padding: 4px 16px 4px 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 16px;
+    border-radius: 8px;
     font-size: 12px;
     font-family: inherit;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s;
-}
-
-select:focus {
-    border-color: #4a5d4e;
-}
-
-/* 額縁のようなクラシックボタン */
-.btn-editorial {
-    background-color: transparent;
-    color: #4a5d4e;
-    border: 1px solid #4a5d4e;
-    padding: 6px 16px;
-    font-family: inherit;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
     transition: all 0.2s;
 }
 
-.btn-editorial:hover {
-    background-color: #4a5d4e;
-    color: #fcfbfa;
+select:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 光彩を放つサイバー感ボタン */
+.btn-glass {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(34, 197, 94, 0.4));
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 18px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.btn-glass:hover {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.6), rgba(34, 197, 94, 0.6));
+    box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4);
+    transform: translateY(-1px);
 }
 
 #updateTime {
     font-size: 10px;
-    color: #a19f9c;
+    color: rgba(255, 255, 255, 0.4);
     margin-top: 6px;
     text-align: right;
-    font-family: -apple-system, sans-serif;
 }
 
-/* テーブル（和本や辞典の罫線を意識） */
-.editorial-table {
+/* テーブルスタイル */
+.glass-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.editorial-table th {
-    padding: 8px 12px;
+.glass-table th {
+    padding: 10px 12px;
     font-size: 11px;
     font-weight: 600;
-    color: #706e6b;
-    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
     text-align: left;
-    border-bottom: 1px solid #1c2024;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.editorial-table td {
+.glass-table td {
     padding: 16px 12px;
     font-size: 14px;
-    border-bottom: 1px solid #e8e6e3;
-    transition: all 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-/* リストアイテム */
-.item-link {
+/* リスト項目 */
+.student-link {
     background: none;
     border: none;
-    color: #1c2024;
+    color: rgba(255, 255, 255, 0.85);
     font-family: inherit;
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     text-align: left;
     width: 100%;
-    transition: color 0.15s;
+    transition: all 0.15s;
 }
 
-.item-link:hover {
-    color: #4a5d4e;
+.student-link:hover {
+    color: #ffffff;
+    padding-left: 4px; /* わずかにスライドして触覚を表現 */
 }
 
-/* 選択中の行：和紙を重ねたようなごく淡いベージュ */
+/* アクティブ行 */
 .row-active td {
-    background-color: #f4f2ee !important;
+    background: rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.row-active .item-link {
-    color: #4a5d4e;
+.row-active .student-link {
+    color: #a855f7; /* パープル */
     font-weight: bold;
+    text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
 }
 
-/* カウンター：昔の頁表示のような上品な数字 */
-.number-counter {
-    font-family: "Georgia", serif;
-    font-style: italic;
-    font-size: 14px;
-    color: #706e6b;
+/* カプセルバッジ */
+.glass-badge {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
 }
 
-.row-active .number-counter {
-    color: #4a5d4e;
-    font-weight: bold;
+.row-active .glass-badge {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.4);
+    color: #e9d5ff;
 }
 
-/* 右側：詳細表示 */
-.detail-header-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: #1c2024;
-    margin-bottom: 24px;
-    letter-spacing: 0.05em;
-    line-height: 1.4;
-    border-bottom: 1px dashed #c8c6c2;
-    padding-bottom: 12px;
+/* 右側：履歴セクション */
+.history-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
 }
 
-.record-stack {
+.card-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
-/* 一枚の手紙のようなカード */
-.record-card {
-    border-left: 2px solid #4a5d4e; /* 本の栞（しおり）のようなライン */
-    background-color: #f7f6f3;
+/* 半透明の詳細カード */
+.history-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
     padding: 16px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.2s;
 }
 
-.record-main {
+.history-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.history-main {
     font-size: 13px;
-    color: #1c2024;
+    color: #ffffff;
 }
 
-.record-meta {
-    font-family: "Georgia", serif;
-    font-style: italic;
+.history-main strong {
+    color: #22c55e; /* エメラルドグリーン */
+}
+
+.history-meta {
     font-size: 12px;
-    color: #706e6b;
+    color: rgba(255, 255, 255, 0.45);
 }
 
-/* 未選択時の佇まい */
-.empty-state {
+/* 空表示 */
+.empty-view {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #706e6b;
+    color: rgba(255, 255, 255, 0.4);
     text-align: center;
-    padding: 40px;
 }
 
-.empty-prompt {
+.empty-text {
     font-size: 13px;
-    line-height: 1.8;
-    letter-spacing: 0.05em;
+    line-height: 1.6;
 }
 
-/* 繊細なローディング（CSSフェード） */
-.classic-loader {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #c8c6c2;
+/* スペーシーなスピンローダー */
+.space-loader {
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #a855f7;
+    border-bottom-color: #22c55e;
     border-radius: 50%;
-    border-top-color: #4a5d4e;
-    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    margin-bottom: 20px;
+    animation: orbit 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    margin-bottom: 16px;
 }
 
-@keyframes spin {
+@keyframes orbit {
     to { transform: rotate(360deg); }
 }
 
-/* 上品な細身のスクロールバー */
+/* 極細スクロールバー */
 ::-webkit-scrollbar {
     width: 4px;
 }
@@ -298,11 +311,11 @@ select:focus {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #e8e6e3;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #c8c6c2;
+    background: rgba(255, 255, 255, 0.2);
 }
 </style>
 
@@ -310,39 +323,38 @@ select:focus {
 
 <body>
 
-<!-- エディトリアルヘッダー -->
-<div class="editorial-header">
-    <div class="brand-title">ARCHIVE</div>
-    <div class="brand-subtitle">Index of Student Registries</div>
+<!-- ガラスヘッダー -->
+<div class="glass-header">
+    <div class="brand-title">NEBULA CONTROL</div>
+    <div class="app-status">SYSTEM OK // ENCRYPTED_CONN</div>
 </div>
 
-<!-- 2カラム構成 -->
-<div class="editorial-layout">
+<!-- ワークスペース -->
+<div class="glass-workspace">
 
-    <!-- 左：目次（Index） -->
-    <div class="editorial-panel">
-        <div class="panel-title">Index Directory</div>
+    <!-- 左パネル：ディレクトリ -->
+    <div class="glass-panel">
+        <div class="panel-header">Database Directory</div>
         <div class="panel-body">
             
             <div class="control-bar">
-                <div class="filter-group">
-                    <span class="filter-label">Order by:</span>
+                <div>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Most active records first</option>
-                        <option value="id">Alphabetical identifier</option>
+                        <option value="count">Sort: Max Entries</option>
+                        <option value="id">Sort: Target ID</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-editorial" onclick="refreshData()">Sync Archive</button>
+                    <button class="btn-glass" onclick="refreshData()">Sync Database</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="editorial-table" id="summaryTable">
+            <table class="glass-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th style="padding-left: 12px;">Student Identifier</th>
-                        <th style="text-align: right; padding-right: 12px; width: 80px;">Logs</th>
+                        <th style="padding-left: 12px;">Target Identifier</th>
+                        <th style="text-align: right; padding-right: 12px;">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -353,16 +365,16 @@ select:focus {
         </div>
     </div>
 
-    <!-- 右：詳細（Details） -->
-    <div class="editorial-panel">
-        <div class="panel-title">Record Details</div>
+    <!-- 右パネル：ログ詳細 -->
+    <div class="glass-panel">
+        <div class="panel-header">Data Stream Output</div>
         <div id="historyArea" class="panel-body">
             
-            <!-- 初期状態 -->
-            <div class="empty-state">
-                <p class="empty-prompt">
-                    Please select an identifier from the catalog on the left<br>
-                    to reveal the corresponding historical ledger entries.
+            <!-- デフォルト -->
+            <div class="empty-view">
+                <p class="empty-text">
+                    Await Selection...<br>
+                    Choose an active telemetry target to pipe logs.
                 </p>
             </div>
 
@@ -379,7 +391,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "Last synchronized: " + now.toLocaleTimeString("en-US", {hour12: false});
+    document.getElementById("updateTime").innerHTML = "SYNC_TIME: " + now.toLocaleTimeString("en-US", {hour12: false});
 }
 
 function loadSummary(){
@@ -412,12 +424,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="item-link" onclick="showHistory('${student.id}')">
+                    <button class="student-link" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right; padding-right: 12px;">
-                    <span class="number-counter">${student.count}</span>
+                    <span class="glass-badge">${student.count}</span>
                 </td>
             </tr>
             `;
@@ -428,18 +440,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // 行ハイライトの変更
-    document.querySelectorAll('.editorial-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
+    // リストの行ハイライト
+    document.querySelectorAll('.glass-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-active');
     }
 
-    // ロード中表示
+    // 読み込み中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-state">
-            <div class="classic-loader"></div>
-            <p class="empty-prompt">Retrieving archives for ${studentId}...</p>
+        <div class="empty-view">
+            <div class="space-loader"></div>
+            <p class="empty-text">Piping telemetric stream for ${studentId}...</p>
         </div>
     `;
 
@@ -447,20 +459,20 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="detail-header-title">${studentId} — Registry Stream</div>
-        <div class="record-stack">
+        <div class="history-title">Streaming Log: ${studentId}</div>
+        <div class="card-container">
         `;
 
         for(let i = 0; i < data.length; i++){
             let d = new Date(data[i].date);
-            let dateStr = d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' }) + " " + d.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false });
+            let dateStr = d.toLocaleDateString("en-US", { month: 'short', day: 'numeric' }) + " " + d.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false });
 
             html += `
-            <div class="record-card">
-                <div class="record-main">
-                    Logged by Instructor: <strong>${data[i].teacher}</strong>
+            <div class="history-card">
+                <div class="history-main">
+                    Authorized by <strong>${data[i].teacher}</strong>
                 </div>
-                <div class="record-meta">
+                <div class="history-meta">
                     ${dateStr}
                 </div>
             </div>
@@ -472,8 +484,8 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-state" style="color: #c94a4a;">
-                <p class="empty-prompt">Failed to decrypt archive. Please check the network bridge.</p>
+            <div class="empty-view" style="color: #ef4444;">
+                <p class="empty-text">Stream Interrupted. Verify terminal connection.</p>
             </div>
         `;
     });
