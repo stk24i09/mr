@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lounge / Interview Record</title>
+<title>BOTANICAL // ECO-SYSTEM LOG v2.4</title>
 
 <style>
 /* 共通リセット */
@@ -15,22 +15,22 @@
 }
 
 body {
-    /* シックで気品のあるフォント選定 */
-    font-family: "Times New Roman", Georgia, "Yu Mincho", "游明朝", serif;
-    background-color: #0a0705; /* 深夜のバーの暗闇 */
-    color: #f5f5f4; /* わずかに温かみのある白 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif;
+    /* 夜の温室をイメージした、深紫と深い緑のグラデーション背景 */
+    background: radial-gradient(circle at top left, #0e1e12 0%, #06040a 60%), radial-gradient(circle at bottom right, #130a1c 0%, #06040a 100%);
+    color: #e2e8f0;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 28px;
-    letter-spacing: 0.08em;
+    padding: 24px;
+    letter-spacing: 0.06em;
 }
 
-/* ヘッダー：ヴィンテージネオン看板風 */
-.bar-header {
-    border-bottom: 1px solid rgba(217, 119, 6, 0.3);
-    height: 64px;
+/* ヘッダー：ラボのモニタリングパネル風 */
+.bio-header {
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,205 +39,220 @@ body {
 }
 
 .brand-title {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: bold;
-    color: #f5f5f4;
-    text-shadow: 0 0 8px rgba(217, 119, 6, 0.6), 0 0 20px rgba(217, 119, 6, 0.4); /* 琥珀色のネオングロウ */
-    font-style: italic;
+    color: #10b981; /* ネオングリーン */
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.brand-title span {
-    color: #d97706; /* アンバーゴールド */
+.brand-icon {
+    font-size: 20px;
+    animation: pulse 3s infinite ease-in-out;
 }
 
-.bar-status {
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.system-status {
     font-size: 11px;
-    color: #a8a29e;
-    letter-spacing: 0.2em;
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
     text-transform: uppercase;
 }
 
 /* 2カラムレイアウト */
-.bar-workspace {
+.bio-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 32px;
+    gap: 24px;
     width: 100%;
 }
 
-/* ラウンジシートのようなシックなカード */
-.lounge-card {
+/* ガラス製温室のような半透明カード */
+.glass-panel {
     flex: 1;
-    background-color: rgba(18, 13, 10, 0.8); /* わずかに透ける漆黒 */
-    border: 1px solid rgba(217, 119, 6, 0.15);
-    border-radius: 12px;
+    background: rgba(15, 11, 25, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: border-color 0.4s ease;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.4s;
 }
 
-.lounge-card:hover {
-    border-color: rgba(217, 119, 6, 0.4);
+.glass-panel:hover {
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
-.card-header {
-    padding: 24px;
-    border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+.panel-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.card-title {
+.panel-title {
     font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 0.2em;
-    color: #d97706;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #94a3b8;
     text-transform: uppercase;
 }
 
-.card-body {
+.panel-body {
     overflow-y: auto;
     flex: 1;
     padding: 24px;
 }
 
-/* コントロールパネル */
+/* コントロール（培養コントロール風） */
 .control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .filter-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    font-size: 12px;
+    color: #94a3b8;
 }
 
-.filter-label {
-    font-size: 11px;
-    color: #a8a29e;
-}
-
-/* 落ち着いた琥珀のセレクト＆ボタン */
+/* ネオンがかかったダークセレクト */
 select {
-    padding: 8px 14px;
+    padding: 6px 12px;
     font-size: 12px;
     font-family: inherit;
-    border: 1px solid rgba(217, 119, 6, 0.2);
-    border-radius: 6px;
-    background-color: #120d0a;
-    color: #f5f5f4;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background-color: #0b0713;
+    color: #e2e8f0;
     outline: none;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 select:hover {
-    border-color: #d97706;
+    border-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
 }
 
-.btn-lounge {
-    padding: 8px 18px;
+/* バイオ栽培ボタン */
+.btn-bio {
+    padding: 6px 16px;
     font-size: 12px;
     font-family: inherit;
     font-weight: bold;
-    background-color: transparent;
-    color: #d97706;
-    border: 1px solid #d97706;
-    border-radius: 6px;
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid #10b981;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.btn-lounge:hover {
-    background-color: #d97706;
-    color: #0a0705;
-    box-shadow: 0 0 12px rgba(217, 119, 6, 0.5);
+.btn-bio:hover {
+    background-color: #10b981;
+    color: #06040a;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
 }
 
 #updateTime {
     font-size: 11px;
-    color: #78716c;
-    margin-top: 6px;
-    text-align: right;
-    font-style: italic;
+    color: #64748b;
+    margin-top: 4px;
 }
 
-/* メニュー表風テーブル */
-.bar-table {
+/* 培養インデックスリスト */
+.bio-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.bar-table th {
+.bio-table th {
     padding: 12px 8px;
     font-size: 11px;
-    color: #78716c;
+    color: #64748b;
     text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.bar-table td {
+.bio-table td {
     padding: 16px 8px;
-    font-size: 14px;
-    border-bottom: 1px solid rgba(217, 119, 6, 0.05);
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-/* キャスト（生徒名）ボタン：静かな美しさ */
+/* 生徒ボタン */
 .student-btn {
-    font-size: 14px;
+    font-size: 13px;
     font-family: inherit;
-    color: #f5f5f4;
+    font-weight: bold;
+    color: #e2e8f0;
     background: none;
     border: none;
     cursor: pointer;
-    transition: color 0.3s, transform 0.3s;
     text-align: left;
+    transition: color 0.3s;
 }
 
 .student-btn:hover {
-    color: #d97706;
-    transform: translateX(4px);
+    color: #10b981;
 }
 
-/* 選択されたシート：優しく光るアンバーのハイライト */
+/* 選択行：優雅なグリーンのグラデーション */
 .row-selected td {
-    background-color: rgba(217, 119, 6, 0.08) !important;
-    border-bottom-color: rgba(217, 119, 6, 0.4);
+    background-color: rgba(16, 185, 129, 0.06) !important;
+    border-bottom-color: rgba(16, 185, 129, 0.3);
 }
 
 .row-selected .student-btn {
-    color: #d97706;
+    color: #10b981;
+}
+
+/* 成長度（回数）を示すバイオバッジ */
+.grow-badge {
+    background-color: rgba(16, 185, 129, 0.08);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
     font-weight: bold;
 }
 
-/* 琥珀色のショット数バッジ */
-.count-badge {
-    font-size: 12px;
-    font-style: italic;
-    color: #d97706;
-    background-color: rgba(217, 119, 6, 0.1);
-    padding: 2px 10px;
-    border-radius: 4px;
-    border: 1px solid rgba(217, 119, 6, 0.2);
-}
-
-/* 右側：ボトルキープ（ログ）表示 */
-.log-header {
-    font-size: 16px;
+/* 右側：培養データ詳細 */
+.specimen-title {
+    font-size: 15px;
     font-weight: bold;
-    color: #f5f5f4;
-    margin-bottom: 24px;
-    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
-    padding-bottom: 12px;
-    font-style: italic;
+    color: #10b981;
+    margin-bottom: 16px;
+    border-left: 3px solid #10b981;
+    padding-left: 10px;
 }
 
 .log-list {
@@ -247,60 +262,57 @@ select:hover {
 }
 
 .log-card {
-    background-color: rgba(217, 119, 6, 0.02);
-    border: 1px solid rgba(217, 119, 6, 0.1);
-    border-radius: 8px;
-    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    transition: all 0.3s;
+    gap: 6px;
+    transition: border-color 0.3s;
 }
 
 .log-card:hover {
-    background-color: rgba(217, 119, 6, 0.04);
-    border-color: rgba(217, 119, 6, 0.25);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .log-num {
     font-size: 10px;
-    color: #78716c;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.1em;
 }
 
-.log-teacher {
-    font-size: 15px;
-    color: #f5f5f4;
+.log-detail {
+    font-size: 13px;
+    color: #cbd5e1;
 }
 
-.log-date {
-    font-size: 11px;
-    color: #a8a29e;
+.log-highlight {
+    color: #10b981;
 }
 
-/* 空白状態：キャンドルが静かに佇むプレースホルダー */
-.empty-lounge {
+/* プレースホルダー */
+.empty-glass {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #78716c;
+    color: #64748b;
     text-align: center;
 }
 
 .empty-icon {
-    font-size: 24px;
-    color: #d97706;
+    font-size: 32px;
+    color: #10b981;
+    opacity: 0.3;
     margin-bottom: 16px;
-    opacity: 0.6;
-    animation: flicker 2s infinite ease-in-out; /* キャンドルのような揺らぎ */
+    animation: float 4s infinite ease-in-out;
 }
 
-@keyframes flicker {
-    0%, 100% { opacity: 0.4; transform: scale(0.98); }
-    50% { opacity: 0.8; transform: scale(1.02); }
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
 }
 
 .empty-text {
@@ -314,39 +326,42 @@ select:hover {
 <body>
 
 <!-- ヘッダー -->
-<div class="bar-header">
-    <div class="brand-title">THE <span>LOUNGE</span></div>
-    <div class="bar-status">Midnight Edition // 2:00 AM</div>
+<div class="bio-header">
+    <div class="brand-title">
+        <span class="brand-icon">🌱</span>
+        <span>MEISETSU // BIO-CONSOLE</span>
+    </div>
+    <div class="system-status">SYS_ECO: SECURE</div>
 </div>
 
 <!-- メインエリア -->
-<div class="bar-workspace">
+<div class="bio-workspace">
 
-    <!-- 左パネル：ボトル棚 -->
-    <div class="lounge-card">
-        <div class="card-header">
-            <div class="card-title">Selected Guests</div>
+    <!-- 左ガラスパネル -->
+    <div class="glass-panel">
+        <div class="panel-header">
+            <div class="panel-title">SPECIMEN LIST</div>
         </div>
-        <div class="card-body">
+        <div class="panel-body">
             <div class="control-panel">
                 <div class="filter-group">
-                    <span class="filter-label">Sort by</span>
+                    <span>SORT:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Active Order</option>
-                        <option value="id">Alphabetical</option>
+                        <option value="count">GROWTH_RATE (DESC)</option>
+                        <option value="id">SPECIMEN_ID (ASC)</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-lounge" onclick="refreshData()">Refill</button>
+                    <button class="btn-bio" onclick="refreshData()">RE-SCAN</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="bar-table" id="summaryTable">
+            <table class="bio-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>Guest Name</th>
-                        <th style="text-align: right; width: 120px;">Sessions</th>
+                        <th>NAME (ID)</th>
+                        <th style="text-align: right; width: 120px;">GROWTH (TIMES)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -356,18 +371,18 @@ select:hover {
         </div>
     </div>
 
-    <!-- 右パネル：ボトルキープ履歴 -->
-    <div class="lounge-card">
-        <div class="card-header">
-            <div class="card-title">Chronicle Book</div>
+    <!-- 右ガラスパネル -->
+    <div class="glass-panel">
+        <div class="panel-header">
+            <div class="panel-title">CHRONO-DATABASE</div>
         </div>
-        <div id="historyArea" class="card-body">
-            <!-- 未選択時の表示 -->
-            <div class="empty-lounge">
-                <div class="empty-icon">🕯️</div>
+        <div id="historyArea" class="panel-body">
+            <!-- 未選択表示 -->
+            <div class="empty-glass">
+                <div class="empty-icon">🍀</div>
                 <p class="empty-text">
-                    静寂の中に、記録が眠っています。<br>
-                    ゲストを選択すると、琥珀色の履歴が蘇ります。
+                    ポッドが休止状態にあります。<br>
+                    左の検体を選択して、これまでの培養データを復元してください。
                 </p>
             </div>
         </div>
@@ -383,7 +398,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "Updated " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "SCAN: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -417,11 +432,11 @@ function loadSummary(){
             <tr id="row-${student.id}">
                 <td>
                     <button class="student-btn" onclick="showHistory('${student.id}')">
-                        ${student.id}
+                        🟢 ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="count-badge">${student.count} shots</span>
+                    <span class="grow-badge">${student.count} G_LEVEL</span>
                 </td>
             </tr>
             `;
@@ -433,7 +448,7 @@ function loadSummary(){
 
 function showHistory(studentId){
     // アクティブ行の切り替え
-    document.querySelectorAll('.bar-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    document.querySelectorAll('.bio-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
         selectedRow.classList.add('row-selected');
@@ -441,9 +456,9 @@ function showHistory(studentId){
 
     // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-lounge">
-            <div class="empty-icon">🥃</div>
-            <p class="empty-text">グラスを傾け、サーバーから抽出中...</p>
+        <div class="empty-glass">
+            <div class="empty-icon" style="animation: none;">🧬</div>
+            <p class="empty-text">波長を同調中。データをシーケンス化しています...</p>
         </div>
     `;
 
@@ -451,9 +466,7 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="log-header">
-            <span>The Footsteps of ${studentId}</span>
-        </div>
+        <div class="specimen-title">RECORD FOR [ ${studentId} ]</div>
         <div class="log-list">
         `;
 
@@ -461,9 +474,11 @@ function showHistory(studentId){
             let date = new Date(data[i].date);
             html += `
             <div class="log-card">
-                <div class="log-num">Session // 0${i+1}</div>
-                <div class="log-teacher">Coached by ${data[i].teacher}</div>
-                <div class="log-date">Time / ${date.toLocaleString("ja-JP")}</div>
+                <div class="log-num">SEQUENCE // 0${i+1}</div>
+                <div class="log-detail">
+                    SUPERVISOR: <span class="log-highlight">${data[i].teacher}</span> 先生<br>
+                    TIMESTAMP: ${date.toLocaleString("ja-JP")}
+                </div>
             </div>
             `;
         }
@@ -473,9 +488,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-lounge" style="color: #ef4444;">
-                <div class="empty-icon">💔</div>
-                <p class="empty-text">ボトルの取得に失敗しました。もう一度、注文（更新）してください。</p>
+            <div class="empty-glass" style="color: #ef4444;">
+                <div class="empty-icon">⚠️</div>
+                <p class="empty-text">バイオ通信エラー。シグナルが遮断されました。再スキャンしてください。</p>
             </div>
         `;
     });
