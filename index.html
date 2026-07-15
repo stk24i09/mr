@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Student Log Connection</title>
+<title>SYS.TERMINAL // DATA_CONNECTION</title>
 
 <style>
 /* 共通リセット */
@@ -15,307 +15,318 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f1f5f9; /* 落ち着いたライトグレー */
-    color: #1e293b; /* 視認性の高いダークスレート */
+    /* 開発環境でよく使われる等幅フォントをベースに設定 */
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #121212; /* 深いチャコールグレー */
+    color: #e0e0e0; /* オフホワイト */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 24px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-/* ヘッダー：モダンなナビゲーションバー */
-.app-header {
-    height: 56px;
+/* ヘッダー：ターミナルのステータスバー風 */
+.term-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 0 24px;
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    flex-shrink: 0;
+    padding: 8px 16px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+    margin-bottom: 16px;
 }
 
 .brand-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #0f172a;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-weight: bold;
+    color: #00bcd4; /* ターミナルシアン */
+    letter-spacing: 0.05em;
 }
 
-/* ロゴ代わりにCSSで描く青いインジケータードット */
-.brand-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #2563eb;
-    border-radius: 50%;
+.brand-title::before {
+    content: "> ";
+    color: #4caf50; /* ターミナルグリーン */
 }
 
-.app-status {
+.sys-info {
+    color: #888;
     font-size: 11px;
-    font-weight: 500;
-    color: #64748b;
-    background-color: #f1f5f9;
-    padding: 4px 10px;
-    border-radius: 6px;
 }
 
 /* 2カラムレイアウト */
-.app-workspace {
+.term-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 20px;
+    gap: 16px;
     width: 100%;
 }
 
-/* アプリケーション風白色パネル */
-.app-panel {
+/* 各種パネル */
+.term-panel {
     flex: 1;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    background-color: #1e1e1e;
+    border: 1px solid #333;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
 }
 
 .panel-header {
-    background-color: #ffffff;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 12px;
-    font-weight: 600;
-    color: #475569;
-    letter-spacing: 0.05em;
+    background-color: #252526;
+    padding: 8px 16px;
+    border-bottom: 1px solid #333;
+    color: #aaa;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 20px;
+    padding: 16px;
 }
 
-/* コントロール（ツールバー） */
-.control-panel {
+/* ツールバー */
+.control-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #444;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
-    color: #64748b;
+    color: #888;
 }
 
-/* スマートなドロップダウンメニュー */
+/* コマンドプロンプト風セレクトボックス */
 select {
-    padding: 6px 12px;
-    font-size: 12px;
+    background-color: #121212;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    padding: 4px 8px;
     font-family: inherit;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background-color: #ffffff;
-    color: #1e293b;
+    font-size: 12px;
     outline: none;
     cursor: pointer;
-    transition: all 0.15s;
-}
-
-select:hover {
-    border-color: #94a3b8;
 }
 
 select:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    border-color: #00bcd4;
 }
 
-/* 洗練されたアクションボタン */
-.btn-primary {
-    padding: 6px 14px;
-    font-size: 12px;
+/* ソリッドなボタン */
+.btn-cmd {
+    background-color: transparent;
+    color: #00bcd4;
+    border: 1px solid #00bcd4;
+    padding: 4px 12px;
     font-family: inherit;
-    font-weight: 500;
-    background-color: #2563eb;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
+    font-size: 12px;
     cursor: pointer;
-    transition: background-color 0.15s;
+    transition: all 0.1s;
 }
 
-.btn-primary:hover {
-    background-color: #1d4ed8;
+.btn-cmd:hover {
+    background-color: #00bcd4;
+    color: #121212;
+}
+
+.btn-cmd:active {
+    transform: translateY(1px);
 }
 
 #updateTime {
     font-size: 10px;
-    color: #94a3b8;
+    color: #666;
     margin-top: 4px;
     text-align: right;
 }
 
-/* フラットテーブル */
-.app-table {
+/* テーブルスタイル */
+.data-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.app-table th {
-    padding: 10px 8px;
+.data-table th {
+    padding: 8px;
+    color: #888;
     font-size: 11px;
-    font-weight: 600;
-    color: #64748b;
-    text-transform: uppercase;
+    font-weight: normal;
     text-align: left;
-    border-bottom: 2px solid #f1f5f9;
+    border-bottom: 1px solid #333;
 }
 
-.app-table td {
-    padding: 14px 8px;
-    font-size: 13px;
-    border-bottom: 1px solid #f1f5f9;
+.data-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #2a2a2a;
 }
 
-/* テキスト風ボタン（生徒名） */
-.student-btn {
-    font-size: 13.5px;
-    font-family: inherit;
-    font-weight: 500;
-    color: #0f172a;
+/* リストアイテム（ボタン） */
+.list-item-btn {
     background: none;
     border: none;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 13px;
     cursor: pointer;
     text-align: left;
-    transition: color 0.15s;
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
-.student-btn:hover {
-    color: #2563eb;
+.list-item-btn::before {
+    content: "[ ]";
+    color: #555;
+    margin-right: 8px;
+    font-size: 12px;
 }
 
-/* 選択行：左側にさりげないアクティブ線を表示 */
-.row-selected td {
-    background-color: #f8fafc !important;
-    border-bottom-color: #cbd5e1;
+.list-item-btn:hover {
+    color: #fff;
 }
 
-.row-selected .student-btn {
-    color: #2563eb;
-    font-weight: 600;
+.list-item-btn:hover::before {
+    color: #00bcd4;
 }
 
-/* プレーンな数量バッジ */
-.count-badge {
-    background-color: #f1f5f9;
-    color: #475569;
-    padding: 2px 8px;
-    border-radius: 4px;
+/* 選択状態 */
+.row-active td {
+    background-color: #2a2d33 !important;
+}
+
+.row-active .list-item-btn {
+    color: #00bcd4;
+}
+
+.row-active .list-item-btn::before {
+    content: "[x]";
+    color: #00bcd4;
+}
+
+/* カウントバッジ（四角いブロック） */
+.count-block {
+    background-color: #333;
+    color: #ccc;
+    padding: 2px 6px;
     font-size: 11px;
-    font-weight: 500;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
 }
 
-/* 右側：記録リスト */
-.history-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #0f172a;
+/* 右パネル：ログ表示エリア */
+.log-header-title {
+    color: #4caf50;
+    font-size: 14px;
     margin-bottom: 16px;
-    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 8px;
+    border-bottom: 1px solid #333;
 }
 
-.history-list {
+.log-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
-/* 余白と陰影を抑えたモダンなカード */
-.history-card {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px 16px;
-    transition: all 0.15s;
+/* ログエントリ（1行のブロック） */
+.log-entry {
+    background-color: #1a1a1a;
+    border-left: 2px solid #555;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.history-card:hover {
-    background-color: #ffffff;
-    border-color: #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+.log-entry:hover {
+    border-left-color: #4caf50;
+    background-color: #222;
 }
 
-.history-card-header {
+.log-meta {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.history-num {
-    font-size: 10px;
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: uppercase;
-}
-
-.history-teacher {
-    font-size: 13px;
-    font-weight: 500;
-    color: #1e293b;
-}
-
-.history-date {
     font-size: 11px;
-    color: #64748b;
+    color: #888;
 }
 
-/* 未選択時のプレースホルダー */
-.empty-state {
+.log-idx {
+    color: #00bcd4;
+}
+
+.log-content {
+    color: #ccc;
+    font-size: 13px;
+}
+
+.log-content span {
+    color: #fff;
+}
+
+/* ステート表示（プレースホルダー／ロード中） */
+.sys-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #94a3b8;
+    color: #666;
     text-align: center;
 }
 
-/* CSSで作成するミニマルな読み込みリング */
-.loading-ring {
+.cursor-blink {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(37, 99, 235, 0.1);
-    border-left-color: #2563eb;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 16px;
+    width: 8px;
+    height: 14px;
+    background-color: #00bcd4;
+    animation: blink 1s step-end infinite;
+    margin-right: 8px;
+    vertical-align: middle;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
-.empty-text {
+.sys-state-text {
     font-size: 12px;
-    line-height: 1.6;
+}
+
+/* エラー時の表示 */
+.error-text {
+    color: #f44336;
+}
+.error-text::before {
+    content: "ERR: ";
+}
+
+/* スクロールバーのカスタマイズ（Webkit） */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #121212; 
+}
+::-webkit-scrollbar-thumb {
+    background: #444; 
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #666; 
 }
 </style>
 
@@ -323,65 +334,65 @@ select:focus {
 
 <body>
 
-<!-- アプリヘッダー -->
-<div class="app-header">
-    <div class="brand-title">
-        <div class="brand-dot"></div>
-        <span>Data Connection Dashboard</span>
-    </div>
-    <div class="app-status">SaaS Portal v1.2</div>
+<!-- トップバー -->
+<div class="term-header">
+    <div class="brand-title">SYSTEM.TERMINAL</div>
+    <div class="sys-info">DATA_CONNECTION_ESTABLISHED // PORT:8080</div>
 </div>
 
-<!-- メインエリア -->
-<div class="app-workspace">
+<!-- ワークスペース -->
+<div class="term-workspace">
 
-    <!-- 左パネル：生徒一覧 -->
-    <div class="app-panel">
-        <div class="panel-header">
-            <span>STUDENT SUMMARY</span>
-        </div>
+    <!-- パネル左：インデックス -->
+    <div class="term-panel">
+        <div class="panel-header">INDEX / STUDENTS</div>
         <div class="panel-body">
-            <div class="control-panel">
+            
+            <div class="control-bar">
                 <div class="filter-group">
-                    <span>並び替え:</span>
+                    SORT_BY:
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">指導回数順</option>
-                        <option value="id">生徒 ID 順</option>
+                        <option value="count">REC_COUNT (DESC)</option>
+                        <option value="id">STUDENT_ID (ASC)</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-primary" onclick="refreshData()">同期する</button>
+                    <button class="btn-cmd" onclick="refreshData()">EXECUTE_SYNC</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="app-table" id="summaryTable">
+            <table class="data-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th>生徒識別 ID</th>
-                        <th style="text-align: right; width: 100px;">指導回数</th>
+                        <th>TARGET_ID</th>
+                        <th style="text-align: right; width: 80px;">RECORDS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JSで展開 -->
+                    <!-- JS展開 -->
                 </tbody>
             </table>
+
         </div>
     </div>
 
-    <!-- 右パネル：履歴詳細 -->
-    <div class="app-panel">
-        <div class="panel-header">
-            <span>ACTIVITY DETAILS</span>
-        </div>
+    <!-- パネル右：詳細ログ -->
+    <div class="term-panel">
+        <div class="panel-header">OUTPUT / ACTIVITY_LOG</div>
         <div id="historyArea" class="panel-body">
-            <!-- 初期表示 -->
-            <div class="empty-state">
-                <p class="empty-text">
-                    データは保護されています。<br>
-                    左の生徒 ID を選択してアクティビティ履歴を読み込んでください。
-                </p>
+            
+            <!-- 初期状態 -->
+            <div class="sys-state">
+                <div>
+                    <span class="cursor-blink"></span>
+                    <span class="sys-state-text">WAITING_FOR_INPUT...</span>
+                </div>
+                <div style="margin-top: 8px; font-size: 11px;">
+                    Select a target ID from the index panel.
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -390,12 +401,13 @@ select:focus {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
+// 初期ロード
 loadSummary();
 
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "Last update: " + now.toLocaleTimeString("ja-JP");
+    document.getElementById("updateTime").innerHTML = "SYNC: " + now.toLocaleTimeString("en-US", { hour12: false });
 }
 
 function loadSummary(){
@@ -403,8 +415,8 @@ function loadSummary(){
     .then(response => response.json())
     .then(data => {
         let html = "";
-
         let students = [];
+        
         for(let id in data){
             students.push({
                 id: id,
@@ -428,12 +440,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="student-btn" onclick="showHistory('${student.id}')">
+                    <button class="list-item-btn" onclick="showHistory('${student.id}')">
                         ${student.id}
                     </button>
                 </td>
                 <td style="text-align: right;">
-                    <span class="count-badge">${student.count} 回</span>
+                    <span class="count-block">${student.count}</span>
                 </td>
             </tr>
             `;
@@ -444,18 +456,20 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の切り替え
-    document.querySelectorAll('.app-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
+    // 選択行のハイライト変更
+    document.querySelectorAll('.data-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-selected');
+        selectedRow.classList.add('row-active');
     }
 
     // ロード中表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-state">
-            <div class="loading-ring"></div>
-            <p class="empty-text">セッションデータを取得中 (${studentId})</p>
+        <div class="sys-state">
+            <div>
+                <span class="cursor-blink"></span>
+                <span class="sys-state-text">FETCHING_DATA [${studentId}]...</span>
+            </div>
         </div>
     `;
 
@@ -463,19 +477,31 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="history-title">${studentId} - 指導セッション履歴</div>
-        <div class="history-list">
+        <div class="log-header-title">QUERY_RESULT // TARGET: ${studentId}</div>
+        <div class="log-container">
         `;
 
         for(let i = 0; i < data.length; i++){
-            let date = new Date(data[i].date);
+            // 日付を少し機械的なフォーマットに変換
+            let d = new Date(data[i].date);
+            let dateStr = d.getFullYear() + "-" + 
+                          String(d.getMonth()+1).padStart(2,'0') + "-" + 
+                          String(d.getDate()).padStart(2,'0') + " " + 
+                          String(d.getHours()).padStart(2,'0') + ":" + 
+                          String(d.getMinutes()).padStart(2,'0') + ":" + 
+                          String(d.getSeconds()).padStart(2,'0');
+
+            let indexStr = String(i+1).padStart(3, '0');
+
             html += `
-            <div class="history-card">
-                <div class="history-card-header">
-                    <span class="history-num">Session 0${i+1}</span>
-                    <span class="history-date">${date.toLocaleString("ja-JP")}</span>
+            <div class="log-entry">
+                <div class="log-meta">
+                    <span class="log-idx">SEQ_${indexStr}</span>
+                    <span>TS: ${dateStr}</span>
                 </div>
-                <div class="history-teacher">担当：${data[i].teacher} 講師</div>
+                <div class="log-content">
+                    OPERATOR: <span>${data[i].teacher}</span>
+                </div>
             </div>
             `;
         }
@@ -485,8 +511,8 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-state" style="color: #ef4444;">
-                <p class="empty-text">接続エラーが発生しました。時間を置いて同期を再実行してください。</p>
+            <div class="sys-state">
+                <div class="sys-state-text error-text">CONNECTION_FAILED. TRY_AGAIN.</div>
             </div>
         `;
     });
