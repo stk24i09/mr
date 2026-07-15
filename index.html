@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛠️ GARAGE RACK // CONTROL TERMINAL</title>
+<title>🏫 児童生徒指導カルテ // 統合ダッシュボード</title>
 
 <style>
-/* 共通リセット */
+/* 共通リセット＆モダンフォント（明瞭・可読性重視） */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,190 +15,167 @@
 }
 
 body {
-    /* 硬質でインダストリアルなサンセリフと等幅フォント */
-    font-family: "Impact", "Arial Black", "Consolas", "Courier New", monospace, sans-serif;
-    background-color: #121314; /* 鋳鉄のような極暗グレー */
-    /* 縞鋼板（チェッカープレート）を模した極薄のパターン背景 */
-    background-image: 
-        linear-gradient(45deg, #18191a 25%, transparent 25%), 
-        linear-gradient(-45deg, #18191a 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #18191a 75%),
-        linear-gradient(-45deg, transparent 75%, #18191a 75%);
-    background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-    color: #d1d2d3; /* くすんだスチール色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background-color: #f4f6f9; /* 落ち着いたスクールグレー */
+    color: #1e293b; /* 読みやすいチャコールグレー */
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 32px;
-    -webkit-font-smoothing: antialiased;
+    padding: 20px;
 }
 
-/* ヘッダー：工業用マシンの銘板（ネームプレート）風 */
-.garage-header {
+/* ヘッダー：公立・私立の校内イントラをイメージした信頼感あるデザイン */
+.school-header {
     height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
-    margin-bottom: 24px;
-    background-color: #1a1c1e;
-    border: 2px solid #2d3135;
-    border-left: 6px solid #d35400; /* アンバーオレンジのアクセント */
-    border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.5);
+    background-color: #1e3a8a; /* 知的なネイビー */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
     flex-shrink: 0;
 }
 
-.brand-title {
-    font-size: 18px;
-    font-weight: 900;
-    color: #f3f4f6;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+.brand-area {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.brand-title span {
-    color: #d35400;
+.school-badge {
+    background-color: #3b82f6;
+    color: #ffffff;
+    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: bold;
 }
 
-.system-volt {
-    font-size: 11px;
-    font-family: "Consolas", monospace;
-    color: #2ecc71; /* インジケーターのグリーン */
-    background: #0d1b15;
-    padding: 4px 10px;
-    border: 1px solid #145a32;
-    border-radius: 3px;
-    letter-spacing: 1px;
+.brand-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
 }
 
-/* 2カラムワークスペース */
-.garage-workspace {
+.system-tag {
+    font-size: 12px;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+/* 2カラムレイアウト */
+.dashboard-container {
     display: flex;
     flex: 1;
     overflow: hidden;
-    gap: 24px;
+    gap: 20px;
     width: 100%;
 }
 
-/* スチールラックをイメージしたパネル */
-.garage-panel {
+/* 情報整理パネル */
+.info-panel {
     flex: 1;
-    background: #16181a;
-    border: 2px solid #2d3135;
-    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.panel-header {
-    background-color: #1c1e22;
+.panel-title-bar {
+    background-color: #f8fafc;
     padding: 16px 20px;
-    border-bottom: 2px solid #2d3135;
+    border-bottom: 1px solid #e2e8f0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .panel-title {
-    font-size: 12px;
-    font-weight: bold;
-    color: #a0a5a9;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.panel-title::before {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #d35400;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #d35400;
-}
-
-/* コントロールコンソール（アナログアンプのつまみ風） */
-.control-console {
+/* 教員の事務作業を効率化するコントロールエリア */
+.control-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
-    background-color: #111214;
-    border: 1px solid #23272a;
-    border-radius: 4px;
-    padding: 12px 16px;
+    margin-bottom: 16px;
+    background-color: #f1f5f9;
+    border-radius: 6px;
+    padding: 12px;
 }
 
-.selector-group {
+.filter-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 11px;
-    font-family: "Consolas", monospace;
-    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
 }
 
-/* ヘヴィ・デューティーなセレクトボックス */
+/* 押しやすいセレクトボックス */
 select {
-    background: #1a1c1e;
-    color: #d1d2d3;
-    border: 1px solid #3a3f44;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-family: "Consolas", monospace;
+    background-color: #ffffff;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    padding: 6px 28px 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
+    font-weight: 500;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    -webkit-appearance: none;
 }
 
-select:focus {
-    border-color: #d35400;
-}
-
-/* トグルスイッチ風の金属製同期ボタン */
-.btn-industrial {
-    background: linear-gradient(to bottom, #2c3035, #1c1e22);
-    color: #e5e7eb;
-    border: 1px solid #3e444b;
-    border-bottom: 3px solid #111214;
-    padding: 6px 16px;
-    font-family: "Consolas", monospace;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 4px;
+/* 直感的に分かりやすい「同期」ボタン */
+.btn-sync {
+    background-color: #2563eb; /* 視認性の高いブルー */
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.1s;
+    transition: background-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.btn-industrial:hover {
-    background: linear-gradient(to bottom, #353b41, #24292e);
-    border-color: #4e555d;
+.btn-sync:hover {
+    background-color: #1d4ed8;
 }
 
-.btn-industrial:active {
-    border-bottom-width: 1px;
-    transform: translateY(2px);
-}
-
-#updateTime {
-    font-size: 10px;
-    font-family: "Consolas", monospace;
-    color: #666;
+.sync-time-stamp {
+    font-size: 11px;
+    color: #64748b;
     margin-top: 4px;
     text-align: right;
 }
@@ -209,176 +186,177 @@ select:focus {
     padding: 20px;
 }
 
-/* テーブルスタイル（配管やメタルラックをイメージ） */
-.garage-table {
+/* テーブルスタイル（文字を大きく、視認性を高く） */
+.student-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.garage-table th {
-    padding: 10px 8px;
-    font-size: 10px;
-    font-family: "Consolas", monospace;
-    color: #666;
+.student-table th {
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
     text-transform: uppercase;
     text-align: left;
-    border-bottom: 2px solid #2d3135;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.garage-table td {
-    padding: 14px 8px;
-    font-size: 13px;
-    border-bottom: 1px solid #202225;
-}
-
-/* ギアやメタルパーツを想起させる生徒名選択 */
-.target-btn {
-    font-size: 13px;
-    font-family: "Consolas", monospace;
-    font-weight: bold;
-    color: #a0a5a9;
-    background: none;
-    border: none;
+/* 生徒の行：ホバーで行全体がボタンのように反応（タブレットにも対応） */
+.student-row {
     cursor: pointer;
-    text-align: left;
-    width: 100%;
-    transition: all 0.15s;
+    transition: background-color 0.15s;
 }
 
-.target-btn:hover {
-    color: #d35400;
-    text-shadow: 0 0 10px rgba(211,84,0,0.3);
+.student-row:hover {
+    background-color: #f1f5f9;
 }
 
-/* アクティブ選択行：ヴィンテージウッドのような赤みのブラウン */
-.row-active td {
-    background-color: #231c16 !important; /* オイルステインウッド風 */
-    border-top: 1px solid rgba(211,84,0,0.3);
-    border-bottom: 1px solid rgba(211,84,0,0.3);
+.student-row td {
+    padding: 14px 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-.row-active .target-btn {
-    color: #d35400;
+.student-id {
+    font-weight: 700;
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* メタルプレート風カウンター */
-.gear-badge {
-    background-color: #111214;
-    color: #d4ac0d; /* 真鍮ゴールド */
-    border: 1px solid #3a321a;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-family: "Consolas", monospace;
+/* 選択行の強調（校内ダッシュボード標準の洗練されたハイライト） */
+.student-row.selected-row {
+    background-color: #eff6ff !important;
+}
+
+.student-row.selected-row .student-id {
+    color: #2563eb;
+}
+
+/* 指導実績カウンター */
+.count-pill {
+    background-color: #f1f5f9;
+    color: #475569;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 }
 
-.row-active .gear-badge {
-    color: #f39c12;
-    border-color: #e67e22;
-    background-color: #1c1008;
+.selected-row .count-pill {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border-color: #2563eb;
 }
 
-/* 右側：詳細（工業用ワークカード風） */
-.card-stack {
+/* 右側：指導履歴（カルテカード風） */
+.chart-header {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.detail-title {
-    font-size: 15px;
-    font-weight: bold;
-    color: #f3f4f6;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #2d3135;
-    font-family: "Consolas", monospace;
-}
-
-/* タイムカード風ログカード */
-.work-card {
-    background-color: #1a1c1e;
-    border: 1px solid #2d3135;
-    border-left: 3px solid #d4ac0d; /* ブラスライン */
+/* 先生用のカルテ型カード */
+.chart-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #3b82f6; /* 優しい青の縦ライン */
+    border-radius: 6px;
     padding: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.chart-card:hover {
+    border-color: #cbd5e1;
+    background-color: #fafafa;
+}
+
+.chart-main {
+    font-size: 14px;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.teacher-name {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.chart-date {
+    font-size: 12px;
+    color: #64748b;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    border-radius: 3px;
+    gap: 6px;
 }
 
-.work-card:hover {
-    background-color: #1e2124;
-}
-
-.work-main {
-    font-size: 13px;
-    color: #cbd5e1;
-    font-family: sans-serif;
-}
-
-.work-main strong {
-    color: #f3f4f6;
-    font-family: "Consolas", monospace;
-}
-
-.work-meta {
-    font-family: "Consolas", monospace;
-    font-size: 11px;
-    color: #70757a;
-}
-
-/* 未選択：無稼働状態のモニター */
-.offline-state {
+/* 未選択時の状態（ダッシュボード初期表示） */
+.empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #555;
+    color: #94a3b8;
     text-align: center;
+    padding: 40px;
 }
 
-.offline-icon {
-    font-size: 32px;
+.empty-icon {
+    font-size: 40px;
     margin-bottom: 16px;
-    color: #333;
+    color: #cbd5e1;
 }
 
-.offline-prompt {
-    font-size: 11px;
-    font-family: "Consolas", monospace;
-    line-height: 1.8;
+.empty-text {
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 500;
 }
 
-/* 歯車調ローディング */
-.gear-loader {
+/* ローディング（シンプルな教育機関向けインジケータ） */
+.loader-spinner {
     width: 24px;
     height: 24px;
-    border: 3px dashed #d35400;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563eb;
     border-radius: 50%;
-    animation: rotate-gear 2s infinite linear;
+    animation: spin 0.8s infinite linear;
     margin-bottom: 16px;
 }
 
-@keyframes rotate-gear {
+@keyframes spin {
     to { transform: rotate(360deg); }
 }
 
-/* タフなスクロールバー */
+/* スクロールバーもスッキリ美しく */
 ::-webkit-scrollbar {
     width: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: #111214;
+    background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #2a2d30;
+    background: #cbd5e1;
     border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #3e4448;
+    background: #94a3b8;
 }
 </style>
 
@@ -386,65 +364,66 @@ select:focus {
 
 <body>
 
-<!-- 工業用ネームプレート調ヘッダー -->
-<div class="garage-header">
-    <div class="brand-title">
-        <span>[🛠️]</span> GARAGE_RACK // ADMIN_PORT
+<!-- 学校共通ヘッダー -->
+<div class="school-header">
+    <div class="brand-area">
+        <div class="school-badge">📖</div>
+        <div class="brand-title">児童生徒カルテ・コネクター</div>
     </div>
-    <div class="system-volt">SYS_STATUS: ACTIVE</div>
+    <div class="system-tag">教職員専用ダッシュボード</div>
 </div>
 
-<!-- メインエリア -->
-<div class="garage-workspace">
+<!-- メインコンテナ -->
+<div class="dashboard-container">
 
-    <!-- 左パネル：ツール（生徒名簿） -->
-    <div class="garage-panel">
-        <div class="panel-header">
-            <div class="panel-title">Target Registry</div>
+    <!-- 左パネル：対象者名簿 -->
+    <div class="info-panel">
+        <div class="panel-title-bar">
+            <div class="panel-title">👥 指導対象 IDリスト</div>
         </div>
         <div class="panel-body">
             
-            <div class="control-console">
-                <div class="selector-group">
-                    <span>SORT:</span>
+            <div class="control-bar">
+                <div class="filter-item">
+                    <span>並び替え:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Count (最高稼働順)</option>
-                        <option value="id">Alphabetical (ID順)</option>
+                        <option value="count">指導回数が多い順</option>
+                        <option value="id">生徒ID（昇順）</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-industrial" onclick="refreshData()">Sync Server</button>
+                    <button class="btn-sync" onclick="refreshData()">🔄 データを同期</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="garage-table" id="summaryTable">
+            <table class="student-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th style="padding-left: 8px;">Target Unit (ID)</th>
-                        <th style="text-align: right; padding-right: 8px; width: 80px;">Tasks</th>
+                        <th>識別番号 (生徒ID)</th>
+                        <th style="text-align: right; width: 100px;">指導回数</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JS展開 -->
+                    <!-- JavaScriptでここにデータが展開されます -->
                 </tbody>
             </table>
 
         </div>
     </div>
 
-    <!-- 右パネル：タスクカード（指導履歴） -->
-    <div class="garage-panel">
-        <div class="panel-header">
-            <div class="panel-title">Operation Logs</div>
+    <!-- 右パネル：指導履歴詳細 -->
+    <div class="info-panel">
+        <div class="panel-title-bar">
+            <div class="panel-title">📝 指導実績カルテ</div>
         </div>
         <div id="historyArea" class="panel-body">
-            <!-- 未選択状態 -->
-            <div class="offline-state">
-                <div class="offline-icon">🔌</div>
-                <p class="offline-prompt">
-                    SYSTEM IDLE // SELECT TARGET ON THE LEFT<br>
-                    左リストから識別IDを選択して、ログをアクティブ化してください。
+            <!-- 初期状態の表示（未選択） -->
+            <div class="empty-state">
+                <div class="empty-icon">📂</div>
+                <p class="empty-text">
+                    <strong>カルテが選択されていません</strong><br>
+                    左のリストから生徒のID行をクリックすると、詳細な個別指導履歴がここに表示されます。
                 </p>
             </div>
         </div>
@@ -455,12 +434,13 @@ select:focus {
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
+// 初期ロード
 loadSummary();
 
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYNC_T: " + now.toLocaleTimeString("en-US", {hour12: false});
+    document.getElementById("updateTime").innerHTML = "最終同期: " + now.toLocaleTimeString("ja-JP");
 }
 
 function loadSummary(){
@@ -491,14 +471,14 @@ function loadSummary(){
 
         students.forEach(student => {
             html += `
-            <tr id="row-${student.id}">
+            <tr class="student-row" id="row-${student.id}" onclick="showHistory('${student.id}')">
                 <td>
-                    <button class="target-btn" onclick="showHistory('${student.id}')">
-                        &gt; ${student.id}
-                    </button>
+                    <div class="student-id">
+                        👤 ${student.id}
+                    </div>
                 </td>
-                <td style="text-align: right; padding-right: 8px;">
-                    <span class="gear-badge">${student.count} LOGS</span>
+                <td style="text-align: right;">
+                    <span class="count-pill">${student.count} 回</span>
                 </td>
             </tr>
             `;
@@ -509,18 +489,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // アクティブ行の変更
-    document.querySelectorAll('.garage-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
+    // 行の選択表示の切り替え
+    document.querySelectorAll('.student-table tbody tr').forEach(tr => tr.classList.remove('selected-row'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-active');
+        selectedRow.classList.add('selected-row');
     }
 
-    // ロード中表示
+    // ロード中のフィードバックを表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="offline-state">
-            <div class="gear-loader"></div>
-            <p class="offline-prompt">RETRIEVING MACHINE DATA FOR ${studentId}...</p>
+        <div class="empty-state">
+            <div class="loader-spinner"></div>
+            <p class="empty-text">生徒 ${studentId} の指導記録を取得中...</p>
         </div>
     `;
 
@@ -528,21 +508,21 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="detail-title">> REGISTERED STREAM: ${studentId}</div>
-        <div class="card-stack">
+        <div class="chart-header">📋 個別記録カルテ: ${studentId}</div>
+        <div class="chart-list">
         `;
 
         for(let i = 0; i < data.length; i++){
             let d = new Date(data[i].date);
-            let dateStr = d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' }) + " " + d.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false });
+            let dateStr = d.toLocaleDateString("ja-JP", { year: 'numeric', month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
 
             html += `
-            <div class="work-card">
-                <div class="work-main">
-                    Supervisor / Instructor: <strong>${data[i].teacher}</strong>
+            <div class="chart-card">
+                <div class="chart-main">
+                    担当指導者: <span class="teacher-name">${data[i].teacher} 先生</span>
                 </div>
-                <div class="work-meta">
-                    [ ${dateStr} ]
+                <div class="chart-date">
+                    📅 記録日時: ${dateStr}
                 </div>
             </div>
             `;
@@ -553,9 +533,12 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="offline-state" style="color: #e74c3c;">
-                <div class="offline-icon">🚨</div>
-                <p class="offline-prompt">CONNECTION ERROR // SYNC FAILED.</p>
+            <div class="empty-state" style="color: #ef4444;">
+                <div class="empty-icon">⚠️</div>
+                <p class="empty-text">
+                    <strong>データの読み込みに失敗しました</strong><br>
+                    ネットワーク接続をご確認の上、もう一度「データを同期」をお試しください。
+                </p>
             </div>
         `;
     });
