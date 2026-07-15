@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glassmorphism Terminal</title>
+<title>🍔 RETRO DINER // STUDENT LOG CONNECTION</title>
 
 <style>
 /* 共通リセット */
@@ -15,53 +15,68 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    /* 宇宙の星雲をイメージした美麗グラデーション背景 */
-    background: radial-gradient(circle at 20% 30%, #251845 0%, #0a0a16 70%), 
-                radial-gradient(circle at 80% 80%, #0d3831 0%, transparent 50%);
-    background-attachment: fixed;
-    color: #f3f4f6;
+    /* アメリカンレトロなサンセリフと可愛いポップフォント */
+    font-family: "Futura", "Helvetica Neue", "Arial", "Comic Sans MS", cursive, sans-serif;
+    background-color: #fdfcf5; /* バニラシェイク・クリーム */
+    /* 薄いチェッカーフラッグ柄の背景 */
+    background-image: 
+        linear-gradient(45deg, #f8f6e9 25%, transparent 25%), 
+        linear-gradient(-45deg, #f8f6e9 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f8f6e9 75%),
+        linear-gradient(-45deg, transparent 75%, #f8f6e9 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    color: #333;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 32px;
-    -webkit-font-smoothing: antialiased;
+    padding: 24px;
+    letter-spacing: 0.02em;
 }
 
-/* ヘッダー */
-.glass-header {
-    height: 50px;
+/* ヘッダー：ダイナーのネオン看板風 */
+.diner-header {
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
     margin-bottom: 24px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0 20px;
+    background-color: #e74c3c; /* チェリーレッド */
+    border: 4px solid #fff;
     border-radius: 12px;
+    box-shadow: 0 6px 0 #c0392b, 0 8px 15px rgba(0,0,0,0.2);
     flex-shrink: 0;
 }
 
 .brand-title {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    font-size: 24px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 3px 3px 0 #c0392b, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333, 1px 1px 0 #333;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.app-status {
-    font-size: 11px;
-    font-weight: 500;
-    color: #9ca3af;
-    letter-spacing: 0.5px;
+.brand-icon {
+    font-size: 32px;
+}
+
+.station-status {
+    font-size: 14px;
+    font-weight: bold;
+    color: #f1c40f; /* サンシャインイエロー */
+    background-color: #333;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 2px solid #fff;
+    letter-spacing: 0.1em;
 }
 
 /* 2カラムレイアウト */
-.glass-workspace {
+.diner-workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
@@ -69,253 +84,283 @@ body {
     width: 100%;
 }
 
-/* 磨りガラス風パネル */
-.glass-panel {
+/* ダイナーのカウンターや席をイメージしたパネル */
+.diner-panel {
     flex: 1;
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    background: #fff;
+    border: 4px solid #333;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     height: 100%;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
 }
 
 .panel-header {
-    padding: 24px 24px 12px 24px;
-    font-size: 12px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 1.5px;
+    /* チェッカーフラッグ柄のヘッダー */
+    background-image: 
+        linear-gradient(45deg, #333 25%, transparent 25%), 
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    background-color: #fff;
+    padding: 12px 20px;
+    border-bottom: 4px solid #333;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    text-align: center;
     text-transform: uppercase;
+    letter-spacing: 0.15em;
+    background-color: rgba(0,0,0,0.7);
+    padding: 4px;
+    display: inline-block;
 }
 
 .panel-body {
     overflow-y: auto;
     flex: 1;
-    padding: 0 24px 24px 24px;
+    padding: 24px;
 }
 
-/* 操作エリア */
-.control-bar {
+/* コントロール（メニュー注文風） */
+.control-panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
+    background-color: #fcf8e3; /* 薄いイエロー */
+    border: 2px dashed #e67e22; /* オレンジの破線 */
+    border-radius: 12px;
+    padding: 16px;
 }
 
-/* シースルーのセレクトボックス */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #e67e22;
+}
+
+/* ポップなセレクトボックス */
 select {
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 6px 16px;
-    border-radius: 8px;
-    font-size: 12px;
+    padding: 8px 16px;
+    font-size: 13px;
     font-family: inherit;
+    border: 3px solid #333;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
     outline: none;
     cursor: pointer;
-    transition: all 0.2s;
+    font-weight: bold;
 }
 
 select:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background-color: #fdfcf5;
 }
 
-/* 光彩を放つサイバー感ボタン */
-.btn-glass {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(34, 197, 94, 0.4));
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 6px 18px;
+/* ジュークボックスのボタン風同期ボタン */
+.btn-diner {
+    padding: 8px 20px;
+    font-size: 14px;
     font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
+    font-weight: 900;
+    background-color: #3498db; /* アクアブルー */
+    color: #fff;
+    border: 3px solid #333;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+    transition: all 0.1s;
+    box-shadow: 0 4px 0 #333;
+    text-transform: uppercase;
 }
 
-.btn-glass:hover {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.6), rgba(34, 197, 94, 0.6));
-    box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4);
-    transform: translateY(-1px);
+.btn-diner:hover {
+    background-color: #5dade2;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #333;
+}
+
+.btn-diner:active {
+    transform: translateY(4px);
+    box-shadow: none;
 }
 
 #updateTime {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 11px;
+    color: #7f8c8d;
     margin-top: 6px;
     text-align: right;
+    font-weight: bold;
 }
 
-/* テーブルスタイル */
-.glass-table {
+/* メニュー表風のテーブル */
+.diner-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.glass-table th {
-    padding: 10px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+.diner-table th {
+    padding: 12px 8px;
+    font-size: 12px;
+    color: #e74c3c;
+    text-transform: uppercase;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 3px solid #333;
 }
 
-.glass-table td {
-    padding: 16px 12px;
-    font-size: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+.diner-table td {
+    padding: 18px 8px;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
 }
 
-/* リスト項目 */
-.student-link {
+/* オーダーボタン風（生徒名） */
+.student-btn {
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 900;
+    color: #3498db;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.85);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
     cursor: pointer;
     text-align: left;
-    width: 100%;
-    transition: all 0.15s;
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.student-link:hover {
-    color: #ffffff;
-    padding-left: 4px; /* わずかにスライドして触覚を表現 */
+.student-btn:hover {
+    color: #e74c3c;
+    transform: scale(1.05);
 }
 
-/* アクティブ行 */
-.row-active td {
-    background: rgba(255, 255, 255, 0.06);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+/* 選択行：ケチャップとマスタードのような陽気な黄色ハイライト */
+.row-selected td {
+    background-color: #fef9e7 !important;
+    border-bottom: 2px solid #f1c40f;
 }
 
-.row-active .student-link {
-    color: #a855f7; /* パープル */
-    font-weight: bold;
-    text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+.row-selected .student-btn {
+    color: #e74c3c;
 }
 
-/* カプセルバッジ */
-.glass-badge {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    padding: 3px 10px;
+/* オーダー数バッジ（ソーダのキャップ風） */
+.order-badge {
+    background-color: #f1c40f;
+    color: #333;
+    border: 2px solid #333;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 900;
 }
 
-.row-active .glass-badge {
-    background: rgba(168, 85, 247, 0.2);
-    border-color: rgba(168, 85, 247, 0.4);
-    color: #e9d5ff;
+/* 右側：履歴（オーダー伝票風） */
+.order-slip-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #e74c3c;
+    margin-bottom: 24px;
+    border-bottom: 3px solid #333;
+    padding-bottom: 10px;
+    text-align: center;
 }
 
-/* 右側：履歴セクション */
-.history-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 20px;
-}
-
-.card-container {
+.order-stack {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-/* 半透明の詳細カード */
-.history-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.2s;
+/* レトロな伝票・メニュー風カード */
+.order-card {
+    background-color: #fff;
+    border: 3px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
 }
 
-.history-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-1px);
+.order-card:hover {
+    background-color: #fdfcf5;
 }
 
-.history-main {
-    font-size: 13px;
-    color: #ffffff;
+/* 伝票のパンチ穴を疑似表現 */
+.order-card::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 12px;
+    height: 12px;
+    background-color: #fdfcf5; /* 背景色で抜く */
+    border: 2px solid #333;
+    border-radius: 50%;
 }
 
-.history-main strong {
-    color: #22c55e; /* エメラルドグリーン */
+.order-num {
+    font-size: 11px;
+    font-weight: bold;
+    color: #e67e22;
+    margin-bottom: 6px;
 }
 
-.history-meta {
+.order-main {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.order-main span {
+    color: #e74c3c;
+}
+
+.order-date {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.45);
+    color: #7f8c8d;
+    font-family: sans-serif;
 }
 
-/* 空表示 */
-.empty-view {
+/* 未選択：営業時間外のジュークボックス */
+.closed-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: rgba(255, 255, 255, 0.4);
+    color: #7f8c8d;
     text-align: center;
 }
 
-.empty-text {
-    font-size: 13px;
-    line-height: 1.6;
+.closed-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    animation: jukebox-wobble 2s infinite ease-in-out;
 }
 
-/* スペーシーなスピンローダー */
-.space-loader {
-    width: 24px;
-    height: 24px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-top-color: #a855f7;
-    border-bottom-color: #22c55e;
-    border-radius: 50%;
-    animation: orbit 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    margin-bottom: 16px;
+@keyframes jukebox-wobble {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
 }
 
-@keyframes orbit {
-    to { transform: rotate(360deg); }
-}
-
-/* 極細スクロールバー */
-::-webkit-scrollbar {
-    width: 4px;
-}
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+.closed-text {
+    font-size: 14px;
+    line-height: 1.8;
+    font-weight: bold;
 }
 </style>
 
@@ -323,61 +368,66 @@ select:hover {
 
 <body>
 
-<!-- ガラスヘッダー -->
-<div class="glass-header">
-    <div class="brand-title">NEBULA CONTROL</div>
-    <div class="app-status">SYSTEM OK // ENCRYPTED_CONN</div>
+<!-- ヘッダー -->
+<div class="diner-header">
+    <div class="brand-title">
+        <span class="brand-icon">🍔</span>
+        <span>RETRO DINER // LOG CONNECTION</span>
+    </div>
+    <div class="station-status">OPEN 24 HOURS</div>
 </div>
 
-<!-- ワークスペース -->
-<div class="glass-workspace">
+<!-- メインエリア -->
+<div class="diner-workspace">
 
-    <!-- 左パネル：ディレクトリ -->
-    <div class="glass-panel">
-        <div class="panel-header">Database Directory</div>
+    <!-- 左パネル：メニュー（生徒名簿） -->
+    <div class="diner-panel">
+        <div class="panel-header">
+            <div class="panel-title">MENU: ACCESS ID List</div>
+        </div>
         <div class="panel-body">
-            
-            <div class="control-bar">
-                <div>
+            <div class="control-panel">
+                <div class="filter-group">
+                    <span>SORT BY:</span>
                     <select id="sortSelect" onchange="loadSummary()">
-                        <option value="count">Sort: Max Entries</option>
-                        <option value="id">Sort: Target ID</option>
+                        <option value="count">Most Orders (指導回数)</option>
+                        <option value="id">ID (Alphabetical)</option>
                     </select>
                 </div>
                 <div>
-                    <button class="btn-glass" onclick="refreshData()">Sync Database</button>
+                    <button class="btn-diner" onclick="refreshData()">SYNC (同期)</button>
                     <div id="updateTime"></div>
                 </div>
             </div>
 
-            <table class="glass-table" id="summaryTable">
+            <table class="diner-table" id="summaryTable">
                 <thead>
                     <tr>
-                        <th style="padding-left: 12px;">Target Identifier</th>
-                        <th style="text-align: right; padding-right: 12px;">Total</th>
+                        <th>Identifier (ID)</th>
+                        <th style="text-align: right; width: 100px;">Orders</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- JS展開 -->
+                    <!-- JSで展開 -->
                 </tbody>
             </table>
-
         </div>
     </div>
 
-    <!-- 右パネル：ログ詳細 -->
-    <div class="glass-panel">
-        <div class="panel-header">Data Stream Output</div>
+    <!-- 右パネル：オーダー伝票（指導履歴） -->
+    <div class="diner-panel">
+        <div class="panel-header">
+            <div class="panel-title">Your Order History</div>
+        </div>
         <div id="historyArea" class="panel-body">
-            
-            <!-- デフォルト -->
-            <div class="empty-view">
-                <p class="empty-text">
-                    Await Selection...<br>
-                    Choose an active telemetry target to pipe logs.
+            <!-- 未選択表示 -->
+            <div class="closed-state">
+                <div class="closed-icon">📻</div>
+                <p class="closed-text">
+                    Welcome to Retro Diner!<br>
+                    左のID（メニュー）をクリックして、これまでの特訓オーダー（指導履歴）を呼び出してください。
                 </p>
             </div>
-
         </div>
     </div>
 
@@ -391,7 +441,7 @@ loadSummary();
 function refreshData(){
     loadSummary();
     let now = new Date();
-    document.getElementById("updateTime").innerHTML = "SYNC_TIME: " + now.toLocaleTimeString("en-US", {hour12: false});
+    document.getElementById("updateTime").innerHTML = "SYNC TIME: " + now.toLocaleTimeString("en-US");
 }
 
 function loadSummary(){
@@ -399,8 +449,8 @@ function loadSummary(){
     .then(response => response.json())
     .then(data => {
         let html = "";
+
         let students = [];
-        
         for(let id in data){
             students.push({
                 id: id,
@@ -424,12 +474,12 @@ function loadSummary(){
             html += `
             <tr id="row-${student.id}">
                 <td>
-                    <button class="student-link" onclick="showHistory('${student.id}')">
-                        ${student.id}
+                    <button class="student-btn" onclick="showHistory('${student.id}')">
+                        🥤 ${student.id}
                     </button>
                 </td>
-                <td style="text-align: right; padding-right: 12px;">
-                    <span class="glass-badge">${student.count}</span>
+                <td style="text-align: right;">
+                    <span class="order-badge">${student.count}</span>
                 </td>
             </tr>
             `;
@@ -440,18 +490,18 @@ function loadSummary(){
 }
 
 function showHistory(studentId){
-    // リストの行ハイライト
-    document.querySelectorAll('.glass-table tbody tr').forEach(tr => tr.classList.remove('row-active'));
+    // アクティブ行の切り替え
+    document.querySelectorAll('.diner-table tbody tr').forEach(tr => tr.classList.remove('row-selected'));
     const selectedRow = document.getElementById(`row-${studentId}`);
     if(selectedRow) {
-        selectedRow.classList.add('row-active');
+        selectedRow.classList.add('row-selected');
     }
 
-    // 読み込み中表示
+    // ロード表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="empty-view">
-            <div class="space-loader"></div>
-            <p class="empty-text">Piping telemetric stream for ${studentId}...</p>
+        <div class="closed-state">
+            <div class="closed-icon" style="animation: jukebox-wobble 0.5s infinite linear;">🍔</div>
+            <p class="closed-text">Now Cooking... データをオーブンで焼いています...</p>
         </div>
     `;
 
@@ -459,22 +509,17 @@ function showHistory(studentId){
     .then(response => response.json())
     .then(data => {
         let html = `
-        <div class="history-title">Streaming Log: ${studentId}</div>
-        <div class="card-container">
+        <div class="order-slip-title">ORDER SLIP // ${studentId}様</div>
+        <div class="order-stack">
         `;
 
         for(let i = 0; i < data.length; i++){
-            let d = new Date(data[i].date);
-            let dateStr = d.toLocaleDateString("en-US", { month: 'short', day: 'numeric' }) + " " + d.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false });
-
+            let date = new Date(data[i].date);
             html += `
-            <div class="history-card">
-                <div class="history-main">
-                    Authorized by <strong>${data[i].teacher}</strong>
-                </div>
-                <div class="history-meta">
-                    ${dateStr}
-                </div>
+            <div class="order-card">
+                <div class="order-num">GUEST CHECK #0${i+1}</div>
+                <div class="order-main">担当スタッフ：<span>${data[i].teacher}</span> 先生</div>
+                <div class="order-date">日時：${date.toLocaleString("ja-JP")}</div>
             </div>
             `;
         }
@@ -484,8 +529,9 @@ function showHistory(studentId){
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="empty-view" style="color: #ef4444;">
-                <p class="empty-text">Stream Interrupted. Verify terminal connection.</p>
+            <div class="closed-state" style="color: #e74c3c;">
+                <div class="closed-icon">💥</div>
+                <p class="closed-text">Oops! 通信エラーです。オーブンの調子が悪いようです。「SYNC」ボタンを押してください。</p>
             </div>
         `;
     });
