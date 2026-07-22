@@ -98,8 +98,8 @@ button:hover{
 <div class="sortArea">
 <label for="sortSelect">並び替え：</label>
 <select id="sortSelect" onchange="loadSummary()">
-    <option value="count">面接回数順</option>
     <option value="id">生徒ID順</option>
+    <option value="count">面接回数順</option>
 </select>
 
 <button onclick="refreshData()">🔄 更新</button>
@@ -108,7 +108,7 @@ button:hover{
 
 <table id="summaryTable">
 <tr>
-    <th>生徒ID</th>
+    <th>生徒名 / ID</th>
     <th>面接回数</th>
 </tr>
 </table>
@@ -117,7 +117,7 @@ button:hover{
 <div class="right-panel">
 <div id="historyArea">
     <h2>面接履歴</h2>
-    <p>生徒IDをクリックしてください。</p>
+    <p>生徒名をクリックしてください。</p>
 </div>
 </div>
 
@@ -141,7 +141,7 @@ function loadSummary(){
     .then(data => {
         let html = `
         <tr>
-            <th>生徒ID</th>
+            <th>生徒名 / ID</th>
             <th>面接回数</th>
         </tr>
         `;
@@ -150,7 +150,8 @@ function loadSummary(){
         for(let id in data){
             students.push({
                 id: id,
-                count: data[id]
+                fullName: data[id].fullName,
+                count: data[id].count
             });
         }
 
@@ -162,11 +163,10 @@ function loadSummary(){
                 if(b.count !== a.count){
                     return b.count - a.count;
                 }
-                // 回数が同じならID順
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
         }
-        // 生徒ID順（24i01 〜 24i31 まで正しく数字昇順で並べる）
+        // 生徒ID順（24i01 〜 24i33 まで末尾の数字順に並べる）
         else{
             students.sort(function(a, b){
                 return a.id.localeCompare(b.id, undefined, {numeric: true});
@@ -177,8 +177,8 @@ function loadSummary(){
             html += `
             <tr>
                 <td>
-                    <span class="student-link" onclick="showHistory('${student.id}')">
-                        ${student.id}
+                    <span class="student-link" onclick="showHistory('${student.id}', '${student.fullName}')">
+                        ${student.fullName}
                     </span>
                 </td>
                 <td>
@@ -192,12 +192,12 @@ function loadSummary(){
     });
 }
 
-function showHistory(studentId){
+function showHistory(studentId, fullName){
     fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
     .then(response => response.json())
     .then(data => {
         let html = `
-        <h2>${studentId} の面接履歴</h2>
+        <h2>${fullName} の面接履歴</h2>
         <table>
         <tr>
             <th>回数</th>
