@@ -159,22 +159,17 @@ function loadSummary(){
         // 面接回数順（多い順）
         if(sortType == "count"){
             students.sort(function(a, b){
-                return b.count - a.count;
+                if(b.count !== a.count){
+                    return b.count - a.count;
+                }
+                // 回数が同じならID順
+                return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
         }
-        // 生徒ID順（1, 2, 3... の正しい数字順に並べる）
+        // 生徒ID順（24i01 〜 24i31 まで正しく数字昇順で並べる）
         else{
             students.sort(function(a, b){
-                const matchA = a.id.toString().match(/\d+/);
-                const matchB = b.id.toString().match(/\d+/);
-                
-                const numA = matchA ? parseInt(matchA[0], 10) : -1;
-                const numB = matchB ? parseInt(matchB[0], 10) : -1;
-
-                if (numA !== -1 && numB !== -1 && numA !== numB) {
-                    return numA - numB;
-                }
-                return a.id.localeCompare(b.id, 'ja');
+                return a.id.localeCompare(b.id, undefined, {numeric: true});
             });
         }
 
@@ -211,7 +206,7 @@ function showHistory(studentId){
         </tr>
         `;
 
-        if(data.length === 0){
+        if(!data || data.length === 0){
             html += `<tr><td colspan="3">まだ面接練習の記録はありません。</td></tr>`;
         } else {
             for(let i = 0; i < data.length; i++){
