@@ -162,15 +162,17 @@ function loadSummary(){
                 return b.count - a.count;
             });
         }
-        // 生徒ID順（あいうえお順 / A1~A31順）
+        // 生徒ID順（1, 2, 3... の正しい数字順に並べる）
         else{
             students.sort(function(a, b){
-                // 数字抽出を試み、失敗しても安全に名前順でソートする書き方に変更
-                const numA = a.id.match(/\d+/);
-                const numB = b.id.match(/\d+/);
+                const matchA = a.id.toString().match(/\d+/);
+                const matchB = b.id.toString().match(/\d+/);
                 
-                if (numA && numB) {
-                    return parseInt(numA[0]) - parseInt(numB[0]);
+                const numA = matchA ? parseInt(matchA[0], 10) : -1;
+                const numB = matchB ? parseInt(matchB[0], 10) : -1;
+
+                if (numA !== -1 && numB !== -1 && numA !== numB) {
+                    return numA - numB;
                 }
                 return a.id.localeCompare(b.id, 'ja');
             });
