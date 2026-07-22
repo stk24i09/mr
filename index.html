@@ -3,11 +3,11 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
-<title>📱 教員用 指導カルテ App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏫 教員用 指導カルテ Smart Dashboard</title>
 
 <style>
-/* iOS / iPadOS ネイティブアプリ風リセット */
+/* --- リセット & 基本設定 --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -16,9 +16,9 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Hiragino Sans", sans-serif;
-    background-color: #f2f2f7; /* iOS標準システム背景色 */
-    color: #1c1c1e;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background-color: #f6f8fa; /* 明るく清潔感のあるグレー */
+    color: #1f2937;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -26,107 +26,127 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ナビゲーションバー（アプリのTop Bar） */
-.app-navbar {
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(60, 60, 67, 0.12);
+/* --- アプリヘッダー --- */
+.app-header {
+    height: 64px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 24px;
     flex-shrink: 0;
-    z-index: 100;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.app-brand {
+.brand-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 17px;
-    font-weight: 700;
-    color: #000000;
+    gap: 12px;
 }
 
-.app-icon {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, #007aff, #5856d6);
-    border-radius: 8px;
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 16px;
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
 }
 
-.sync-button {
-    background-color: #e5e5ea;
-    color: #007aff;
-    border: none;
+.brand-text-main {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+}
+
+.brand-text-sub {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.btn-sync {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     gap: 6px;
+    transition: all 0.2s ease;
 }
 
-.sync-button:active {
-    background-color: #d1d1d6;
+.btn-sync:hover {
+    background-color: #dbeafe;
+}
+
+.btn-sync:active {
     transform: scale(0.96);
 }
 
-/* メインキャンバス（2カラム） */
-.app-view {
+/* --- アプリメインレイアウト --- */
+.app-body {
     display: flex;
     flex: 1;
-    overflow: hidden;
-    padding: 20px;
     gap: 20px;
+    padding: 20px;
+    overflow: hidden;
 }
 
-/* アプリ風カードアイランド */
+/* アプリ用カード（島） */
 .app-card {
-    flex: 1;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid rgba(60, 60, 67, 0.06);
 }
 
-/* セクションヘッダー */
+.card-left {
+    width: 360px;
+    flex-shrink: 0;
+}
+
+.card-right {
+    flex: 1;
+}
+
+/* カード内部ヘッダー */
 .card-header {
     padding: 16px 20px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f2f2f7;
+    border-bottom: 1px solid #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #ffffff;
 }
 
-.card-title {
-    font-size: 15px;
+.card-header-title {
+    font-size: 14px;
     font-weight: 700;
-    color: #8e8e93;
-    text-transform: uppercase;
-    letter-spacing: -0.2px;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* アプリ特有の「セグメントコントロール（タブスイッチ）」 */
-.segmented-control {
-    background-color: #e3e3e8;
+/* アプリ風切り替えトグル（セグメント） */
+.segment-control {
+    background-color: #f3f4f6;
     padding: 3px;
-    border-radius: 9px;
+    border-radius: 8px;
     display: flex;
     gap: 2px;
 }
@@ -134,176 +154,190 @@ body {
 .segment-btn {
     border: none;
     background: transparent;
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 4px 10px;
+    font-size: 11px;
     font-weight: 600;
-    color: #3c3c43;
-    border-radius: 7px;
+    color: #6b7280;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
 }
 
 .segment-btn.active {
-    background: #ffffff;
-    color: #000000;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    background-color: #ffffff;
+    color: #111827;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.card-body {
+.card-content {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
 }
 
-/* 生徒リスト（アプリのセル表示） */
+/* --- 生徒セル（ボタン風カード） --- */
 .student-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
-.student-cell {
-    background-color: #f9f9fb;
-    border-radius: 14px;
-    padding: 14px 18px;
+.student-item {
+    background-color: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-    border: 1.5px solid transparent;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.student-cell:hover {
-    background-color: #f2f2f7;
+.student-item:hover {
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
 }
 
-.student-cell:active {
+.student-item:active {
     transform: scale(0.98);
 }
 
-/* 選択中のセル（アプリのハイライト） */
-.student-cell.selected {
-    background-color: #e8f2ff;
-    border-color: #007aff;
+/* アプリ選択状態（鮮やかな青枠） */
+.student-item.selected {
+    background-color: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
 }
 
 .student-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .student-avatar {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: #e5e5ea;
+    background-color: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 14px;
+    transition: all 0.15s ease;
 }
 
-.student-cell.selected .student-avatar {
-    background: #007aff;
+.student-item.selected .student-avatar {
+    background-color: #2563eb;
     color: #ffffff;
 }
 
-.student-name {
-    font-size: 15px;
+.student-id-text {
+    font-size: 14px;
     font-weight: 700;
-    color: #1c1c1e;
+    color: #1f2937;
 }
 
-/* 通知風カウントバッジ */
-.badge-pill {
-    background-color: #e5e5ea;
-    color: #3a3a3c;
-    font-size: 12px;
+.student-item.selected .student-id-text {
+    color: #1d4ed8;
+}
+
+/* 通知風回数バッジ */
+.count-badge {
+    font-size: 11px;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 12px;
+    background-color: #f3f4f6;
+    color: #4b5563;
 }
 
-.badge-pill.alert {
-    background-color: #ff3b30; /* iOSレッド */
-    color: #ffffff;
+/* 5回以上対応の注意バッジ */
+.count-badge.alert {
+    background-color: #fee2e2;
+    color: #dc2626;
 }
 
-.student-cell.selected .badge-pill:not(.alert) {
-    background-color: #007aff;
-    color: #ffffff;
-}
-
-/* 右側：指導履歴（メッセージスレッド風） */
-.history-thread {
+/* --- 右側カルテ表示（スレッド） --- */
+.history-stack {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.history-bubble {
-    background-color: #f2f2f7;
-    border-radius: 16px;
+.history-card {
+    background-color: #f9fafb;
+    border-radius: 12px;
     padding: 16px;
+    border: 1px solid #f3f4f6;
     position: relative;
+    animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .history-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 8px;
 }
 
-.teacher-tag {
-    font-size: 14px;
+.history-teacher {
+    font-size: 13px;
     font-weight: 700;
-    color: #007aff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.date-tag {
+.history-date {
     font-size: 11px;
-    color: #8e8e93;
+    color: #9ca3af;
     font-weight: 500;
 }
 
-.history-content {
+.history-body {
     font-size: 13px;
-    color: #3a3a3c;
+    color: #374151;
     line-height: 1.5;
 }
 
-/* 未選択状態（アプリのランディング画面） */
-.app-empty-state {
+/* アプリ未選択プレースホルダー */
+.empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #8e8e93;
+    color: #9ca3af;
     text-align: center;
+    padding: 40px;
 }
 
-.app-empty-icon {
-    font-size: 48px;
+.empty-icon {
+    font-size: 44px;
     margin-bottom: 12px;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 
-.app-empty-text {
-    font-size: 14px;
+.empty-text {
+    font-size: 13px;
     font-weight: 600;
-    color: #8e8e93;
+    line-height: 1.6;
 }
 
-/* iOS風スライドインローダー */
+/* スピナー */
 .spinner {
     width: 24px;
     height: 24px;
-    border: 3px solid #e5e5ea;
-    border-top-color: #007aff;
+    border: 3px solid #e5e7eb;
+    border-top-color: #2563eb;
     border-radius: 50%;
     animation: spin 0.8s infinite linear;
     margin-bottom: 12px;
@@ -313,12 +347,12 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* スクロールバーの非表示（ネイティブアプリ感の演出） */
+/* スクロールバー整形 */
 ::-webkit-scrollbar {
     width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-    background: #c7c7cc;
+    background-color: #d1d5db;
     border-radius: 3px;
 }
 </style>
@@ -327,46 +361,48 @@ body {
 
 <body>
 
-<!-- iOSアプリ風ナビゲーションバー -->
-<div class="app-navbar">
-    <div class="app-brand">
-        <div class="app-icon">📚</div>
-        <span>指導カルテ App</span>
+<!-- ヘッダー -->
+<div class="app-header">
+    <div class="brand-title">
+        <div class="brand-icon">📑</div>
+        <div>
+            <div class="brand-text-main">児童生徒指導カルテ</div>
+            <div class="brand-text-sub">教職員用モバイルダッシュボード</div>
+        </div>
     </div>
-    <button class="sync-button" onclick="refreshData()">
-        <span>🔄</span> 同期
+    <button class="btn-sync" onclick="refreshData()">
+        <span>🔄</span> 最新データを同期
     </button>
 </div>
 
-<!-- メインアプリビュー -->
-<div class="app-view">
+<!-- メインエリア -->
+<div class="app-body">
 
-    <!-- 左カード：生徒リスト -->
-    <div class="app-card">
+    <!-- 左カード：名簿一覧 -->
+    <div class="app-card card-left">
         <div class="card-header">
-            <span class="card-title">対象生徒</span>
-            <!-- セグメントコントロール（並び替え） -->
-            <div class="segmented-control">
-                <button class="segment-btn active" id="btnSortCount" onclick="setSort('count')">指導順</button>
-                <button class="segment-btn" id="btnSortId" onclick="setSort('id')">ID順</button>
+            <span class="card-header-title">👥 生徒ID名簿</span>
+            <div class="segment-control">
+                <button class="segment-btn active" id="segCount" onclick="setSort('count')">回数順</button>
+                <button class="segment-btn" id="segId" onclick="setSort('id')">ID順</button>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-content">
             <div class="student-list" id="studentList">
-                <!-- JSでアプリ風セルを生成 -->
+                <!-- JSで動的読み込み -->
             </div>
         </div>
     </div>
 
-    <!-- 右カード：詳細カルテ -->
-    <div class="app-card">
+    <!-- 右カード：カルテ詳細 -->
+    <div class="app-card card-right">
         <div class="card-header">
-            <span class="card-title" id="historyTitle">カルテ詳細</span>
+            <span class="card-header-title" id="historyTitle">📝 指導実績詳細</span>
         </div>
-        <div class="card-body" id="historyArea">
-            <div class="app-empty-state">
-                <div class="app-empty-icon">📇</div>
-                <div class="app-empty-text">左の生徒をタップして<br>カルテを開いてください</div>
+        <div class="card-content" id="historyArea">
+            <div class="empty-state">
+                <div class="empty-icon">👈</div>
+                <div class="empty-text">左側の名簿から生徒を選択すると<br>ここに指導カルテが展開されます</div>
             </div>
         </div>
     </div>
@@ -377,18 +413,19 @@ body {
 const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
 let currentSort = 'count';
-let rawData = null;
+let summaryCache = null;
 
+// 初期化
 loadSummary();
 
 function refreshData() {
     loadSummary();
 }
 
-function setSort(type) {
-    currentSort = type;
-    document.getElementById('btnSortCount').classList.toggle('active', type === 'count');
-    document.getElementById('btnSortId').classList.toggle('active', type === 'id');
+function setSort(sortType) {
+    currentSort = sortType;
+    document.getElementById('segCount').classList.toggle('active', sortType === 'count');
+    document.getElementById('segId').classList.toggle('active', sortType === 'id');
     renderSummary();
 }
 
@@ -396,17 +433,17 @@ function loadSummary() {
     fetch(API_URL + "?mode=summary")
     .then(response => response.json())
     .then(data => {
-        rawData = data;
+        summaryCache = data;
         renderSummary();
     });
 }
 
 function renderSummary() {
-    if (!rawData) return;
-    
+    if (!summaryCache) return;
+
     let students = [];
-    for (let id in rawData) {
-        students.push({ id: id, count: rawData[id] });
+    for (let id in summaryCache) {
+        students.push({ id: id, count: summaryCache[id] });
     }
 
     if (currentSort === 'count') {
@@ -421,17 +458,16 @@ function renderSummary() {
 
     let html = "";
     students.forEach(student => {
-        // 5回以上の指導がある場合は赤バッジ
         const isAlert = student.count >= 5;
-        const badgeClass = isAlert ? "badge-pill alert" : "badge-pill";
+        const badgeClass = isAlert ? "count-badge alert" : "count-badge";
 
         html += `
-        <div class="student-cell" id="cell-${student.id}" onclick="showHistory('${student.id}')">
+        <div class="student-item" id="item-${student.id}" onclick="showHistory('${student.id}')">
             <div class="student-info">
                 <div class="student-avatar">👤</div>
-                <div class="student-name">${student.id}</div>
+                <span class="student-id-text">${student.id}</span>
             </div>
-            <div class="${badgeClass}">${student.count} 回</div>
+            <span class="${badgeClass}">${student.count} 回</span>
         </div>
         `;
     });
@@ -440,38 +476,38 @@ function renderSummary() {
 }
 
 function showHistory(studentId) {
-    // セル選択のアニメーション
-    document.querySelectorAll('.student-cell').forEach(cell => cell.classList.remove('selected'));
-    const selectedCell = document.getElementById(`cell-${studentId}`);
-    if (selectedCell) selectedCell.classList.add('selected');
+    // アクティブ選択表示
+    document.querySelectorAll('.student-item').forEach(el => el.classList.remove('selected'));
+    const targetItem = document.getElementById(`item-${studentId}`);
+    if (targetItem) targetItem.classList.add('selected');
 
-    document.getElementById("historyTitle").innerText = `カルテ: ${studentId}`;
-    
+    document.getElementById("historyTitle").innerText = `📝 カルテ詳細: ${studentId}`;
+
     // スピナー表示
     document.getElementById("historyArea").innerHTML = `
-        <div class="app-empty-state">
+        <div class="empty-state">
             <div class="spinner"></div>
-            <div class="app-empty-text">データを同期中...</div>
+            <div class="empty-text">${studentId} のカルテを読み込み中...</div>
         </div>
     `;
 
     fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
     .then(response => response.json())
     .then(data => {
-        let html = `<div class="history-thread">`;
+        let html = `<div class="history-stack">`;
 
-        data.forEach((log, index) => {
+        data.forEach((log, i) => {
             let d = new Date(log.date);
             let dateStr = d.toLocaleDateString("ja-JP", { year: 'numeric', month: '2-digit', day: '2-digit' }) + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
 
             html += `
-            <div class="history-bubble">
+            <div class="history-card">
                 <div class="history-header">
-                    <span class="teacher-tag">👨‍🏫 ${log.teacher} 先生</span>
-                    <span class="date-tag">${dateStr}</span>
+                    <span class="history-teacher">👨‍🏫 ${log.teacher} 先生</span>
+                    <span class="history-date">${dateStr}</span>
                 </div>
-                <div class="history-content">
-                    個別指導の実施が記録されました。
+                <div class="history-body">
+                    個別指導の記録が保存されています。
                 </div>
             </div>
             `;
@@ -482,9 +518,9 @@ function showHistory(studentId) {
     })
     .catch(error => {
         document.getElementById("historyArea").innerHTML = `
-            <div class="app-empty-state" style="color: #ff3b30;">
-                <div class="app-empty-icon">⚠️</div>
-                <div class="app-empty-text">通信エラーが発生しました</div>
+            <div class="empty-state" style="color: #ef4444;">
+                <div class="empty-icon">⚠️</div>
+                <div class="empty-text">データ取得に失敗しました。<br>同期ボタンをお試しください。</div>
             </div>
         `;
     });
