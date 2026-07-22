@@ -128,7 +128,6 @@ const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJ
 
 loadSummary();
 
-// 更新ボタン
 function refreshData(){
     loadSummary();
     let now = new Date();
@@ -150,13 +149,12 @@ function loadSummary(){
         for(let name in data){
             students.push({
                 name: name,
-                count: data[name]
+                count: Number(data[name]) || 0
             });
         }
 
         const sortType = document.getElementById("sortSelect").value;
 
-        // 面接回数順（多い順）
         if(sortType == "count"){
             students.sort(function(a, b){
                 if(b.count !== a.count){
@@ -165,7 +163,6 @@ function loadSummary(){
                 return a.name.localeCompare(b.name, undefined, {numeric: true});
             });
         }
-        // 生徒ID順（24i01 〜 24i33 を抽出して正しく並べる）
         else{
             students.sort(function(a, b){
                 const matchA = a.name.match(/\d+[a-zA-Z]\d+/);
@@ -182,7 +179,7 @@ function loadSummary(){
             html += `
             <tr>
                 <td>
-                    <span class="student-link" onclick="showHistory('${student.name}')">
+                    <span class="student-link" onclick="showHistory('${student.student.name || student.name}')">
                         ${student.name}
                     </span>
                 </td>
