@@ -1,583 +1,409 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
-
 <meta charset="UTF-8">
-<title>面接練習回数管理システム</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 EdTechダッシュボード // 児童生徒指導アナリティクス</title>
 
 <style>
-
-body{
-    font-family:sans-serif;
-    margin:30px;
-    max-width:1400px;
+/* 共通リセット＆モダンフォント */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.container{
-    display:flex;
-    flex-direction:row;
-    align-items:flex-start;
-    gap:30px;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #0f172a; /* ダークネイビー背景 */
+    color: #f8fafc;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.left-panel{
-    flex:1;
-    min-width:400px;
+/* ヘッダー */
+.app-header {
+    height: 56px;
+    background-color: #1e293b;
+    border-bottom: 1px solid #334155;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
 }
 
-.right-panel{
-    flex:1;
-    min-width:400px;
+.brand {
+    font-size: 16px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-table{
-    border-collapse:collapse;
-    width:100%;
+.btn-sync {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-th,td{
-    border:1px solid #000;
-    padding:10px;
-    text-align:center;
+/* メインコンテンツエリア */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    overflow: hidden;
 }
 
-th{
-    background:#eeeeee;
+/* 上部KPIサマリーカード */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    flex-shrink: 0;
 }
 
-.student-link{
-    color:blue;
-    cursor:pointer;
-    text-decoration:underline;
+.kpi-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.student-link:hover{
-    color:red;
+.kpi-title {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 4px;
 }
 
-#historyArea{
-    border:1px solid #ccc;
-    padding:15px;
-    min-height:300px;
-    background:#fafafa;
+.kpi-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f8fafc;
 }
 
-.sortArea{
-    margin-bottom:15px;
+.kpi-chart-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
 }
 
-select{
-    padding:5px;
-    font-size:16px;
+/* 下部メイン2カラムワークスペース */
+.workspace-row {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
 }
 
-button{
-
-    padding:6px 15px;
-
-    font-size:16px;
-
-    margin-left:15px;
-
-    cursor:pointer;
-
+.panel {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-button:hover{
-
-    background:#eeeeee;
-
+.panel-left {
+    width: 380px;
 }
 
-#updateTime{
-
-    margin-top:10px;
-
-    color:#555;
-
+.panel-right {
+    flex: 1;
 }
 
+.panel-header {
+    padding: 12px 16px;
+    background-color: #0f172a;
+    border-bottom: 1px solid #334155;
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+/* 名簿リストカード */
+.student-row-card {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.15s;
+}
+
+.student-row-card:hover {
+    border-color: #38bdf8;
+    transform: translateX(2px);
+}
+
+.student-row-card.selected {
+    border-color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.08);
+}
+
+.student-id-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+.badge-normal { background-color: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+.badge-warning { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.badge-danger { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+/* 右側カルテ詳細 */
+.timeline-item {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #38bdf8;
+    border-radius: 8px 0 0 8px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.timeline-content {
+    font-size: 13px;
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+
+.placeholder-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #64748b;
+    text-align: center;
+}
+
+/* カスタムスクロールバー */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1e293b; }
+::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
 </style>
 
 </head>
 
-
 <body>
 
-
-<div class="container">
-
-
-<div class="left-panel">
-
-
-<h1>面接練習回数一覧</h1>
-
-
-<div class="sortArea">
-
-
-<label for="sortSelect">
-並び替え：
-</label>
-
-
-<select id="sortSelect" onchange="loadSummary()">
-
-
-
-<option value="count">
-面接回数順
-</option>
-
-
-
-<option value="id">
-生徒ID順
-</option>
-
-
-
-</select>
-
-
-<button onclick="refreshData()">
-
-🔄 更新
-
-</button>
-
-
-<p id="updateTime">
-
-</p>
-
-
+<!-- アプリヘッダー -->
+<div class="app-header">
+    <div class="brand">
+        <span>⚡</span>
+        <span>EdTech カルテ・アナリティクス</span>
+    </div>
+    <button class="btn-sync" onclick="loadSummary()">⚡ リアルタイム同期</button>
 </div>
 
+<!-- メインコンテンツ -->
+<div class="main-container">
 
+    <!-- 上部サマリーKPI -->
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <div>
+                <div class="kpi-title">登録対象生徒</div>
+                <div class="kpi-value" id="kpiTotalStudents">-</div>
+            </div>
+            <div class="kpi-chart-icon">👥</div>
+        </div>
+        <div class="kpi-card">
+            <div>
+                <div class="kpi-title">要フォロー（5回以上）</div>
+                <div class="kpi-value" style="color: #ef4444;" id="kpiAlertStudents">-</div>
+            </div>
+            <div class="kpi-chart-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">🚨</div>
+        </div>
+        <div class="kpi-card">
+            <div>
+                <div class="kpi-title">総指導累計ログ数</div>
+                <div class="kpi-value" style="color: #38bdf8;" id="kpiTotalLogs">-</div>
+            </div>
+            <div class="kpi-chart-icon">📈</div>
+        </div>
+    </div>
 
-<table id="summaryTable">
+    <!-- 2カラムワークスペース -->
+    <div class="workspace-row">
 
+        <!-- 左パネル：生徒一覧 -->
+        <div class="panel panel-left">
+            <div class="panel-header">
+                <span>📋 指導記録生徒マスター</span>
+            </div>
+            <div class="panel-body" id="studentListArea">
+                <!-- JS展開 -->
+            </div>
+        </div>
 
-<tr>
+        <!-- 右パネル：ログ詳細 -->
+        <div class="panel panel-right">
+            <div class="panel-header">
+                <span>🔍 指導アナリティクス詳細</span>
+            </div>
+            <div class="panel-body" id="historyArea">
+                <div class="placeholder-view">
+                    <div style="font-size: 32px; margin-bottom: 8px;">📊</div>
+                    <p style="font-size: 12px;">生徒を選択すると、詳細な対応アクティビティが描画されます。</p>
+                </div>
+            </div>
+        </div>
 
-<th>
-生徒ID
-</th>
-
-
-<th>
-面接回数
-</th>
-
-
-</tr>
-
-
-</table>
-
-
+    </div>
 
 </div>
-
-
-
-
-<div class="right-panel">
-
-
-<div id="historyArea">
-
-
-<h2>
-面接履歴
-</h2>
-
-
-<p>
-生徒IDをクリックしてください。
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
 
 <script>
-
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
-
-
+const API_URL = "https://script.google.com/macros/s/AKfycby5z2XHrTB4cVvK2hn2U6YJm3KmeZKnxrnIO2iUKBOqUXxOehhwX3PjUXImI59Kfgh4/exec";
 
 loadSummary();
 
-
-
-
-
-// 更新ボタン
-
-function refreshData(){
-
-
-    loadSummary();
-
-
-    let now = new Date();
-
-
-    document.getElementById("updateTime").innerHTML =
-
-    "最終更新：" +
-
-    now.toLocaleString("ja-JP");
-
-
-}
-
-
-
-
-
 function loadSummary(){
+    fetch(API_URL + "?mode=summary")
+    .then(response => response.json())
+    .then(data => {
+        let html = "";
+        let students = [];
+        let totalLogs = 0;
+        let alertCount = 0;
 
+        for(let id in data){
+            let count = data[id];
+            students.push({ id: id, count: count });
+            totalLogs += count;
+            if(count >= 5) alertCount++;
+        }
 
+        // KPI更新
+        document.getElementById("kpiTotalStudents").innerText = students.length + " 名";
+        document.getElementById("kpiAlertStudents").innerText = alertCount + " 名";
+        document.getElementById("kpiTotalLogs").innerText = totalLogs + " 件";
 
-fetch(API_URL + "?mode=summary")
+        // 件数順ソート
+        students.sort((a, b) => b.count - a.count);
 
-.then(response=>response.json())
+        students.forEach(student => {
+            let badgeClass = "badge badge-normal";
+            if(student.count >= 5) badgeClass = "badge badge-danger";
+            else if(student.count >= 2) badgeClass = "badge badge-warning";
 
+            html += `
+            <div class="student-row-card" id="card-${student.id}" onclick="showHistory('${student.id}')">
+                <span class="student-id-text">👤 ${student.id}</span>
+                <span class="${badgeClass}">${student.count} 件</span>
+            </div>
+            `;
+        });
 
-.then(data=>{
-
-
-let html = `
-
-<tr>
-
-<th>
-生徒ID
-</th>
-
-
-<th>
-面接回数
-</th>
-
-
-</tr>
-
-`;
-
-
-
-let students=[];
-
-
-
-for(let id in data){
-
-
-students.push({
-
-id:id,
-
-count:data[id]
-
-});
-
-
+        document.getElementById("studentListArea").innerHTML = html;
+    });
 }
-
-
-
-
-
-const sortType =
-
-document.getElementById("sortSelect").value;
-
-
-
-
-
-// 面接回数順
-
-if(sortType=="count"){
-
-
-students.sort(function(a,b){
-
-
-return b.count-a.count;
-
-
-});
-
-
-}
-
-
-
-
-// 生徒ID順
-
-else{
-
-
-students.sort(function(a,b){
-
-
-const numA =
-
-parseInt(a.id.match(/\d+$/)[0]);
-
-
-
-const numB =
-
-parseInt(b.id.match(/\d+$/)[0]);
-
-
-
-return numA-numB;
-
-
-
-});
-
-
-}
-
-
-
-
-
-students.forEach(function(student){
-
-
-
-html += `
-
-
-<tr>
-
-
-<td>
-
-
-<span
-
-class="student-link"
-
-onclick="showHistory('${student.id}')">
-
-
-${student.id}
-
-
-</span>
-
-
-</td>
-
-
-<td>
-
-
-${student.count}回
-
-
-</td>
-
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-
-
-document.getElementById("summaryTable").innerHTML =
-
-html;
-
-
-
-});
-
-
-}
-
-
-
-
-
-
 
 function showHistory(studentId){
-
-
-
-fetch(
-
-API_URL+
-
-"?mode=history&id="+
-
-encodeURIComponent(studentId)
-
-)
-
-
-
-.then(response=>response.json())
-
-
-
-.then(data=>{
-
-
-
-let html = `
-
-
-<h2>
-
-${studentId}
-
-の面接履歴
-
-
-</h2>
-
-
-
-<table>
-
-
-<tr>
-
-<th>
-回数
-</th>
-
-
-<th>
-日時
-</th>
-
-
-<th>
-担当先生
-</th>
-
-
-</tr>
-
-
-
-`;
-
-
-
-
-
-for(let i=0;i<data.length;i++){
-
-
-
-let date =
-
-new Date(data[i].date);
-
-
-
-
-html += `
-
-
-<tr>
-
-
-<td>
-
-${i+1}回目
-
-</td>
-
-
-
-<td>
-
-${date.toLocaleString("ja-JP")}
-
-</td>
-
-
-
-<td>
-
-${data[i].teacher}
-
-</td>
-
-
-
-</tr>
-
-
-`;
-
-
-
+    document.querySelectorAll('.student-row-card').forEach(el => el.classList.remove('selected'));
+    const target = document.getElementById(`card-${studentId}`);
+    if(target) target.classList.add('selected');
+
+    document.getElementById("historyArea").innerHTML = `
+        <div class="placeholder-view">
+            <p style="font-size: 12px;">データログを解析中...</p>
+        </div>
+    `;
+
+    fetch(API_URL + "?mode=history&id=" + encodeURIComponent(studentId))
+    .then(response => response.json())
+    .then(data => {
+        let html = `
+            <div style="font-size: 14px; font-weight: bold; color: #38bdf8; margin-bottom: 16px;">
+                📊 タイムライン・アクティビティ: ${studentId}
+            </div>
+        `;
+
+        data.forEach((log, i) => {
+            let d = new Date(log.date);
+            let dateStr = d.toLocaleDateString("ja-JP") + " " + d.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
+
+            html += `
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <span>記録ID: #${i+1}</span>
+                    <span>🕒 ${dateStr}</span>
+                </div>
+                <div class="timeline-content">
+                    対応指導者：<strong>${log.teacher} 先生</strong>
+                </div>
+            </div>
+            `;
+        });
+
+        document.getElementById("historyArea").innerHTML = html;
+    });
 }
-
-
-
-
-
-html += "</table>";
-
-
-
-
-document.getElementById("historyArea").innerHTML =
-
-html;
-
-
-
-});
-
-
-
-}
-
-
-
 </script>
 
-
 </body>
-
 </html>
