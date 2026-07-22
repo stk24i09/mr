@@ -168,9 +168,8 @@ function loadSummary(){
         // 生徒ID順（24i01 〜 24i33 を抽出して正しく並べる）
         else{
             students.sort(function(a, b){
-                // 文字列の中から「24iXX」や「数字」を検出して比較
-                const matchA = a.name.match(/\d+[a-zA-Z]\d+|\d+/);
-                const matchB = b.name.match(/\d+[a-zA-Z]\d+|\d+/);
+                const matchA = a.name.match(/\d+[a-zA-Z]\d+/);
+                const matchB = b.name.match(/\d+[a-zA-Z]\d+/);
                 
                 const codeA = matchA ? matchA[0] : a.name;
                 const codeB = matchB ? matchB[0] : b.name;
