@@ -26,9 +26,17 @@ body{
     min-width:400px;
 }
 
+/* 面接練習回数一覧のタイトルを中央にする */
+.left-panel h1{
+    text-align:center;
+}
+
 .right-panel{
     flex:1;
     min-width:400px;
+
+    /* 面接履歴を少し下げる */
+    padding-top:40px;
 }
 
 table{
@@ -99,9 +107,13 @@ button:hover{
 <div class="container">
 
 
+<!-- 左側 -->
+
 <div class="left-panel">
 
-<h1>面接練習回数一覧</h1>
+<h1>
+面接練習回数一覧
+</h1>
 
 
 <div class="sortArea">
@@ -111,7 +123,7 @@ button:hover{
 </label>
 
 
-<select id="sortSelect" onchange="loadSummary()">
+<select id="sortSelect" onchange="loadSummary">
 
     <option value="id">
         生徒ID順
@@ -153,6 +165,8 @@ button:hover{
 </div>
 
 
+
+<!-- 右側 -->
 
 <div class="right-panel">
 
@@ -210,11 +224,6 @@ function refreshData(){
 
 function getStudentId(name){
 
-    // 例
-    // 山田 太郎 24i25
-    // ↓
-    // 24i25
-
     const match =
         name.match(/\d+[a-zA-Z]\d+/);
 
@@ -224,7 +233,6 @@ function getStudentId(name){
 
     }
 
-    // IDが見つからなかった場合
     return name;
 
 }
@@ -235,22 +243,13 @@ function getStudentId(name){
 // 生徒IDを比較する
 // ========================================
 
-function compareStudentId(a, b){
+function compareStudentId(a,b){
 
     const idA =
         getStudentId(a);
 
     const idB =
         getStudentId(b);
-
-
-    // 例
-    // 24i01
-    // 24i02
-    // 24i10
-    // 24i30
-    //
-    // のように数字を考慮して並べる
 
     return idA.localeCompare(
         idB,
@@ -270,12 +269,9 @@ function compareStudentId(a, b){
 
 function loadSummary(){
 
-
 fetch(API_URL + "?mode=summary")
 
-
 .then(response => response.json())
-
 
 .then(data => {
 
@@ -327,11 +323,9 @@ const sortType =
 
 if(sortType == "count"){
 
-
     students.sort(function(a,b){
 
-
-        // ① まず面接回数を比較
+        // ① 面接回数を優先
 
         if(b.count !== a.count){
 
@@ -339,18 +333,14 @@ if(sortType == "count"){
 
         }
 
-
-        // ② 面接回数が同じなら
-        //    生徒ID順にする
+        // ② 同じ回数なら生徒ID順
 
         return compareStudentId(
             a.name,
             b.name
         );
 
-
     });
-
 
 }
 
@@ -362,7 +352,6 @@ if(sortType == "count"){
 
 else{
 
-
     students.sort(function(a,b){
 
         return compareStudentId(
@@ -371,7 +360,6 @@ else{
         );
 
     });
-
 
 }
 
@@ -382,7 +370,6 @@ else{
 // ========================================
 
 students.forEach(function(student){
-
 
 html += `
 
@@ -410,7 +397,6 @@ ${student.count}回
 </tr>
 
 `;
-
 
 });
 
@@ -443,7 +429,6 @@ document.getElementById("summaryTable").innerHTML =
 
 function showHistory(studentName){
 
-
 fetch(
 
     API_URL +
@@ -452,9 +437,7 @@ fetch(
 
 )
 
-
 .then(response => response.json())
-
 
 .then(data => {
 
@@ -508,9 +491,7 @@ if(!data || data.length === 0){
 
 else{
 
-
     for(let i = 0; i < data.length; i++){
-
 
         let date =
             new Date(data[i].date);
@@ -542,7 +523,6 @@ else{
 
 
 html += "</table>";
-
 
 
 document.getElementById("historyArea").innerHTML =
