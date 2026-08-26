@@ -15,7 +15,17 @@ body{
 }
 
 /* ========================================
-   全体
+   ページタイトル
+======================================== */
+
+.page-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+
+/* ========================================
+   左右の画面
 ======================================== */
 
 .container{
@@ -23,16 +33,6 @@ body{
     flex-direction:row;
     align-items:flex-start;
     gap:30px;
-}
-
-
-/* ========================================
-   ページタイトル
-======================================== */
-
-.page-title{
-    text-align:center;
-    margin-bottom:30px;
 }
 
 
@@ -53,9 +53,6 @@ body{
 .right-panel{
     flex:1;
     min-width:400px;
-
-    /* 生徒一覧と同じ高さから始める */
-    padding-top:0;
 }
 
 
@@ -154,7 +151,7 @@ button:hover{
 
 
 <!-- ========================================
-     ページ全体のタイトル
+     ページタイトル
 ======================================== -->
 
 <h1 class="page-title">
@@ -163,12 +160,7 @@ button:hover{
 
 
 
-<!-- ========================================
-     左右の画面
-======================================== -->
-
 <div class="container">
-
 
 
 <!-- ========================================
@@ -266,13 +258,12 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbxYvNAx8TWTezWFp9V7G2UeXYkHGehDVWDdweIhdAnLaeqfzRhbpU8CONMt7CV45tj4/exec";
 
 
-
 loadSummary();
 
 
 
 // ========================================
-// 更新ボタン
+// 更新
 // ========================================
 
 function refreshData(){
@@ -295,6 +286,16 @@ function refreshData(){
 
 function getStudentId(name){
 
+    /*
+        例：
+
+        山田 太郎 24i25
+
+        ↓
+
+        24i25
+    */
+
     const match =
         name.match(/\d+[a-zA-Z]\d+/);
 
@@ -304,6 +305,11 @@ function getStudentId(name){
 
     }
 
+    /*
+        ID形式が見つからない場合は
+        元の値をそのまま返す
+    */
+
     return name;
 
 }
@@ -311,7 +317,7 @@ function getStudentId(name){
 
 
 // ========================================
-// 生徒IDを比較する
+// 生徒ID比較
 // ========================================
 
 function compareStudentId(a,b){
@@ -367,7 +373,6 @@ let html = `
 `;
 
 
-
 let students = [];
 
 
@@ -401,7 +406,7 @@ if(sortType == "count"){
     students.sort(function(a,b){
 
 
-        // 面接回数を優先
+        // ① 面接回数を優先
 
         if(b.count !== a.count){
 
@@ -410,7 +415,7 @@ if(sortType == "count"){
         }
 
 
-        // 同じ回数なら生徒ID順
+        // ② 同じ回数なら生徒ID順
 
         return compareStudentId(
             a.name,
@@ -480,9 +485,7 @@ ${student.count}回
 
 `;
 
-
 });
-
 
 
 document.getElementById("summaryTable").innerHTML =
@@ -495,7 +498,7 @@ document.getElementById("summaryTable").innerHTML =
 .catch(error => {
 
     console.error(
-        "エラーが発生しました:",
+        "一覧取得エラー:",
         error
     );
 
@@ -507,132 +510,168 @@ document.getElementById("summaryTable").innerHTML =
 
 
 // ========================================
-// 面接履歴
+// 面接履歴表示
 // ========================================
 
 function showHistory(studentName){
 
 
-fetch(
+    // ------------------------------------
+    // ここが今回の重要な部分
+    // ------------------------------------
 
-    API_URL +
-    "?mode=history&id=" +
-    encodeURIComponent(studentName)
-
-)
-
-
-.then(response => response.json())
+    const studentId =
+        getStudentId(studentName);
 
 
-.then(data => {
+    console.log(
+        "表示名：",
+        studentName
+    );
 
-
-let html = `
-
-<h2>
-
-${studentName} の面接履歴
-
-</h2>
-
-
-<table>
-
-<tr>
-
-<th>
-    回数
-</th>
-
-<th>
-    日時
-</th>
-
-<th>
-    担当先生
-</th>
-
-</tr>
-
-`;
+    console.log(
+        "検索する生徒ID：",
+        studentId
+    );
 
 
 
-if(!data || data.length === 0){
+    fetch(
 
-    html += `
+        API_URL +
+        "?mode=history&id=" +
+        encodeURIComponent(studentId)
 
-    <tr>
-
-    <td colspan="3">
-
-        まだ面接練習の記録はありません。
-
-    </td>
-
-    </tr>
-
-    `;
-
-}
+    )
 
 
-else{
+    .then(response => response.json())
 
 
-    for(let i = 0; i < data.length; i++){
+    .then(data => {
 
 
-        let date =
-            new Date(data[i].date);
+        let html = `
+
+        <h2>
+            ${studentName} の面接履歴
+        </h2>
 
 
-        html += `
+        <table>
 
         <tr>
 
-        <td>
-            ${i+1}回目
-        </td>
+        <th>
+            回数
+        </th>
 
-        <td>
-            ${date.toLocaleString("ja-JP")}
-        </td>
+        <th>
+            日時
+        </th>
 
-        <td>
-            ${data[i].teacher}
-        </td>
+        <th>
+            担当先生
+        </th>
 
         </tr>
 
         `;
 
-    }
-
-}
 
 
-
-html += "</table>";
-
+        if(!data || data.length === 0){
 
 
-document.getElementById("historyArea").innerHTML =
-    html;
+            html += `
+
+            <tr>
+
+            <td colspan="3">
+
+                まだ面接練習の記録はありません。
+
+            </td>
+
+            </tr>
+
+            `;
 
 
-})
+        }
 
 
-.catch(error => {
+        else{
 
-    console.error(
-        "履歴取得エラー:",
-        error
-    );
 
-});
+            for(
+                let i = 0;
+                i < data.length;
+                i++
+            ){
+
+
+                let date =
+                    new Date(data[i].date);
+
+
+                html += `
+
+                <tr>
+
+                <td>
+                    ${i+1}回目
+                </td>
+
+                <td>
+                    ${date.toLocaleString("ja-JP")}
+                </td>
+
+                <td>
+                    ${data[i].teacher}
+                </td>
+
+                </tr>
+
+                `;
+
+            }
+
+
+        }
+
+
+        html += "</table>";
+
+
+        document.getElementById("historyArea").innerHTML =
+            html;
+
+
+    })
+
+
+    .catch(error => {
+
+        console.error(
+            "履歴取得エラー:",
+            error
+        );
+
+
+        document.getElementById("historyArea").innerHTML = `
+
+        <h2>
+            面接履歴
+        </h2>
+
+        <p>
+            履歴の取得中にエラーが発生しました。
+        </p>
+
+        `;
+
+    });
 
 
 }
