@@ -14,6 +14,10 @@ body{
     max-width:1400px;
 }
 
+/* ========================================
+   全体
+======================================== */
+
 .container{
     display:flex;
     flex-direction:row;
@@ -21,23 +25,43 @@ body{
     gap:30px;
 }
 
+
+/* ========================================
+   ページタイトル
+======================================== */
+
+.page-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+
+/* ========================================
+   左側
+======================================== */
+
 .left-panel{
     flex:1;
     min-width:400px;
 }
 
-/* 面接練習回数一覧のタイトルを中央にする */
-.left-panel h1{
-    text-align:center;
-}
+
+/* ========================================
+   右側
+======================================== */
 
 .right-panel{
     flex:1;
     min-width:400px;
 
-    /* 面接履歴を少し下げる */
-    padding-top:40px;
+    /* 生徒一覧と同じ高さから始める */
+    padding-top:0;
 }
+
+
+/* ========================================
+   テーブル
+======================================== */
 
 table{
     border-collapse:collapse;
@@ -54,6 +78,11 @@ th{
     background:#eeeeee;
 }
 
+
+/* ========================================
+   生徒リンク
+======================================== */
+
 .student-link{
     color:blue;
     cursor:pointer;
@@ -64,12 +93,22 @@ th{
     color:red;
 }
 
+
+/* ========================================
+   面接履歴
+======================================== */
+
 #historyArea{
     border:1px solid #ccc;
     padding:15px;
     min-height:300px;
     background:#fafafa;
 }
+
+
+/* ========================================
+   並び替え
+======================================== */
 
 .sortArea{
     margin-bottom:15px;
@@ -79,6 +118,11 @@ select{
     padding:5px;
     font-size:16px;
 }
+
+
+/* ========================================
+   更新ボタン
+======================================== */
 
 button{
     padding:6px 15px;
@@ -90,6 +134,11 @@ button{
 button:hover{
     background:#eeeeee;
 }
+
+
+/* ========================================
+   更新時刻
+======================================== */
 
 #updateTime{
     margin-top:10px;
@@ -104,26 +153,39 @@ button:hover{
 <body>
 
 
+<!-- ========================================
+     ページ全体のタイトル
+======================================== -->
+
+<h1 class="page-title">
+    面接練習回数一覧
+</h1>
+
+
+
+<!-- ========================================
+     左右の画面
+======================================== -->
+
 <div class="container">
 
 
-<!-- 左側 -->
+
+<!-- ========================================
+     左側：生徒一覧
+======================================== -->
 
 <div class="left-panel">
-
-<h1>
-面接練習回数一覧
-</h1>
 
 
 <div class="sortArea">
 
 <label for="sortSelect">
-並び替え：
+    並び替え：
 </label>
 
 
-<select id="sortSelect" onchange="loadSummary">
+<select id="sortSelect" onchange="loadSummary()">
 
     <option value="id">
         生徒ID順
@@ -146,38 +208,42 @@ button:hover{
 </div>
 
 
+
 <table id="summaryTable">
 
 <tr>
 
 <th>
-生徒名 / ID
+    生徒名 / ID
 </th>
 
 <th>
-面接回数
+    面接回数
 </th>
 
 </tr>
 
 </table>
 
+
 </div>
 
 
 
-<!-- 右側 -->
+<!-- ========================================
+     右側：面接履歴
+======================================== -->
 
 <div class="right-panel">
 
 <div id="historyArea">
 
 <h2>
-面接履歴
+    面接履歴
 </h2>
 
 <p>
-生徒名をクリックしてください。
+    生徒名をクリックしてください。
 </p>
 
 </div>
@@ -192,8 +258,13 @@ button:hover{
 <script>
 
 
+// ========================================
+// API
+// ========================================
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbxYvNAx8TWTezWFp9V7G2UeXYkHGehDVWDdweIhdAnLaeqfzRhbpU8CONMt7CV45tj4/exec";
+
 
 
 loadSummary();
@@ -264,14 +335,17 @@ function compareStudentId(a,b){
 
 
 // ========================================
-// 面接回数一覧を読み込む
+// 面接回数一覧
 // ========================================
 
 function loadSummary(){
 
+
 fetch(API_URL + "?mode=summary")
 
+
 .then(response => response.json())
+
 
 .then(data => {
 
@@ -281,11 +355,11 @@ let html = `
 <tr>
 
 <th>
-生徒名 / ID
+    生徒名 / ID
 </th>
 
 <th>
-面接回数
+    面接回数
 </th>
 
 </tr>
@@ -323,9 +397,11 @@ const sortType =
 
 if(sortType == "count"){
 
+
     students.sort(function(a,b){
 
-        // ① 面接回数を優先
+
+        // 面接回数を優先
 
         if(b.count !== a.count){
 
@@ -333,14 +409,17 @@ if(sortType == "count"){
 
         }
 
-        // ② 同じ回数なら生徒ID順
+
+        // 同じ回数なら生徒ID順
 
         return compareStudentId(
             a.name,
             b.name
         );
 
+
     });
+
 
 }
 
@@ -352,6 +431,7 @@ if(sortType == "count"){
 
 else{
 
+
     students.sort(function(a,b){
 
         return compareStudentId(
@@ -361,15 +441,17 @@ else{
 
     });
 
+
 }
 
 
 
 // ========================================
-// テーブル生成
+// テーブル作成
 // ========================================
 
 students.forEach(function(student){
+
 
 html += `
 
@@ -398,6 +480,7 @@ ${student.count}回
 
 `;
 
+
 });
 
 
@@ -424,10 +507,11 @@ document.getElementById("summaryTable").innerHTML =
 
 
 // ========================================
-// 面接履歴を表示
+// 面接履歴
 // ========================================
 
 function showHistory(studentName){
+
 
 fetch(
 
@@ -437,7 +521,9 @@ fetch(
 
 )
 
+
 .then(response => response.json())
+
 
 .then(data => {
 
@@ -445,23 +531,26 @@ fetch(
 let html = `
 
 <h2>
+
 ${studentName} の面接履歴
+
 </h2>
+
 
 <table>
 
 <tr>
 
 <th>
-回数
+    回数
 </th>
 
 <th>
-日時
+    日時
 </th>
 
 <th>
-担当先生
+    担当先生
 </th>
 
 </tr>
@@ -478,7 +567,7 @@ if(!data || data.length === 0){
 
     <td colspan="3">
 
-    まだ面接練習の記録はありません。
+        まだ面接練習の記録はありません。
 
     </td>
 
@@ -491,7 +580,9 @@ if(!data || data.length === 0){
 
 else{
 
+
     for(let i = 0; i < data.length; i++){
+
 
         let date =
             new Date(data[i].date);
@@ -502,15 +593,15 @@ else{
         <tr>
 
         <td>
-        ${i+1}回目
+            ${i+1}回目
         </td>
 
         <td>
-        ${date.toLocaleString("ja-JP")}
+            ${date.toLocaleString("ja-JP")}
         </td>
 
         <td>
-        ${data[i].teacher}
+            ${data[i].teacher}
         </td>
 
         </tr>
@@ -522,7 +613,9 @@ else{
 }
 
 
+
 html += "</table>";
+
 
 
 document.getElementById("historyArea").innerHTML =
