@@ -304,6 +304,10 @@ function refreshData(){
 function loadSummary(){
 
 
+    // ====================================
+    // 面接回数と試験日を取得
+    // ====================================
+
     Promise.all([
 
         fetch(
@@ -322,7 +326,12 @@ function loadSummary(){
     .then(function(results){
 
 
+        // 面接回数
+
         const data = results[0];
+
+
+        // 試験日
 
         const examDates = results[1];
 
@@ -363,6 +372,8 @@ function loadSummary(){
 
         for(let name in data){
 
+
+            // 生徒IDを取得
 
             const idMatch =
                 name.match(/\d+[a-zA-Z]\d+/);
@@ -413,12 +424,17 @@ function loadSummary(){
             students.sort(function(a,b){
 
 
+                // 面接回数が違う場合
+
                 if(b.count !== a.count){
 
                     return b.count - a.count;
 
                 }
 
+
+                // 面接回数が同じ場合
+                // 生徒ID順
 
                 return a.id.localeCompare(
                     b.id,
@@ -463,6 +479,10 @@ function loadSummary(){
         students.forEach(function(student){
 
 
+            // ==================================
+            // 試験日
+            // ==================================
+
             let examDateText =
                 student.examDate !== ""
                     ? student.examDate
@@ -474,16 +494,25 @@ function loadSummary(){
 
             <tr>
 
+
+                <!-- 試験日 -->
+
                 <td>
                     ${examDateText}
                 </td>
 
 
+
+                <!-- 生徒名 / ID -->
+
                 <td>
 
                     <span
                         class="student-link"
-                        onclick="showHistory('${student.id}')"
+                        onclick="showHistory(
+                            '${student.id}',
+                            '${student.name}'
+                        )"
                     >
 
                         ${student.name}
@@ -493,11 +522,15 @@ function loadSummary(){
                 </td>
 
 
+
+                <!-- 面接回数 -->
+
                 <td>
 
                     ${student.count}回
 
                 </td>
+
 
             </tr>
 
@@ -536,8 +569,15 @@ function loadSummary(){
 // 面接履歴表示
 // ========================================
 
-function showHistory(studentId){
+function showHistory(
+    studentId,
+    studentName
+){
 
+
+    // =====================================
+    // IDを使って履歴を取得
+    // =====================================
 
     fetch(
 
@@ -554,10 +594,14 @@ function showHistory(studentId){
     .then(function(data){
 
 
+        // ==================================
+        // 履歴画面
+        // ==================================
+
         let html = `
 
         <h2>
-            ${studentId} の面接履歴
+            ${studentName} の面接履歴
         </h2>
 
 
@@ -583,6 +627,10 @@ function showHistory(studentId){
 
 
 
+        // ==================================
+        // 履歴がない場合
+        // ==================================
+
         if(!data || data.length === 0){
 
             html += `
@@ -602,6 +650,11 @@ function showHistory(studentId){
         }
 
 
+
+        // ==================================
+        // 履歴がある場合
+        // ==================================
+
         else{
 
             for(
@@ -610,8 +663,10 @@ function showHistory(studentId){
                 i++
             ){
 
+
                 let date =
                     new Date(data[i].date);
+
 
 
                 html += `
@@ -641,12 +696,19 @@ function showHistory(studentId){
         }
 
 
+
         html += "</table>";
 
+
+
+        // ==================================
+        // 右側へ表示
+        // ==================================
 
         document.getElementById(
             "historyArea"
         ).innerHTML = html;
+
 
     })
 
