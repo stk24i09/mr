@@ -133,6 +133,15 @@ button:hover{
     color:#555;
 }
 
+
+/* ========================================
+   試験日終了
+======================================== */
+
+.exam-finished{
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -181,42 +190,33 @@ button:hover{
                 onchange="loadSummary()"
             >
 
-                <!-- =================================
-                     生徒ID
-                ================================== -->
+                <!-- 生徒ID -->
 
                 <option value="id-asc">
                     生徒ID順（昇順）
                 </option>
-
 
                 <option value="id-desc">
                     生徒ID順（降順）
                 </option>
 
 
-                <!-- =================================
-                     面接回数
-                ================================== -->
+                <!-- 面接回数 -->
 
                 <option value="count-desc">
                     回数順（多）
                 </option>
-
 
                 <option value="count-asc">
                     回数順（少）
                 </option>
 
 
-                <!-- =================================
-                     試験日
-                ================================== -->
+                <!-- 試験日 -->
 
                 <option value="exam-asc">
                     試験日順（近い順）
                 </option>
-
 
                 <option value="exam-desc">
                     試験日順（遠い順）
@@ -305,7 +305,7 @@ const API_URL =
 
 
 // ========================================
-// ページを開いたときに読み込む
+// ページを開いたとき
 // ========================================
 
 loadSummary();
@@ -338,7 +338,6 @@ function getToday(){
 
     const today = new Date();
 
-    // 時刻を0時にする
     today.setHours(0,0,0,0);
 
     return today;
@@ -348,22 +347,29 @@ function getToday(){
 
 
 // ========================================
-// 試験日を日付として取得
+// 試験日をDateに変換
 // ========================================
 
-function getExamDateValue(dateText){
+function getExamDate(dateText){
 
-    // 未設定の場合
-    if(!dateText || dateText === "未設定"){
+    if(
+        !dateText ||
+        dateText === "未設定"
+    ){
 
         return null;
 
     }
 
 
-    // ====================================
-    // yyyy/MM/dd を yyyy-MM-dd に変更
-    // ====================================
+    /*
+     * GASから
+     *
+     * 2026/09/03
+     *
+     * の形式で送られてくるため、
+     * / で分割してDateを作成する
+     */
 
     const parts = dateText.split("/");
 
@@ -403,23 +409,50 @@ function getExamDateValue(dateText){
     date.setHours(0,0,0,0);
 
 
-    return date.getTime();
+    return date;
 
 }
 
 
 
 // ========================================
-// 今日から試験日までの日数を取得
+// 試験日が過ぎているか確認
+// ========================================
+
+function isExamFinished(dateText){
+
+    const examDate =
+        getExamDate(dateText);
+
+
+    if(examDate === null){
+
+        return false;
+
+    }
+
+
+    const today =
+        getToday();
+
+
+    return examDate.getTime()
+        < today.getTime();
+
+}
+
+
+
+// ========================================
+// 今日から試験日までの日数
 // ========================================
 
 function getDaysUntilExam(dateText){
 
     const examDate =
-        getExamDateValue(dateText);
+        getExamDate(dateText);
 
 
-    // 試験日未設定
     if(examDate === null){
 
         return null;
@@ -428,7 +461,7 @@ function getDaysUntilExam(dateText){
 
 
     const today =
-        getToday().getTime();
+        getToday();
 
 
     const oneDay =
@@ -436,7 +469,31 @@ function getDaysUntilExam(dateText){
 
 
     return Math.round(
-        (examDate - today) / oneDay
+        (
+            examDate.getTime()
+            -
+            today.getTime()
+        )
+        /
+        oneDay
+    );
+
+}
+
+
+
+// ========================================
+// 生徒IDを比較
+// ========================================
+
+function compareStudentId(a,b){
+
+    return a.id.localeCompare(
+        b.id,
+        undefined,
+        {
+            numeric:true
+        }
     );
 
 }
@@ -461,7 +518,6 @@ function loadSummary(){
         )
         .then(response => response.json()),
 
-
         fetch(
             API_URL + "?mode=examDates"
         )
@@ -473,14 +529,12 @@ function loadSummary(){
     .then(function(results){
 
 
-        // 面接回数
+        const data =
+            results[0];
 
-        const data = results[0];
 
-
-        // 試験日
-
-        const examDates = results[1];
+        const examDates =
+            results[1];
 
 
 
@@ -520,9 +574,7 @@ function loadSummary(){
         for(let name in data){
 
 
-            // ==================================
             // 生徒IDを取得
-            // ==================================
 
             const idMatch =
                 name.match(/\d+[a-zA-Z]\d+/);
@@ -535,17 +587,27 @@ function loadSummary(){
 
 
 
+            const examDate =
+                examDates[studentId] || "";
+
+
+
             students.push({
 
-                name: name,
+                name:name,
 
-                id: studentId,
+                id:studentId,
 
                 count:
                     Number(data[name]) || 0,
 
-                examDate:
-                    examDates[studentId] || ""
+                examDate:examDate,
+
+                finished:
+                    isExamFinished(examDate),
+
+                daysUntil:
+                    getDaysUntilExam(examDate)
 
             });
 
@@ -565,20 +627,14 @@ function loadSummary(){
 
 
         // ==================================
-        // 生徒ID順（昇順）
+        // ID昇順
         // ==================================
 
         if(sortType === "id-asc"){
 
             students.sort(function(a,b){
 
-                return a.id.localeCompare(
-                    b.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                return compareStudentId(a,b);
 
             });
 
@@ -587,20 +643,14 @@ function loadSummary(){
 
 
         // ==================================
-        // 生徒ID順（降順）
+        // ID降順
         // ==================================
 
         else if(sortType === "id-desc"){
 
             students.sort(function(a,b){
 
-                return b.id.localeCompare(
-                    a.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                return compareStudentId(b,a);
 
             });
 
@@ -609,15 +659,12 @@ function loadSummary(){
 
 
         // ==================================
-        // 面接回数順（多い順）
+        // 回数多い順
         // ==================================
 
         else if(sortType === "count-desc"){
 
             students.sort(function(a,b){
-
-
-                // 面接回数が違う場合
 
                 if(b.count !== a.count){
 
@@ -626,15 +673,7 @@ function loadSummary(){
                 }
 
 
-                // 回数が同じならID順
-
-                return a.id.localeCompare(
-                    b.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                return compareStudentId(a,b);
 
             });
 
@@ -643,15 +682,12 @@ function loadSummary(){
 
 
         // ==================================
-        // 面接回数順（少ない順）
+        // 回数少ない順
         // ==================================
 
         else if(sortType === "count-asc"){
 
             students.sort(function(a,b){
-
-
-                // 面接回数が違う場合
 
                 if(a.count !== b.count){
 
@@ -660,15 +696,7 @@ function loadSummary(){
                 }
 
 
-                // 回数が同じならID順
-
-                return a.id.localeCompare(
-                    b.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                return compareStudentId(a,b);
 
             });
 
@@ -677,7 +705,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 試験日順（今日から近い順）
+        // 試験日近い順
         // ==================================
 
         else if(sortType === "exam-asc"){
@@ -685,82 +713,125 @@ function loadSummary(){
             students.sort(function(a,b){
 
 
-                const daysA =
-                    getDaysUntilExam(
-                        a.examDate
-                    );
-
-
-                const daysB =
-                    getDaysUntilExam(
-                        b.examDate
-                    );
-
-
-                // ==================================
-                // 両方未設定
-                // ==================================
+                /*
+                 * 未設定は最後
+                 */
 
                 if(
-                    daysA === null &&
-                    daysB === null
+                    a.daysUntil === null &&
+                    b.daysUntil === null
                 ){
 
-                    return a.id.localeCompare(
-                        b.id,
-                        undefined,
-                        {
-                            numeric:true
-                        }
-                    );
+                    return compareStudentId(a,b);
 
                 }
 
 
-                // ==================================
-                // Aだけ未設定
-                // ==================================
-
-                if(daysA === null){
+                if(a.daysUntil === null){
 
                     return 1;
 
                 }
 
 
-                // ==================================
-                // Bだけ未設定
-                // ==================================
-
-                if(daysB === null){
+                if(b.daysUntil === null){
 
                     return -1;
 
                 }
 
 
-                // ==================================
-                // 今日からの日数が少ない順
-                // ==================================
 
-                if(daysA !== daysB){
+                /*
+                 * =================================
+                 * まだ試験日前の生徒
+                 * =================================
+                 *
+                 * 未来の日付を優先
+                 */
 
-                    return daysA - daysB;
+                if(
+                    !a.finished &&
+                    !b.finished
+                ){
+
+                    if(
+                        a.daysUntil !==
+                        b.daysUntil
+                    ){
+
+                        return (
+                            a.daysUntil
+                            -
+                            b.daysUntil
+                        );
+
+                    }
+
+                    return compareStudentId(a,b);
 
                 }
 
 
-                // ==================================
-                // 同じ日ならID順
-                // ==================================
 
-                return a.id.localeCompare(
-                    b.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                /*
+                 * =================================
+                 * Aが未来、Bが過去
+                 * =================================
+                 */
+
+                if(
+                    !a.finished &&
+                    b.finished
+                ){
+
+                    return -1;
+
+                }
+
+
+
+                /*
+                 * =================================
+                 * Aが過去、Bが未来
+                 * =================================
+                 */
+
+                if(
+                    a.finished &&
+                    !b.finished
+                ){
+
+                    return 1;
+
+                }
+
+
+
+                /*
+                 * =================================
+                 * 両方とも過去
+                 * =================================
+                 *
+                 * 過去の中では、
+                 * 最近試験日が過ぎた人を上
+                 */
+
+                if(
+                    a.daysUntil !==
+                    b.daysUntil
+                ){
+
+                    return (
+                        b.daysUntil
+                        -
+                        a.daysUntil
+                    );
+
+                }
+
+
+                return compareStudentId(a,b);
 
             });
 
@@ -769,7 +840,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 試験日順（今日から遠い順）
+        // 試験日遠い順
         // ==================================
 
         else if(sortType === "exam-desc"){
@@ -777,82 +848,122 @@ function loadSummary(){
             students.sort(function(a,b){
 
 
-                const daysA =
-                    getDaysUntilExam(
-                        a.examDate
-                    );
-
-
-                const daysB =
-                    getDaysUntilExam(
-                        b.examDate
-                    );
-
-
-                // ==================================
-                // 両方未設定
-                // ==================================
+                /*
+                 * 未設定は最後
+                 */
 
                 if(
-                    daysA === null &&
-                    daysB === null
+                    a.daysUntil === null &&
+                    b.daysUntil === null
                 ){
 
-                    return a.id.localeCompare(
-                        b.id,
-                        undefined,
-                        {
-                            numeric:true
-                        }
-                    );
+                    return compareStudentId(a,b);
 
                 }
 
 
-                // ==================================
-                // Aだけ未設定
-                // ==================================
-
-                if(daysA === null){
+                if(a.daysUntil === null){
 
                     return 1;
 
                 }
 
 
-                // ==================================
-                // Bだけ未設定
-                // ==================================
-
-                if(daysB === null){
+                if(b.daysUntil === null){
 
                     return -1;
 
                 }
 
 
-                // ==================================
-                // 今日からの日数が多い順
-                // ==================================
 
-                if(daysA !== daysB){
+                /*
+                 * =================================
+                 * まだ試験日前の生徒
+                 * =================================
+                 *
+                 * 今日から遠い人を上
+                 */
 
-                    return daysB - daysA;
+                if(
+                    !a.finished &&
+                    !b.finished
+                ){
+
+                    if(
+                        a.daysUntil !==
+                        b.daysUntil
+                    ){
+
+                        return (
+                            b.daysUntil
+                            -
+                            a.daysUntil
+                        );
+
+                    }
+
+                    return compareStudentId(a,b);
 
                 }
 
 
-                // ==================================
-                // 同じ日ならID順
-                // ==================================
 
-                return a.id.localeCompare(
-                    b.id,
-                    undefined,
-                    {
-                        numeric:true
-                    }
-                );
+                /*
+                 * =================================
+                 * Aが未来、Bが過去
+                 * =================================
+                 */
+
+                if(
+                    !a.finished &&
+                    b.finished
+                ){
+
+                    return -1;
+
+                }
+
+
+
+                /*
+                 * =================================
+                 * Aが過去、Bが未来
+                 * =================================
+                 */
+
+                if(
+                    a.finished &&
+                    !b.finished
+                ){
+
+                    return 1;
+
+                }
+
+
+
+                /*
+                 * =================================
+                 * 両方とも過去
+                 * =================================
+                 */
+
+                if(
+                    a.daysUntil !==
+                    b.daysUntil
+                ){
+
+                    return (
+                        b.daysUntil
+                        -
+                        a.daysUntil
+                    );
+
+                }
+
+
+                return compareStudentId(a,b);
 
             });
 
@@ -868,13 +979,52 @@ function loadSummary(){
 
 
             // ==================================
-            // 試験日
+            // 試験日表示
             // ==================================
 
-            let examDateText =
-                student.examDate !== ""
-                    ? student.examDate
-                    : "未設定";
+            let examDateHtml = "";
+
+
+
+            // 試験日未設定
+
+            if(student.examDate === ""){
+
+                examDateHtml =
+                    "未設定";
+
+            }
+
+
+            // ==================================
+            // 試験日が過ぎている
+            // ==================================
+
+            else if(student.finished){
+
+                examDateHtml = `
+
+                    <span class="exam-finished">
+
+                        ${student.examDate} ✓
+
+                    </span>
+
+                `;
+
+            }
+
+
+            // ==================================
+            // 試験日前
+            // ==================================
+
+            else{
+
+                examDateHtml =
+                    student.examDate;
+
+            }
 
 
 
@@ -882,16 +1032,10 @@ function loadSummary(){
 
             <tr>
 
-
-                <!-- 試験日 -->
-
                 <td>
-                    ${examDateText}
+                    ${examDateHtml}
                 </td>
 
-
-
-                <!-- 生徒名 / ID -->
 
                 <td>
 
@@ -910,15 +1054,11 @@ function loadSummary(){
                 </td>
 
 
-
-                <!-- 面接回数 -->
-
                 <td>
 
                     ${student.count}回
 
                 </td>
-
 
             </tr>
 
@@ -963,10 +1103,6 @@ function showHistory(
 ){
 
 
-    // =====================================
-    // IDを使って履歴を取得
-    // =====================================
-
     fetch(
 
         API_URL +
@@ -981,10 +1117,6 @@ function showHistory(
 
     .then(function(data){
 
-
-        // ==================================
-        // 履歴画面
-        // ==================================
 
         let html = `
 
@@ -1016,10 +1148,13 @@ function showHistory(
 
 
         // ==================================
-        // 履歴がない場合
+        // 履歴なし
         // ==================================
 
-        if(!data || data.length === 0){
+        if(
+            !data ||
+            data.length === 0
+        ){
 
             html += `
 
@@ -1040,7 +1175,7 @@ function showHistory(
 
 
         // ==================================
-        // 履歴がある場合
+        // 履歴あり
         // ==================================
 
         else{
@@ -1050,7 +1185,6 @@ function showHistory(
                 i < data.length;
                 i++
             ){
-
 
                 let date =
                     new Date(data[i].date);
@@ -1088,10 +1222,6 @@ function showHistory(
         html += "</table>";
 
 
-
-        // ==================================
-        // 右側へ表示
-        // ==================================
 
         document.getElementById(
             "historyArea"
