@@ -9,10 +9,24 @@
 
 <style>
 
+/* ========================================
+   ページ全体
+======================================== */
+
 body{
     font-family:sans-serif;
     margin:30px;
     max-width:1400px;
+}
+
+
+/* ========================================
+   ページタイトル
+======================================== */
+
+.page-title{
+    text-align:center;
+    margin-bottom:30px;
 }
 
 
@@ -127,89 +141,115 @@ button:hover{
 <body>
 
 
+<!-- =====================================
+     ページ全体
+===================================== -->
+
 <div class="container">
 
 
-<!-- =====================================
-     左側
-===================================== -->
+    <!-- =================================
+         左側
+    ================================== -->
 
-<div class="left-panel">
-
-<h1>面接練習回数一覧</h1>
+    <div class="left-panel">
 
 
-<div class="sortArea">
+        <!-- ページタイトル -->
 
-<label for="sortSelect">
-    並び替え：
-</label>
-
-
-<select id="sortSelect" onchange="loadSummary()">
-
-    <option value="id">
-        生徒ID順
-    </option>
-
-    <option value="count">
-        面接回数順
-    </option>
-
-</select>
+        <h1 class="page-title">
+            面接練習回数一覧
+        </h1>
 
 
-<button onclick="refreshData()">
-    🔄 更新
-</button>
+        <!-- =================================
+             並び替え・更新
+        ================================== -->
+
+        <div class="sortArea">
+
+            <label for="sortSelect">
+                並び替え：
+            </label>
 
 
-<p id="updateTime"></p>
+            <select
+                id="sortSelect"
+                onchange="loadSummary()"
+            >
 
-</div>
+                <option value="id">
+                    生徒ID順
+                </option>
 
+                <option value="count">
+                    面接回数順
+                </option>
 
-
-<!-- =====================================
-     一覧表
-===================================== -->
-
-<table id="summaryTable">
-
-<tr>
-
-    <th>試験日</th>
-
-    <th>生徒名 / ID</th>
-
-    <th>面接回数</th>
-
-</tr>
-
-</table>
+            </select>
 
 
-</div>
+            <button onclick="refreshData()">
+                🔄 更新
+            </button>
+
+
+            <p id="updateTime"></p>
+
+        </div>
 
 
 
-<!-- =====================================
-     右側
-===================================== -->
+        <!-- =================================
+             生徒一覧
+        ================================== -->
 
-<div class="right-panel">
+        <table id="summaryTable">
 
-<div id="historyArea">
+            <tr>
 
-    <h2>面接履歴</h2>
+                <th>
+                    試験日
+                </th>
 
-    <p>
-        生徒名をクリックしてください。
-    </p>
+                <th>
+                    生徒名 / ID
+                </th>
 
-</div>
+                <th>
+                    面接回数
+                </th>
 
-</div>
+            </tr>
+
+        </table>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         右側
+    ================================== -->
+
+    <div class="right-panel">
+
+
+        <div id="historyArea">
+
+            <h2>
+                面接履歴
+            </h2>
+
+            <p>
+                生徒名をクリックしてください。
+            </p>
+
+        </div>
+
+
+    </div>
 
 
 </div>
@@ -227,11 +267,13 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbxYvNAx8TWTezWFp9V7G2UeXYkHGehDVWDdweIhdAnLaeqfzRhbpU8CONMt7CV45tj4/exec";
 
 
+
 // ========================================
-// 最初に読み込む
+// ページを開いたときに読み込む
 // ========================================
 
 loadSummary();
+
 
 
 // ========================================
@@ -247,7 +289,9 @@ function refreshData(){
     document.getElementById("updateTime").innerHTML =
         "最終更新：" +
         now.toLocaleString("ja-JP");
+
 }
+
 
 
 // ========================================
@@ -256,22 +300,39 @@ function refreshData(){
 
 function loadSummary(){
 
-    // 面接回数と試験日を同時取得
+
+    // ====================================
+    // 面接回数と試験日を取得
+    // ====================================
+
     Promise.all([
 
-        fetch(API_URL + "?mode=summary")
-            .then(response => response.json()),
+        fetch(
+            API_URL + "?mode=summary"
+        )
+        .then(response => response.json()),
 
-        fetch(API_URL + "?mode=examDates")
-            .then(response => response.json())
+
+        fetch(
+            API_URL + "?mode=examDates"
+        )
+        .then(response => response.json())
 
     ])
 
+
     .then(function(results){
+
+
+        // 面接回数
 
         const data = results[0];
 
+
+        // 試験日
+
         const examDates = results[1];
+
 
 
         // ==================================
@@ -282,15 +343,22 @@ function loadSummary(){
 
         <tr>
 
-            <th>試験日</th>
+            <th>
+                試験日
+            </th>
 
-            <th>生徒名 / ID</th>
+            <th>
+                生徒名 / ID
+            </th>
 
-            <th>面接回数</th>
+            <th>
+                面接回数
+            </th>
 
         </tr>
 
         `;
+
 
 
         // ==================================
@@ -302,14 +370,18 @@ function loadSummary(){
 
         for(let name in data){
 
+
             // 生徒IDを取得
+
             const idMatch =
                 name.match(/\d+[a-zA-Z]\d+/);
+
 
             const studentId =
                 idMatch
                     ? idMatch[0]
                     : name;
+
 
 
             students.push({
@@ -318,7 +390,8 @@ function loadSummary(){
 
                 id: studentId,
 
-                count: Number(data[name]) || 0,
+                count:
+                    Number(data[name]) || 0,
 
                 examDate:
                     examDates[studentId] || ""
@@ -328,12 +401,16 @@ function loadSummary(){
         }
 
 
+
         // ==================================
         // 並び替え
         // ==================================
 
         const sortType =
-            document.getElementById("sortSelect").value;
+            document.getElementById(
+                "sortSelect"
+            ).value;
+
 
 
         // ==================================
@@ -344,14 +421,19 @@ function loadSummary(){
 
             students.sort(function(a,b){
 
-                // まず面接回数
+
+                // 面接回数が違う場合
+
                 if(b.count !== a.count){
 
                     return b.count - a.count;
 
                 }
 
-                // 回数が同じなら生徒ID順
+
+                // 面接回数が同じ場合は
+                // 生徒ID順
+
                 return a.id.localeCompare(
                     b.id,
                     undefined,
@@ -363,6 +445,7 @@ function loadSummary(){
             });
 
         }
+
 
 
         // ==================================
@@ -386,28 +469,39 @@ function loadSummary(){
         }
 
 
+
         // ==================================
-        // テーブル作成
+        // テーブル生成
         // ==================================
 
         students.forEach(function(student){
 
 
+            // ==================================
             // 試験日
+            // ==================================
+
             let examDateText =
                 student.examDate !== ""
                     ? student.examDate
                     : "未設定";
 
 
+
             html += `
 
             <tr>
+
+
+                <!-- 試験日 -->
 
                 <td>
                     ${examDateText}
                 </td>
 
+
+
+                <!-- 生徒名 / ID -->
 
                 <td>
 
@@ -423,17 +517,22 @@ function loadSummary(){
                 </td>
 
 
+
+                <!-- 面接回数 -->
+
                 <td>
 
                     ${student.count}回
 
                 </td>
 
+
             </tr>
 
             `;
 
         });
+
 
 
         // ==================================
@@ -443,6 +542,7 @@ function loadSummary(){
         document.getElementById(
             "summaryTable"
         ).innerHTML = html;
+
 
     })
 
@@ -461,21 +561,30 @@ function loadSummary(){
 
 
 // ========================================
-// 面接履歴
+// 面接履歴表示
 // ========================================
 
 function showHistory(studentId){
 
+
     fetch(
+
         API_URL +
         "?mode=history&id=" +
         encodeURIComponent(studentId)
+
     )
+
 
     .then(response => response.json())
 
+
     .then(function(data){
 
+
+        // ==================================
+        // 履歴画面
+        // ==================================
 
         let html = `
 
@@ -486,21 +595,28 @@ function showHistory(studentId){
 
         <table>
 
-        <tr>
+            <tr>
 
-            <th>回数</th>
+                <th>
+                    回数
+                </th>
 
-            <th>日時</th>
+                <th>
+                    日時
+                </th>
 
-            <th>担当先生</th>
+                <th>
+                    担当先生
+                </th>
 
-        </tr>
+            </tr>
 
         `;
 
 
+
         // ==================================
-        // 履歴なし
+        // 履歴がない場合
         // ==================================
 
         if(!data || data.length === 0){
@@ -522,11 +638,13 @@ function showHistory(studentId){
         }
 
 
+
         // ==================================
-        // 履歴あり
+        // 履歴がある場合
         // ==================================
 
         else{
+
 
             for(
                 let i = 0;
@@ -534,8 +652,10 @@ function showHistory(studentId){
                 i++
             ){
 
+
                 let date =
                     new Date(data[i].date);
+
 
 
                 html += `
@@ -546,11 +666,11 @@ function showHistory(studentId){
                         ${i + 1}回目
                     </td>
 
-
                     <td>
-                        ${date.toLocaleString("ja-JP")}
+                        ${date.toLocaleString(
+                            "ja-JP"
+                        )}
                     </td>
-
 
                     <td>
                         ${data[i].teacher}
@@ -565,12 +685,19 @@ function showHistory(studentId){
         }
 
 
+
         html += "</table>";
 
+
+
+        // ==================================
+        // 画面に表示
+        // ==================================
 
         document.getElementById(
             "historyArea"
         ).innerHTML = html;
+
 
     })
 
@@ -585,6 +712,7 @@ function showHistory(studentId){
     });
 
 }
+
 
 </script>
 
