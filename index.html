@@ -9,11 +9,16 @@
 
 <style>
 
+/* ========================================
+   全体
+======================================== */
+
 body{
     font-family:sans-serif;
     margin:30px;
     max-width:1400px;
 }
+
 
 /* ========================================
    ページタイトル
@@ -87,7 +92,7 @@ body{
 
 
 /* ========================================
-   テーブル
+   生徒一覧テーブル
 ======================================== */
 
 table{
@@ -109,20 +114,23 @@ th{
 
 
 /* ========================================
-   生徒行
+   生徒ID
 ======================================== */
 
-.student-row{
+.student-id-link{
+    color:#0066cc;
+    text-decoration:underline;
     cursor:pointer;
+    font-weight:bold;
 }
 
-.student-row:hover{
-    background:#f5f5f5;
+.student-id-link:hover{
+    color:#003399;
 }
 
 
 /* ========================================
-   試験日
+   試験日終了
 ======================================== */
 
 .exam-finished{
@@ -147,17 +155,55 @@ th{
     background:#fafafa;
 }
 
-.history-item{
-    padding:10px;
-    border-bottom:1px solid #ddd;
+
+/* ========================================
+   履歴タイトル
+======================================== */
+
+.history-student-name{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
-.history-item:last-child{
-    border-bottom:none;
+
+/* ========================================
+   履歴テーブル
+======================================== */
+
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
 }
+
+.history-table th,
+.history-table td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+.history-table th{
+    background:#f2f2f2;
+}
+
+
+/* ========================================
+   履歴なし
+======================================== */
 
 .no-history{
     color:#777;
+}
+
+
+/* ========================================
+   読み込み中
+======================================== */
+
+.loading{
+    color:#555;
 }
 
 </style>
@@ -291,7 +337,7 @@ th{
         >
 
             <div class="no-history">
-                生徒を選択してください。
+                生徒IDをクリックしてください。
             </div>
 
         </div>
@@ -324,7 +370,7 @@ let students = [];
 
 
 /* ========================================
-   今日の日付を取得
+   今日の日付
 ======================================== */
 
 function getToday(){
@@ -339,6 +385,7 @@ function getToday(){
     );
 
     return today;
+
 }
 
 
@@ -493,10 +540,14 @@ function getDaysUntilExam(dateText){
 function compareStudentId(a, b){
 
     const aMatch =
-        a.id.match(/\d+[a-zA-Z](\d+)/);
+        a.id.match(
+            /\d+[a-zA-Z](\d+)/
+        );
 
     const bMatch =
-        b.id.match(/\d+[a-zA-Z](\d+)/);
+        b.id.match(
+            /\d+[a-zA-Z](\d+)/
+        );
 
 
     if(
@@ -562,9 +613,9 @@ async function loadData(){
     try{
 
 
-        /* ================================
+        /* ==================================
            面接回数取得
-        ================================= */
+        ================================== */
 
         const summaryResponse =
             await fetch(
@@ -578,9 +629,9 @@ async function loadData(){
 
 
 
-        /* ================================
+        /* ==================================
            試験日取得
-        ================================= */
+        ================================== */
 
         const examResponse =
             await fetch(
@@ -598,9 +649,9 @@ async function loadData(){
 
 
 
-        /* ================================
+        /* ==================================
            生徒データ作成
-        ================================= */
+        ================================== */
 
         for(
             const name in summary
@@ -659,9 +710,9 @@ async function loadData(){
 
 
 
-        /* ================================
+        /* ==================================
            表示
-        ================================= */
+        ================================== */
 
         renderStudents();
 
@@ -692,6 +743,7 @@ function renderStudents(){
         document.getElementById(
             "sortSelect"
         ).value;
+
 
 
     /* ====================================
@@ -828,9 +880,6 @@ function renderStudents(){
         students.sort(
             function(a,b){
 
-
-                /* 未設定 */
-
                 if(
                     a.daysUntil === null &&
                     b.daysUntil === null
@@ -953,9 +1002,6 @@ function renderStudents(){
 
         students.sort(
             function(a,b){
-
-
-                /* 未設定 */
 
                 if(
                     a.daysUntil === null &&
@@ -1091,14 +1137,10 @@ function renderStudents(){
                 );
 
 
-            tr.className =
-                "student-row";
 
-
-
-            /* ============================
+            /* ==================================
                試験日
-            ============================ */
+            ================================== */
 
             let examDateHtml;
 
@@ -1117,11 +1159,6 @@ function renderStudents(){
                 student.finished
             ){
 
-                /*
-                 * 試験日が過ぎた場合
-                 * 「✓」ではなく「✅」
-                 */
-
                 examDateHtml =
                     `<span class="exam-finished">
                         ${student.examDate} ✅
@@ -1138,9 +1175,22 @@ function renderStudents(){
 
 
 
-            /* ============================
+            /* ==================================
+               生徒名
+            ================================== */
+
+            const studentNameHtml =
+                student.name
+                .replace(
+                    student.id,
+                    ""
+                );
+
+
+
+            /* ==================================
                行の内容
-            ============================ */
+            ================================== */
 
             tr.innerHTML = `
 
@@ -1149,7 +1199,18 @@ function renderStudents(){
                 </td>
 
                 <td>
-                    ${student.name}
+
+                    ${studentNameHtml}
+
+                    <br>
+
+                    <span
+                        class="student-id-link"
+                        data-id="${student.id}"
+                    >
+                        ${student.id}
+                    </span>
+
                 </td>
 
                 <td>
@@ -1160,13 +1221,28 @@ function renderStudents(){
 
 
 
-            /* ============================
-               クリック
-            ============================ */
+            /* ==================================
+               生徒IDだけクリック可能
+            ================================== */
 
-            tr.addEventListener(
+            const idLink =
+                tr.querySelector(
+                    ".student-id-link"
+                );
+
+
+            idLink.addEventListener(
                 "click",
-                function(){
+                function(event){
+
+                    /*
+                     * 行全体のクリックではなく
+                     * 生徒IDを押したときだけ
+                     * 面接履歴を表示
+                     */
+
+                    event.stopPropagation();
+
 
                     showHistory(
                         student
@@ -1199,10 +1275,18 @@ async function showHistory(student){
         );
 
 
-    historyBox.innerHTML =
-        `<div>
+    /* ====================================
+       読み込み中
+    ==================================== */
+
+    historyBox.innerHTML = `
+
+        <div class="loading">
             ${student.name} の面接履歴を読み込み中...
-        </div>`;
+        </div>
+
+    `;
+
 
 
     try{
@@ -1222,19 +1306,13 @@ async function showHistory(student){
 
 
 
-        /* ================================
+        /* ==================================
            タイトル
-        ================================= */
+        ================================== */
 
         let html = `
 
-            <div
-                style="
-                    font-size:20px;
-                    font-weight:bold;
-                    margin-bottom:15px;
-                "
-            >
+            <div class="history-student-name">
                 ${student.name} の面接履歴
             </div>
 
@@ -1242,9 +1320,9 @@ async function showHistory(student){
 
 
 
-        /* ================================
-           履歴なし
-        ================================= */
+        /* ==================================
+           履歴がない場合
+        ================================== */
 
         if(
             history.length === 0
@@ -1262,54 +1340,87 @@ async function showHistory(student){
 
 
 
-        /* ================================
-           履歴表示
-        ================================= */
+        /* ==================================
+           履歴がある場合
+        ================================== */
 
         else{
 
+            html += `
+
+                <table class="history-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                回数
+                            </th>
+
+                            <th>
+                                日時
+                            </th>
+
+                            <th>
+                                担当先生
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+            `;
+
+
+
             history.forEach(
-                function(item){
+                function(item, index){
 
                     let dateText =
                         item.date;
 
 
-                    /* ======================
-                       日付を表示
-                    ====================== */
-
-                    if(
-                        item.date instanceof Object
-                    ){
-
-                        dateText =
-                            String(
-                                item.date
-                            );
-
-                    }
-
+                    /*
+                     * GASから日時が
+                     * 文字列として返ってくる場合
+                     * そのまま表示
+                     */
 
                     html += `
 
-                        <div class="history-item">
+                        <tr>
 
-                            <div>
+                            <td>
+                                ${index + 1}回目
+                            </td>
+
+                            <td>
                                 ${dateText}
-                            </div>
+                            </td>
 
-                            <div>
-                                先生：
+                            <td>
                                 ${item.teacher}
-                            </div>
+                            </td>
 
-                        </div>
+                        </tr>
 
                     `;
 
                 }
             );
+
+
+
+            html += `
+
+                    </tbody>
+
+                </table>
+
+            `;
 
         }
 
