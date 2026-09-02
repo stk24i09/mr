@@ -181,12 +181,31 @@ button:hover{
                 onchange="loadSummary()"
             >
 
-                <option value="id">
-                    生徒ID順
+                <!-- 初期状態 -->
+
+                <option value="id-asc">
+                    生徒ID順（早い順）
                 </option>
 
-                <option value="count">
-                    面接回数順
+
+                <!-- ID逆順 -->
+
+                <option value="id-desc">
+                    生徒ID順（遅い順）
+                </option>
+
+
+                <!-- 回数が多い順 -->
+
+                <option value="count-desc">
+                    面接回数順（多い順）
+                </option>
+
+
+                <!-- 回数が少ない順 -->
+
+                <option value="count-asc">
+                    面接回数順（少ない順）
                 </option>
 
             </select>
@@ -416,25 +435,12 @@ function loadSummary(){
 
 
         // ==================================
-        // 面接回数順
+        // 生徒ID順（早い順）
         // ==================================
 
-        if(sortType == "count"){
+        if(sortType === "id-asc"){
 
             students.sort(function(a,b){
-
-
-                // 面接回数が違う場合
-
-                if(b.count !== a.count){
-
-                    return b.count - a.count;
-
-                }
-
-
-                // 面接回数が同じ場合
-                // 生徒ID順
 
                 return a.id.localeCompare(
                     b.id,
@@ -451,12 +457,80 @@ function loadSummary(){
 
 
         // ==================================
-        // 生徒ID順
+        // 生徒ID順（遅い順）
         // ==================================
 
-        else{
+        else if(sortType === "id-desc"){
 
             students.sort(function(a,b){
+
+                return b.id.localeCompare(
+                    a.id,
+                    undefined,
+                    {
+                        numeric:true
+                    }
+                );
+
+            });
+
+        }
+
+
+
+        // ==================================
+        // 面接回数順（多い順）
+        // ==================================
+
+        else if(sortType === "count-desc"){
+
+            students.sort(function(a,b){
+
+
+                // 面接回数が違う場合
+
+                if(b.count !== a.count){
+
+                    return b.count - a.count;
+
+                }
+
+
+                // 回数が同じならID順
+
+                return a.id.localeCompare(
+                    b.id,
+                    undefined,
+                    {
+                        numeric:true
+                    }
+                );
+
+            });
+
+        }
+
+
+
+        // ==================================
+        // 面接回数順（少ない順）
+        // ==================================
+
+        else if(sortType === "count-asc"){
+
+            students.sort(function(a,b){
+
+
+                // 面接回数が違う場合
+
+                if(a.count !== b.count){
+
+                    return a.count - b.count;
+
+                }
+
+
+                // 回数が同じならID順
 
                 return a.id.localeCompare(
                     b.id,
