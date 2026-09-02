@@ -135,11 +135,21 @@ button:hover{
 
 
 /* ========================================
-   試験日終了
+   試験日前
+======================================== */
+
+.exam-active{
+    font-weight:bold;
+}
+
+
+/* ========================================
+   試験日経過後
+   ※通常の文字にする
 ======================================== */
 
 .exam-finished{
-    font-weight:bold;
+    font-weight:normal;
 }
 
 </style>
@@ -201,11 +211,11 @@ button:hover{
                 </option>
 
                 <option value="count-desc">
-                    回数順（多）
+                    回数順（昇順）
                 </option>
 
                 <option value="count-asc">
-                    回数順（少）
+                    回数順（降順）
                 </option>
 
                 <option value="exam-asc">
@@ -262,7 +272,7 @@ button:hover{
 
     <!-- =================================
          右側
-    ================================= -->
+    ================================== -->
 
     <div class="right-panel">
 
@@ -1104,10 +1114,34 @@ function renderSummary(){
 
 
             // ==================================
-            // 試験日が過ぎている場合
+            // 試験日前・当日の場合
+            // 太字
             // ==================================
 
             if(
+                student.examDate !== "" &&
+                !student.finished
+            ){
+
+                examDateText = `
+
+                    <span class="exam-active">
+                        ${student.examDate}
+                    </span>
+
+                `;
+
+            }
+
+
+
+            // ==================================
+            // 試験日が過ぎた場合
+            // 通常文字 ＋ ✅
+            // ==================================
+
+            if(
+                student.examDate !== "" &&
                 student.finished
             ){
 
