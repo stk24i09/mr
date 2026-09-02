@@ -181,31 +181,42 @@ button:hover{
                 onchange="loadSummary()"
             >
 
-                <!-- 初期状態 -->
+                <!-- =================================
+                     生徒ID
+                ================================== -->
 
                 <option value="id-asc">
                     生徒ID順（昇順）
                 </option>
-
-
-                <!-- ID逆順 -->
 
                 <option value="id-desc">
                     生徒ID順（降順）
                 </option>
 
 
-                <!-- 回数が多い順 -->
+                <!-- =================================
+                     面接回数
+                ================================== -->
 
                 <option value="count-desc">
                     回数順（多）
                 </option>
 
-
-                <!-- 回数が少ない順 -->
-
                 <option value="count-asc">
                     回数順（少）
+                </option>
+
+
+                <!-- =================================
+                     試験日
+                ================================== -->
+
+                <option value="exam-asc">
+                    試験日順（近い順）
+                </option>
+
+                <option value="exam-desc">
+                    試験日順（遠い順）
                 </option>
 
             </select>
@@ -311,6 +322,40 @@ function refreshData(){
     document.getElementById("updateTime").innerHTML =
         "最終更新：" +
         now.toLocaleString("ja-JP");
+
+}
+
+
+
+// ========================================
+// 試験日を比較するための日付取得
+// ========================================
+
+function getExamDateValue(dateText){
+
+    // 未設定の場合
+    if(!dateText || dateText === "未設定"){
+        return null;
+    }
+
+
+    // yyyy/MM/dd を想定
+    let date = new Date(
+        dateText.replace(/\//g,"-")
+    );
+
+
+    // 正しい日付でない場合
+    if(isNaN(date.getTime())){
+        return null;
+    }
+
+
+    // 時刻を0時にする
+    date.setHours(0,0,0,0);
+
+
+    return date.getTime();
 
 }
 
@@ -531,6 +576,146 @@ function loadSummary(){
 
 
                 // 回数が同じならID順
+
+                return a.id.localeCompare(
+                    b.id,
+                    undefined,
+                    {
+                        numeric:true
+                    }
+                );
+
+            });
+
+        }
+
+
+
+        // ==================================
+        // 試験日順（近い順）
+        // ==================================
+
+        else if(sortType === "exam-asc"){
+
+            students.sort(function(a,b){
+
+
+                const dateA =
+                    getExamDateValue(a.examDate);
+
+                const dateB =
+                    getExamDateValue(b.examDate);
+
+
+                // 未設定は一番下
+
+                if(dateA === null && dateB === null){
+
+                    return a.id.localeCompare(
+                        b.id,
+                        undefined,
+                        {
+                            numeric:true
+                        }
+                    );
+
+                }
+
+
+                if(dateA === null){
+
+                    return 1;
+
+                }
+
+
+                if(dateB === null){
+
+                    return -1;
+
+                }
+
+
+                // 試験日が近い順
+
+                if(dateA !== dateB){
+
+                    return dateA - dateB;
+
+                }
+
+
+                // 試験日が同じならID順
+
+                return a.id.localeCompare(
+                    b.id,
+                    undefined,
+                    {
+                        numeric:true
+                    }
+                );
+
+            });
+
+        }
+
+
+
+        // ==================================
+        // 試験日順（遠い順）
+        // ==================================
+
+        else if(sortType === "exam-desc"){
+
+            students.sort(function(a,b){
+
+
+                const dateA =
+                    getExamDateValue(a.examDate);
+
+                const dateB =
+                    getExamDateValue(b.examDate);
+
+
+                // 未設定は一番下
+
+                if(dateA === null && dateB === null){
+
+                    return a.id.localeCompare(
+                        b.id,
+                        undefined,
+                        {
+                            numeric:true
+                        }
+                    );
+
+                }
+
+
+                if(dateA === null){
+
+                    return 1;
+
+                }
+
+
+                if(dateB === null){
+
+                    return -1;
+
+                }
+
+
+                // 試験日が遠い順
+
+                if(dateA !== dateB){
+
+                    return dateB - dateA;
+
+                }
+
+
+                // 試験日が同じならID順
 
                 return a.id.localeCompare(
                     b.id,
