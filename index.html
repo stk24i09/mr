@@ -189,6 +189,7 @@ button:hover{
                     生徒ID順（昇順）
                 </option>
 
+
                 <option value="id-desc">
                     生徒ID順（降順）
                 </option>
@@ -202,6 +203,7 @@ button:hover{
                     回数順（多）
                 </option>
 
+
                 <option value="count-asc">
                     回数順（少）
                 </option>
@@ -214,6 +216,7 @@ button:hover{
                 <option value="exam-asc">
                     試験日順（近い順）
                 </option>
+
 
                 <option value="exam-desc">
                     試験日順（遠い順）
@@ -328,34 +331,113 @@ function refreshData(){
 
 
 // ========================================
-// 試験日を比較するための日付取得
+// 今日の日付を取得
+// ========================================
+
+function getToday(){
+
+    const today = new Date();
+
+    // 時刻を0時にする
+    today.setHours(0,0,0,0);
+
+    return today;
+
+}
+
+
+
+// ========================================
+// 試験日を日付として取得
 // ========================================
 
 function getExamDateValue(dateText){
 
     // 未設定の場合
     if(!dateText || dateText === "未設定"){
+
         return null;
+
     }
 
 
-    // yyyy/MM/dd を想定
-    let date = new Date(
-        dateText.replace(/\//g,"-")
+    // ====================================
+    // yyyy/MM/dd を yyyy-MM-dd に変更
+    // ====================================
+
+    const parts = dateText.split("/");
+
+
+    if(parts.length !== 3){
+
+        return null;
+
+    }
+
+
+    const year = Number(parts[0]);
+
+    const month = Number(parts[1]);
+
+    const day = Number(parts[2]);
+
+
+    if(
+        isNaN(year) ||
+        isNaN(month) ||
+        isNaN(day)
+    ){
+
+        return null;
+
+    }
+
+
+    const date = new Date(
+        year,
+        month - 1,
+        day
     );
 
 
-    // 正しい日付でない場合
-    if(isNaN(date.getTime())){
-        return null;
-    }
-
-
-    // 時刻を0時にする
     date.setHours(0,0,0,0);
 
 
     return date.getTime();
+
+}
+
+
+
+// ========================================
+// 今日から試験日までの日数を取得
+// ========================================
+
+function getDaysUntilExam(dateText){
+
+    const examDate =
+        getExamDateValue(dateText);
+
+
+    // 試験日未設定
+    if(examDate === null){
+
+        return null;
+
+    }
+
+
+    const today =
+        getToday().getTime();
+
+
+    const oneDay =
+        1000 * 60 * 60 * 24;
+
+
+    return Math.round(
+        (examDate - today) / oneDay
+    );
 
 }
 
@@ -378,6 +460,7 @@ function loadSummary(){
             API_URL + "?mode=summary"
         )
         .then(response => response.json()),
+
 
         fetch(
             API_URL + "?mode=examDates"
@@ -437,7 +520,9 @@ function loadSummary(){
         for(let name in data){
 
 
+            // ==================================
             // 生徒IDを取得
+            // ==================================
 
             const idMatch =
                 name.match(/\d+[a-zA-Z]\d+/);
@@ -480,7 +565,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 生徒ID順（早い順）
+        // 生徒ID順（昇順）
         // ==================================
 
         if(sortType === "id-asc"){
@@ -502,7 +587,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 生徒ID順（遅い順）
+        // 生徒ID順（降順）
         // ==================================
 
         else if(sortType === "id-desc"){
@@ -592,7 +677,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 試験日順（近い順）
+        // 試験日順（今日から近い順）
         // ==================================
 
         else if(sortType === "exam-asc"){
@@ -600,16 +685,26 @@ function loadSummary(){
             students.sort(function(a,b){
 
 
-                const dateA =
-                    getExamDateValue(a.examDate);
+                const daysA =
+                    getDaysUntilExam(
+                        a.examDate
+                    );
 
-                const dateB =
-                    getExamDateValue(b.examDate);
+
+                const daysB =
+                    getDaysUntilExam(
+                        b.examDate
+                    );
 
 
-                // 未設定は一番下
+                // ==================================
+                // 両方未設定
+                // ==================================
 
-                if(dateA === null && dateB === null){
+                if(
+                    daysA === null &&
+                    daysB === null
+                ){
 
                     return a.id.localeCompare(
                         b.id,
@@ -622,30 +717,42 @@ function loadSummary(){
                 }
 
 
-                if(dateA === null){
+                // ==================================
+                // Aだけ未設定
+                // ==================================
+
+                if(daysA === null){
 
                     return 1;
 
                 }
 
 
-                if(dateB === null){
+                // ==================================
+                // Bだけ未設定
+                // ==================================
+
+                if(daysB === null){
 
                     return -1;
 
                 }
 
 
-                // 試験日が近い順
+                // ==================================
+                // 今日からの日数が少ない順
+                // ==================================
 
-                if(dateA !== dateB){
+                if(daysA !== daysB){
 
-                    return dateA - dateB;
+                    return daysA - daysB;
 
                 }
 
 
-                // 試験日が同じならID順
+                // ==================================
+                // 同じ日ならID順
+                // ==================================
 
                 return a.id.localeCompare(
                     b.id,
@@ -662,7 +769,7 @@ function loadSummary(){
 
 
         // ==================================
-        // 試験日順（遠い順）
+        // 試験日順（今日から遠い順）
         // ==================================
 
         else if(sortType === "exam-desc"){
@@ -670,16 +777,26 @@ function loadSummary(){
             students.sort(function(a,b){
 
 
-                const dateA =
-                    getExamDateValue(a.examDate);
+                const daysA =
+                    getDaysUntilExam(
+                        a.examDate
+                    );
 
-                const dateB =
-                    getExamDateValue(b.examDate);
+
+                const daysB =
+                    getDaysUntilExam(
+                        b.examDate
+                    );
 
 
-                // 未設定は一番下
+                // ==================================
+                // 両方未設定
+                // ==================================
 
-                if(dateA === null && dateB === null){
+                if(
+                    daysA === null &&
+                    daysB === null
+                ){
 
                     return a.id.localeCompare(
                         b.id,
@@ -692,30 +809,42 @@ function loadSummary(){
                 }
 
 
-                if(dateA === null){
+                // ==================================
+                // Aだけ未設定
+                // ==================================
+
+                if(daysA === null){
 
                     return 1;
 
                 }
 
 
-                if(dateB === null){
+                // ==================================
+                // Bだけ未設定
+                // ==================================
+
+                if(daysB === null){
 
                     return -1;
 
                 }
 
 
-                // 試験日が遠い順
+                // ==================================
+                // 今日からの日数が多い順
+                // ==================================
 
-                if(dateA !== dateB){
+                if(daysA !== daysB){
 
-                    return dateB - dateA;
+                    return daysB - daysA;
 
                 }
 
 
-                // 試験日が同じならID順
+                // ==================================
+                // 同じ日ならID順
+                // ==================================
 
                 return a.id.localeCompare(
                     b.id,
