@@ -10,7 +10,7 @@
 <style>
 
 /* ========================================
-   全体
+   ページ全体
 ======================================== */
 
 body{
@@ -34,28 +34,68 @@ body{
    左右の画面
 ======================================== */
 
-.main-container{
+.container{
     display:flex;
-    gap:30px;
+    flex-direction:row;
     align-items:flex-start;
+    gap:30px;
 }
-
-
-/* ========================================
-   左側
-======================================== */
 
 .left-panel{
-    width:65%;
+    flex:1;
+    min-width:400px;
+}
+
+.right-panel{
+    flex:1;
+    min-width:400px;
 }
 
 
 /* ========================================
-   右側
+   テーブル
 ======================================== */
 
-.right-panel{
-    width:35%;
+table{
+    border-collapse:collapse;
+    width:100%;
+}
+
+th,td{
+    border:1px solid #000;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#eeeeee;
+}
+
+
+/* ========================================
+   生徒リンク
+======================================== */
+
+.student-link{
+    color:blue;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.student-link:hover{
+    color:red;
+}
+
+
+/* ========================================
+   面接履歴
+======================================== */
+
+#historyArea{
+    border:1px solid #ccc;
+    padding:15px;
+    min-height:300px;
+    background:#fafafa;
 }
 
 
@@ -63,69 +103,34 @@ body{
    並び替え
 ======================================== */
 
-.sort-area{
+.sortArea{
     margin-bottom:15px;
-    display:flex;
-    align-items:center;
-    gap:10px;
 }
 
-.sort-area label{
-    font-weight:bold;
-}
-
-#sortSelect{
-    padding:8px 12px;
+select{
+    padding:5px;
     font-size:16px;
 }
 
-
-/* ========================================
-   更新ボタン
-======================================== */
-
-.refresh-button{
-    padding:8px 16px;
+button{
+    padding:6px 15px;
     font-size:16px;
+    margin-left:15px;
     cursor:pointer;
+}
+
+button:hover{
+    background:#eeeeee;
 }
 
 
 /* ========================================
-   生徒一覧テーブル
+   更新時間
 ======================================== */
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-}
-
-th,
-td{
-    border:1px solid #ccc;
-    padding:12px;
-    text-align:center;
-}
-
-th{
-    background:#f2f2f2;
-}
-
-
-/* ========================================
-   生徒ID
-======================================== */
-
-.student-id-link{
-    color:#0066cc;
-    text-decoration:underline;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.student-id-link:hover{
-    color:#003399;
+#updateTime{
+    margin-top:10px;
+    color:#555;
 }
 
 
@@ -137,75 +142,6 @@ th{
     font-weight:bold;
 }
 
-
-/* ========================================
-   面接履歴
-======================================== */
-
-.history-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-.history-box{
-    border:1px solid #ccc;
-    padding:15px;
-    min-height:300px;
-    background:#fafafa;
-}
-
-
-/* ========================================
-   履歴タイトル
-======================================== */
-
-.history-student-name{
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-
-/* ========================================
-   履歴テーブル
-======================================== */
-
-.history-table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-}
-
-.history-table th,
-.history-table td{
-    border:1px solid #ccc;
-    padding:10px;
-    text-align:center;
-}
-
-.history-table th{
-    background:#f2f2f2;
-}
-
-
-/* ========================================
-   履歴なし
-======================================== */
-
-.no-history{
-    color:#777;
-}
-
-
-/* ========================================
-   読み込み中
-======================================== */
-
-.loading{
-    color:#555;
-}
-
 </style>
 
 </head>
@@ -214,38 +150,47 @@ th{
 <body>
 
 
-<!-- ========================================
+<!-- =====================================
      ページタイトル
-======================================== -->
+===================================== -->
 
 <h1 class="page-title">
     面接練習回数一覧
 </h1>
 
 
-<!-- ========================================
+
+<!-- =====================================
      左右の画面
-======================================== -->
+===================================== -->
 
-<div class="main-container">
+<div class="container">
 
 
-    <!-- ====================================
+
+    <!-- =================================
          左側
-    ===================================== -->
+    ================================== -->
 
     <div class="left-panel">
 
 
-        <!-- 並び替え -->
 
-        <div class="sort-area">
+        <!-- =================================
+             並び替え・更新
+        ================================== -->
+
+        <div class="sortArea">
 
             <label for="sortSelect">
                 並び替え：
             </label>
 
-            <select id="sortSelect">
+
+            <select
+                id="sortSelect"
+                onchange="loadSummary()"
+            >
 
                 <option value="id-asc">
                     生徒ID順（昇順）
@@ -274,75 +219,69 @@ th{
             </select>
 
 
-            <button
-                class="refresh-button"
-                onclick="loadData()"
-            >
-                更新
+            <button onclick="refreshData()">
+                🔄 更新
             </button>
+
+
+            <p id="updateTime"></p>
 
         </div>
 
 
-        <!-- ====================================
+
+        <!-- =================================
              生徒一覧
-        ===================================== -->
+        ================================== -->
 
-        <table>
+        <table id="summaryTable">
 
-            <thead>
+            <tr>
 
-                <tr>
+                <th>
+                    試験日
+                </th>
 
-                    <th>
-                        試験日
-                    </th>
+                <th>
+                    生徒名 / ID
+                </th>
 
-                    <th>
-                        生徒名 / ID
-                    </th>
+                <th>
+                    面接回数
+                </th>
 
-                    <th>
-                        面接回数
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="studentTableBody">
-
-            </tbody>
+            </tr>
 
         </table>
 
+
+
     </div>
 
 
 
-    <!-- ====================================
+    <!-- =================================
          右側
-    ===================================== -->
+    ================================= -->
 
     <div class="right-panel">
 
-        <div class="history-title">
-            面接履歴
-        </div>
 
-        <div
-            id="historyBox"
-            class="history-box"
-        >
+        <div id="historyArea">
 
-            <div class="no-history">
+            <h2>
+                面接履歴
+            </h2>
+
+            <p>
                 生徒IDをクリックしてください。
-            </div>
+            </p>
 
         </div>
+
 
     </div>
+
 
 
 </div>
@@ -352,26 +291,44 @@ th{
 <script>
 
 
-/* ========================================
-   GAS API
-======================================== */
+// ========================================
+// GAS API
+// ========================================
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbxYvNAx8TWTezWFp9V7G2UeXYkHGehDVWDdweIhdAnLaeqfzRhbpU8CONMt7CV45tj4/exec";
 
 
 
-/* ========================================
-   生徒データ
-======================================== */
+// ========================================
+// ページを開いたときに読み込む
+// ========================================
 
-let students = [];
+loadSummary();
 
 
 
-/* ========================================
-   今日の日付
-======================================== */
+// ========================================
+// 更新ボタン
+// ========================================
+
+function refreshData(){
+
+    loadSummary();
+
+    let now = new Date();
+
+    document.getElementById("updateTime").innerHTML =
+        "最終更新：" +
+        now.toLocaleString("ja-JP");
+
+}
+
+
+
+// ========================================
+// 今日の日付を取得
+// ========================================
 
 function getToday(){
 
@@ -390,9 +347,9 @@ function getToday(){
 
 
 
-/* ========================================
-   試験日をDate型に変換
-======================================== */
+// ========================================
+// 試験日をDate型に変換
+// ========================================
 
 function getExamDate(dateText){
 
@@ -460,9 +417,9 @@ function getExamDate(dateText){
 
 
 
-/* ========================================
-   試験日が過ぎているか
-======================================== */
+// ========================================
+// 試験日が過ぎているか
+// ========================================
 
 function isExamFinished(dateText){
 
@@ -491,9 +448,9 @@ function isExamFinished(dateText){
 
 
 
-/* ========================================
-   今日から何日後か
-======================================== */
+// ========================================
+// 今日から何日離れているか
+// ========================================
 
 function getDaysUntilExam(dateText){
 
@@ -533,129 +490,118 @@ function getDaysUntilExam(dateText){
 
 
 
-/* ========================================
-   生徒ID比較
-======================================== */
+// ========================================
+// 生徒ID比較
+// ========================================
 
-function compareStudentId(a, b){
-
-    const aMatch =
-        a.id.match(
-            /\d+[a-zA-Z](\d+)/
-        );
-
-    const bMatch =
-        b.id.match(
-            /\d+[a-zA-Z](\d+)/
-        );
-
-
-    if(
-        !aMatch &&
-        !bMatch
-    ){
-
-        return a.id.localeCompare(
-            b.id
-        );
-
-    }
-
-
-    if(!aMatch){
-
-        return 1;
-
-    }
-
-
-    if(!bMatch){
-
-        return -1;
-
-    }
-
-
-    const aNumber =
-        Number(aMatch[1]);
-
-    const bNumber =
-        Number(bMatch[1]);
-
-
-    if(
-        aNumber !==
-        bNumber
-    ){
-
-        return (
-            aNumber -
-            bNumber
-        );
-
-    }
-
+function compareStudentId(a,b){
 
     return a.id.localeCompare(
-        b.id
+        b.id,
+        undefined,
+        {
+            numeric:true
+        }
     );
 
 }
 
 
 
-/* ========================================
-   データ読み込み
-======================================== */
+// ========================================
+// 一覧読み込み
+// ========================================
 
-async function loadData(){
-
-    try{
+function loadSummary(){
 
 
-        /* ==================================
-           面接回数取得
-        ================================== */
+    // ====================================
+    // 面接回数と試験日を取得
+    // ====================================
 
-        const summaryResponse =
-            await fetch(
-                API_URL +
-                "?mode=summary"
-            );
+    Promise.all([
+
+        fetch(
+            API_URL + "?mode=summary"
+        )
+        .then(
+            response =>
+                response.json()
+        ),
+
+        fetch(
+            API_URL + "?mode=examDates"
+        )
+        .then(
+            response =>
+                response.json()
+        )
+
+    ])
 
 
-        const summary =
-            await summaryResponse.json();
+
+    .then(function(results){
 
 
+        // ==================================
+        // 面接回数
+        // ==================================
 
-        /* ==================================
-           試験日取得
-        ================================== */
+        const data =
+            results[0];
 
-        const examResponse =
-            await fetch(
-                API_URL +
-                "?mode=examDates"
-            );
 
+        // ==================================
+        // 試験日
+        // ==================================
 
         const examDates =
-            await examResponse.json();
+            results[1];
 
 
 
-        students = [];
+        // ==================================
+        // 表のヘッダー
+        // ==================================
+
+        let html = `
+
+        <tr>
+
+            <th>
+                試験日
+            </th>
+
+            <th>
+                生徒名 / ID
+            </th>
+
+            <th>
+                面接回数
+            </th>
+
+        </tr>
+
+        `;
 
 
 
-        /* ==================================
-           生徒データ作成
-        ================================== */
+        // ==================================
+        // 生徒データ作成
+        // ==================================
+
+        let students = [];
+
 
         for(
-            const name in summary
+            let name in data
         ){
+
+
+            // =================================
+            // 生徒IDを取得
+            // =================================
 
             const idMatch =
                 name.match(
@@ -663,21 +609,20 @@ async function loadData(){
                 );
 
 
-            if(!idMatch){
-
-                continue;
-
-            }
-
-
             const studentId =
-                idMatch[0];
+                idMatch
+                    ? idMatch[0]
+                    : name;
 
+
+
+            // =================================
+            // 試験日
+            // =================================
 
             const examDate =
-                examDates[
-                    studentId
-                ] || "未設定";
+                examDates[studentId] || "";
+
 
 
             students.push({
@@ -688,7 +633,7 @@ async function loadData(){
 
                 count:
                     Number(
-                        summary[name]
+                        data[name]
                     ) || 0,
 
                 examDate:
@@ -710,180 +655,27 @@ async function loadData(){
 
 
 
-        /* ==================================
-           表示
-        ================================== */
+        // ==================================
+        // 並び替え
+        // ==================================
 
-        renderStudents();
-
-
-    }catch(error){
-
-        console.error(
-            error
-        );
-
-        alert(
-            "データの取得に失敗しました。"
-        );
-
-    }
-
-}
+        const sortType =
+            document.getElementById(
+                "sortSelect"
+            ).value;
 
 
 
-/* ========================================
-   生徒一覧表示
-======================================== */
+        // ==================================
+        // 生徒ID 昇順
+        // ==================================
 
-function renderStudents(){
+        if(
+            sortType === "id-asc"
+        ){
 
-    const sortType =
-        document.getElementById(
-            "sortSelect"
-        ).value;
-
-
-
-    /* ====================================
-       生徒ID 昇順
-    ==================================== */
-
-    if(
-        sortType ===
-        "id-asc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                return compareStudentId(
-                    a,
-                    b
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       生徒ID 降順
-    ==================================== */
-
-    else if(
-        sortType ===
-        "id-desc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                return compareStudentId(
-                    b,
-                    a
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       回数 多い順
-    ==================================== */
-
-    else if(
-        sortType ===
-        "count-desc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                if(
-                    a.count !==
-                    b.count
-                ){
-
-                    return (
-                        b.count -
-                        a.count
-                    );
-
-                }
-
-
-                return compareStudentId(
-                    a,
-                    b
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       回数 少ない順
-    ==================================== */
-
-    else if(
-        sortType ===
-        "count-asc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                if(
-                    a.count !==
-                    b.count
-                ){
-
-                    return (
-                        a.count -
-                        b.count
-                    );
-
-                }
-
-
-                return compareStudentId(
-                    a,
-                    b
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       試験日 近い順
-    ==================================== */
-
-    else if(
-        sortType ===
-        "exam-asc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                if(
-                    a.daysUntil === null &&
-                    b.daysUntil === null
-                ){
+            students.sort(
+                function(a,b){
 
                     return compareStudentId(
                         a,
@@ -891,42 +683,54 @@ function renderStudents(){
                     );
 
                 }
+            );
+
+        }
 
 
-                if(
-                    a.daysUntil === null
-                ){
 
-                    return 1;
+        // ==================================
+        // 生徒ID 降順
+        // ==================================
+
+        else if(
+            sortType === "id-desc"
+        ){
+
+            students.sort(
+                function(a,b){
+
+                    return compareStudentId(
+                        b,
+                        a
+                    );
 
                 }
+            );
 
-
-                if(
-                    b.daysUntil === null
-                ){
-
-                    return -1;
-
-                }
+        }
 
 
 
-                /* まだ試験日前 */
+        // ==================================
+        // 面接回数 多い順
+        // ==================================
 
-                if(
-                    !a.finished &&
-                    !b.finished
-                ){
+        else if(
+            sortType === "count-desc"
+        ){
+
+            students.sort(
+                function(a,b){
 
                     if(
-                        a.daysUntil !==
-                        b.daysUntil
+                        b.count !==
+                        a.count
                     ){
 
                         return (
-                            a.daysUntil -
-                            b.daysUntil
+                            b.count -
+                            a.count
                         );
 
                     }
@@ -938,75 +742,35 @@ function renderStudents(){
                     );
 
                 }
+            );
+
+        }
 
 
 
-                /* 試験日前を上 */
+        // ==================================
+        // 面接回数 少ない順
+        // ==================================
 
-                if(
-                    !a.finished &&
-                    b.finished
-                ){
+        else if(
+            sortType === "count-asc"
+        ){
 
-                    return -1;
+            students.sort(
+                function(a,b){
 
-                }
+                    if(
+                        a.count !==
+                        b.count
+                    ){
 
+                        return (
+                            a.count -
+                            b.count
+                        );
 
-                if(
-                    a.finished &&
-                    !b.finished
-                ){
+                    }
 
-                    return 1;
-
-                }
-
-
-
-                /* 両方試験日経過 */
-
-                if(
-                    a.daysUntil !==
-                    b.daysUntil
-                ){
-
-                    return (
-                        b.daysUntil -
-                        a.daysUntil
-                    );
-
-                }
-
-
-                return compareStudentId(
-                    a,
-                    b
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       試験日 遠い順
-    ==================================== */
-
-    else if(
-        sortType ===
-        "exam-desc"
-    ){
-
-        students.sort(
-            function(a,b){
-
-                if(
-                    a.daysUntil === null &&
-                    b.daysUntil === null
-                ){
 
                     return compareStudentId(
                         a,
@@ -1014,33 +778,119 @@ function renderStudents(){
                     );
 
                 }
+            );
 
-
-                if(
-                    a.daysUntil === null
-                ){
-
-                    return 1;
-
-                }
-
-
-                if(
-                    b.daysUntil === null
-                ){
-
-                    return -1;
-
-                }
+        }
 
 
 
-                /* まだ試験日前 */
+        // ==================================
+        // 試験日 近い順
+        // ==================================
 
-                if(
-                    !a.finished &&
-                    !b.finished
-                ){
+        else if(
+            sortType === "exam-asc"
+        ){
+
+            students.sort(
+                function(a,b){
+
+
+                    // -----------------------
+                    // 未設定
+                    // -----------------------
+
+                    if(
+                        a.daysUntil === null &&
+                        b.daysUntil === null
+                    ){
+
+                        return compareStudentId(
+                            a,
+                            b
+                        );
+
+                    }
+
+
+                    if(
+                        a.daysUntil === null
+                    ){
+
+                        return 1;
+
+                    }
+
+
+                    if(
+                        b.daysUntil === null
+                    ){
+
+                        return -1;
+
+                    }
+
+
+
+                    // -----------------------
+                    // 試験日前
+                    // -----------------------
+
+                    if(
+                        !a.finished &&
+                        !b.finished
+                    ){
+
+                        if(
+                            a.daysUntil !==
+                            b.daysUntil
+                        ){
+
+                            return (
+                                a.daysUntil -
+                                b.daysUntil
+                            );
+
+                        }
+
+
+                        return compareStudentId(
+                            a,
+                            b
+                        );
+
+                    }
+
+
+
+                    // -----------------------
+                    // 試験日前を上
+                    // -----------------------
+
+                    if(
+                        !a.finished &&
+                        b.finished
+                    ){
+
+                        return -1;
+
+                    }
+
+
+                    if(
+                        a.finished &&
+                        !b.finished
+                    ){
+
+                        return 1;
+
+                    }
+
+
+
+                    // -----------------------
+                    // 両方試験日経過
+                    // -----------------------
 
                     if(
                         a.daysUntil !==
@@ -1061,278 +911,382 @@ function renderStudents(){
                     );
 
                 }
-
-
-
-                /* 試験日前を上 */
-
-                if(
-                    !a.finished &&
-                    b.finished
-                ){
-
-                    return -1;
-
-                }
-
-
-                if(
-                    a.finished &&
-                    !b.finished
-                ){
-
-                    return 1;
-
-                }
-
-
-
-                /* 両方試験日経過 */
-
-                if(
-                    a.daysUntil !==
-                    b.daysUntil
-                ){
-
-                    return (
-                        b.daysUntil -
-                        a.daysUntil
-                    );
-
-                }
-
-
-                return compareStudentId(
-                    a,
-                    b
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* ====================================
-       テーブル表示
-    ==================================== */
-
-    const tbody =
-        document.getElementById(
-            "studentTableBody"
-        );
-
-
-    tbody.innerHTML = "";
-
-
-
-    students.forEach(
-        function(student){
-
-            const tr =
-                document.createElement(
-                    "tr"
-                );
-
-
-
-            /* ==================================
-               試験日
-            ================================== */
-
-            let examDateHtml;
-
-
-            if(
-                student.examDate ===
-                "未設定"
-            ){
-
-                examDateHtml =
-                    "未設定";
-
-            }
-
-            else if(
-                student.finished
-            ){
-
-                examDateHtml =
-                    `<span class="exam-finished">
-                        ${student.examDate} ✅
-                    </span>`;
-
-            }
-
-            else{
-
-                examDateHtml =
-                    student.examDate;
-
-            }
-
-
-
-            /* ==================================
-               生徒名
-            ================================== */
-
-            const studentNameHtml =
-                student.name
-                .replace(
-                    student.id,
-                    ""
-                );
-
-
-
-            /* ==================================
-               行の内容
-            ================================== */
-
-            tr.innerHTML = `
-
-                <td>
-                    ${examDateHtml}
-                </td>
-
-                <td>
-
-                    ${studentNameHtml}
-
-                    <br>
-
-                    <span
-                        class="student-id-link"
-                        data-id="${student.id}"
-                    >
-                        ${student.id}
-                    </span>
-
-                </td>
-
-                <td>
-                    ${student.count}回
-                </td>
-
-            `;
-
-
-
-            /* ==================================
-               生徒IDだけクリック可能
-            ================================== */
-
-            const idLink =
-                tr.querySelector(
-                    ".student-id-link"
-                );
-
-
-            idLink.addEventListener(
-                "click",
-                function(event){
-
-                    /*
-                     * 行全体のクリックではなく
-                     * 生徒IDを押したときだけ
-                     * 面接履歴を表示
-                     */
-
-                    event.stopPropagation();
-
-
-                    showHistory(
-                        student
-                    );
-
-                }
-            );
-
-
-            tbody.appendChild(
-                tr
             );
 
         }
-    );
+
+
+
+        // ==================================
+        // 試験日 遠い順
+        // ==================================
+
+        else if(
+            sortType === "exam-desc"
+        ){
+
+            students.sort(
+                function(a,b){
+
+
+                    // -----------------------
+                    // 未設定
+                    // -----------------------
+
+                    if(
+                        a.daysUntil === null &&
+                        b.daysUntil === null
+                    ){
+
+                        return compareStudentId(
+                            a,
+                            b
+                        );
+
+                    }
+
+
+                    if(
+                        a.daysUntil === null
+                    ){
+
+                        return 1;
+
+                    }
+
+
+                    if(
+                        b.daysUntil === null
+                    ){
+
+                        return -1;
+
+                    }
+
+
+
+                    // -----------------------
+                    // 試験日前
+                    // -----------------------
+
+                    if(
+                        !a.finished &&
+                        !b.finished
+                    ){
+
+                        if(
+                            a.daysUntil !==
+                            b.daysUntil
+                        ){
+
+                            return (
+                                b.daysUntil -
+                                a.daysUntil
+                            );
+
+                        }
+
+
+                        return compareStudentId(
+                            a,
+                            b
+                        );
+
+                    }
+
+
+
+                    // -----------------------
+                    // 試験日前を上
+                    // -----------------------
+
+                    if(
+                        !a.finished &&
+                        b.finished
+                    ){
+
+                        return -1;
+
+                    }
+
+
+                    if(
+                        a.finished &&
+                        !b.finished
+                    ){
+
+                        return 1;
+
+                    }
+
+
+
+                    // -----------------------
+                    // 両方試験日経過
+                    // -----------------------
+
+                    if(
+                        a.daysUntil !==
+                        b.daysUntil
+                    ){
+
+                        return (
+                            b.daysUntil -
+                            a.daysUntil
+                        );
+
+                    }
+
+
+                    return compareStudentId(
+                        a,
+                        b
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        // ==================================
+        // テーブル作成
+        // ==================================
+
+        students.forEach(
+            function(student){
+
+
+                // ==================================
+                // 試験日
+                // ==================================
+
+                let examDateText =
+                    student.examDate !== ""
+                        ? student.examDate
+                        : "未設定";
+
+
+
+                // ==================================
+                // 試験日が過ぎている場合
+                // ==================================
+
+                if(
+                    student.finished
+                ){
+
+                    examDateText = `
+
+                        <span class="exam-finished">
+                            ${student.examDate} ✅
+                        </span>
+
+                    `;
+
+                }
+
+
+
+                html += `
+
+                <tr>
+
+
+                    <!-- 試験日 -->
+
+                    <td>
+                        ${examDateText}
+                    </td>
+
+
+
+                    <!-- 生徒名 / ID -->
+
+                    <td>
+
+
+                        ${student.name.replace(
+                            student.id,
+                            ""
+                        )}
+
+
+                        <br>
+
+
+                        <span
+                            class="student-link"
+                            onclick="showHistory(
+                                '${student.id}',
+                                '${student.name}'
+                            )"
+                        >
+
+                            ${student.id}
+
+                        </span>
+
+
+                    </td>
+
+
+
+                    <!-- 面接回数 -->
+
+                    <td>
+
+                        ${student.count}回
+
+                    </td>
+
+
+                </tr>
+
+                `;
+
+            }
+        );
+
+
+
+        // ==================================
+        // 画面へ反映
+        // ==================================
+
+        document.getElementById(
+            "summaryTable"
+        ).innerHTML = html;
+
+
+
+    })
+
+
+    .catch(function(error){
+
+        console.error(
+            "エラーが発生しました:",
+            error
+        );
+
+    });
 
 }
 
 
 
-/* ========================================
-   面接履歴表示
-======================================== */
+// ========================================
+// 面接履歴表示
+// ========================================
 
-async function showHistory(student){
-
-    const historyBox =
-        document.getElementById(
-            "historyBox"
-        );
+function showHistory(
+    studentId,
+    studentName
+){
 
 
-    /* ====================================
-       読み込み中
-    ==================================== */
+    // =====================================
+    // まず読み込み中を表示
+    // =====================================
 
-    historyBox.innerHTML = `
+    document.getElementById(
+        "historyArea"
+    ).innerHTML = `
 
-        <div class="loading">
-            ${student.name} の面接履歴を読み込み中...
-        </div>
+        <h2>
+            面接履歴
+        </h2>
+
+        <p>
+            ${studentName} の面接履歴を読み込み中...
+        </p>
 
     `;
 
 
 
-    try{
+    // =====================================
+    // IDを使って履歴を取得
+    // =====================================
 
-        const response =
-            await fetch(
-                API_URL +
-                "?mode=history&id=" +
-                encodeURIComponent(
-                    student.id
-                )
-            );
+    fetch(
 
+        API_URL +
+        "?mode=history&id=" +
+        encodeURIComponent(
+            studentId
+        )
 
-        const history =
-            await response.json();
-
+    )
 
 
-        /* ==================================
-           タイトル
-        ================================== */
+
+    .then(
+        response =>
+            response.json()
+    )
+
+
+
+    .then(function(data){
+
+
+        // ==================================
+        // 履歴画面
+        // ==================================
 
         let html = `
 
-            <div class="history-student-name">
-                ${student.name} の面接履歴
-            </div>
+        <h2>
+            ${studentName} の面接履歴
+        </h2>
+
+
+
+        <table>
+
+        <tr>
+
+            <th>
+                回数
+            </th>
+
+            <th>
+                日時
+            </th>
+
+            <th>
+                担当先生
+            </th>
+
+        </tr>
 
         `;
 
 
 
-        /* ==================================
-           履歴がない場合
-        ================================== */
+        // ==================================
+        // 履歴がない場合
+        // ==================================
 
         if(
-            history.length === 0
+            !data ||
+            data.length === 0
         ){
 
             html += `
 
-                <div class="no-history">
-                    面接履歴はありません。
-                </div>
+            <tr>
+
+                <td colspan="3">
+
+                    まだ面接練習の記録はありません。
+
+                </td>
+
+            </tr>
 
             `;
 
@@ -1340,142 +1294,97 @@ async function showHistory(student){
 
 
 
-        /* ==================================
-           履歴がある場合
-        ================================== */
+        // ==================================
+        // 履歴がある場合
+        // ==================================
 
         else{
 
-            html += `
+            for(
+                let i = 0;
+                i < data.length;
+                i++
+            ){
 
-                <table class="history-table">
 
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                回数
-                            </th>
-
-                            <th>
-                                日時
-                            </th>
-
-                            <th>
-                                担当先生
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-            `;
+                let date =
+                    new Date(
+                        data[i].date
+                    );
 
 
 
-            history.forEach(
-                function(item, index){
+                html += `
 
-                    let dateText =
-                        item.date;
+                <tr>
 
+                    <td>
+                        ${i + 1}回目
+                    </td>
 
-                    /*
-                     * GASから日時が
-                     * 文字列として返ってくる場合
-                     * そのまま表示
-                     */
+                    <td>
+                        ${date.toLocaleString(
+                            "ja-JP"
+                        )}
+                    </td>
 
-                    html += `
+                    <td>
+                        ${data[i].teacher}
+                    </td>
 
-                        <tr>
+                </tr>
 
-                            <td>
-                                ${index + 1}回目
-                            </td>
+                `;
 
-                            <td>
-                                ${dateText}
-                            </td>
-
-                            <td>
-                                ${item.teacher}
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }
-            );
-
-
-
-            html += `
-
-                    </tbody>
-
-                </table>
-
-            `;
+            }
 
         }
 
 
 
-        historyBox.innerHTML =
-            html;
+        html += "</table>";
 
 
-    }catch(error){
+
+        // ==================================
+        // 右側へ表示
+        // ==================================
+
+        document.getElementById(
+            "historyArea"
+        ).innerHTML = html;
+
+
+
+    })
+
+
+
+    .catch(function(error){
 
         console.error(
+            "履歴取得エラー:",
             error
         );
 
 
-        historyBox.innerHTML = `
+        document.getElementById(
+            "historyArea"
+        ).innerHTML = `
 
-            <div class="no-history">
+            <h2>
+                面接履歴
+            </h2>
+
+            <p>
                 面接履歴の取得に失敗しました。
-            </div>
+            </p>
 
         `;
 
-    }
+    });
 
 }
-
-
-
-/* ========================================
-   並び替え変更
-======================================== */
-
-document
-    .getElementById(
-        "sortSelect"
-    )
-    .addEventListener(
-        "change",
-        function(){
-
-            renderStudents();
-
-        }
-    );
-
-
-
-/* ========================================
-   初回読み込み
-======================================== */
-
-loadData();
-
 
 </script>
 
