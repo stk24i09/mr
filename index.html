@@ -403,25 +403,27 @@ async function loadSummary(){
                     )
                     .trim();
 
-/*
- * 試験日一覧
- *
- * 空欄の試験日は除外する
- */
 
-const examList =
-    (examData[studentId] || [])
-        .filter(
-            function(dateText){
+            /* ====================================
+               試験日一覧
 
-                return (
-                    dateText !== null &&
-                    dateText !== undefined &&
-                    String(dateText).trim() !== ""
-                );
+               空欄の試験日は除外する
+            ==================================== */
 
-            }
-        );
+            const examList =
+                (examData[studentId] || [])
+                    .filter(
+                        function(dateText){
+
+                            return (
+                                dateText !== null &&
+                                dateText !== undefined &&
+                                String(dateText).trim() !== ""
+                            );
+
+                        }
+                    );
+
 
             /* ====================================
                試験日を解析
@@ -834,129 +836,176 @@ function renderSummary(){
 
 
             /* ====================================
-               今回の変更
-               
-               未終了の日付は元の順番のまま。
-               終了済み（✅）の日付だけ、
-               古い日付 → 新しい日付に並べる。
+               試験日がない場合
+               → 未設定
             ==================================== */
 
-            const activeDates =
-                student.examDates.filter(
+            if(
+                student.examDates.length === 0
+            ){
+
+                examTd.textContent =
+                    "未設定";
+
+            }
+
+
+            /* ====================================
+               試験日がある場合
+            ==================================== */
+
+            else{
+
+                /* ====================================
+                   未終了の日付
+
+                   元のB → C → Dの順番を維持
+                ==================================== */
+
+                const activeDates =
+                    student.examDates.filter(
+                        function(exam){
+
+                            return (
+                                exam.daysUntil === null ||
+                                exam.daysUntil >= 0
+                            );
+
+                        }
+                    );
+
+
+                /* ====================================
+                   終了済みの日付
+
+                   古い日付 → 新しい日付
+                ==================================== */
+
+                const finishedDates =
+                    student.examDates
+                        .filter(
+                            function(exam){
+
+                                return (
+                                    exam.daysUntil !== null &&
+                                    exam.daysUntil < 0
+                                );
+
+                            }
+                        )
+                        .sort(
+                            function(a,b){
+
+                                /* 日付が解析できない場合 */
+
+                                if(
+                                    a.date === null &&
+                                    b.date === null
+                                ){
+
+                                    return (
+                                        a.originalIndex -
+                                        b.originalIndex
+                                    );
+
+                                }
+
+
+                                if(
+                                    a.date === null
+                                ){
+
+                                    return 1;
+
+                                }
+
+
+                                if(
+                                    b.date === null
+                                ){
+
+                                    return -1;
+
+                                }
+
+
+                                return (
+                                    a.date -
+                                    b.date
+                                );
+
+                            }
+                        );
+
+
+                /* ====================================
+                   表示順
+
+                   未終了
+                   ↓
+                   終了済み（古い → 新しい）
+                ==================================== */
+
+                const displayExamDates =
+                    [
+                        ...activeDates,
+                        ...finishedDates
+                    ];
+
+
+                displayExamDates.forEach(
                     function(exam){
 
-                        return (
-                            exam.daysUntil === null ||
-                            exam.daysUntil >= 0
+                        const div =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        /* =================================
+                           終了済み
+                        ================================= */
+
+                        if(
+                            exam.daysUntil !== null &&
+                            exam.daysUntil < 0
+                        ){
+
+                            div.className =
+                                "exam-finished";
+
+
+                            div.textContent =
+                                exam.text +
+                                " ✅";
+
+                        }
+
+
+                        /* =================================
+                           未終了
+                        ================================= */
+
+                        else{
+
+                            div.className =
+                                "exam-active";
+
+
+                            div.textContent =
+                                exam.text;
+
+                        }
+
+
+                        examTd.appendChild(
+                            div
                         );
 
                     }
                 );
 
-
-            const finishedDates =
-                student.examDates
-                    .filter(
-                        function(exam){
-
-                            return (
-                                exam.daysUntil !== null &&
-                                exam.daysUntil < 0
-                            );
-
-                        }
-                    )
-                    .sort(
-                        function(a,b){
-
-                            if(
-                                a.date === null &&
-                                b.date === null
-                            ){
-
-                                return (
-                                    a.originalIndex -
-                                    b.originalIndex
-                                );
-
-                            }
-
-
-                            if(
-                                a.date === null
-                            ){
-
-                                return 1;
-
-                            }
-
-
-                            if(
-                                b.date === null
-                            ){
-
-                                return -1;
-
-                            }
-
-
-                            return (
-                                a.date -
-                                b.date
-                            );
-
-                        }
-                    );
-
-
-            const displayExamDates =
-                [
-                    ...activeDates,
-                    ...finishedDates
-                ];
-
-
-            displayExamDates.forEach(
-                function(exam){
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    if(
-                        exam.daysUntil !== null &&
-                        exam.daysUntil < 0
-                    ){
-
-                        div.className =
-                            "exam-finished";
-
-
-                        div.textContent =
-                            exam.text +
-                            " ✅";
-
-                    }
-                    else{
-
-                        div.className =
-                            "exam-active";
-
-
-                        div.textContent =
-                            exam.text;
-
-                    }
-
-
-                    examTd.appendChild(
-                        div
-                    );
-
-                }
-            );
+            }
 
 
             /* ====================================
@@ -1051,7 +1100,9 @@ function renderSummary(){
     );
 
 }
-    /* ========================================
+
+
+/* ========================================
    試験日順の表示
 ======================================== */
 
@@ -1065,7 +1116,7 @@ function renderExamRows(
 
     /* ====================================
        試験日を1件ずつ行に展開
-       
+
        試験日順の場合は、
        1人の生徒に複数の試験日があれば
        その試験日ごとに1行表示する。
@@ -1196,7 +1247,7 @@ function renderExamRows(
 
                 /* =================================
                    終了済みかどうか
-                   
+
                    未終了 → 終了済み
                 ================================= */
 
@@ -1218,7 +1269,7 @@ function renderExamRows(
 
                 /* =================================
                    未終了の日付
-                   
+
                    近い日付 → 遠い日付
                 ================================= */
 
@@ -1244,7 +1295,7 @@ function renderExamRows(
 
                 /* =================================
                    終了済みの日付
-                   
+
                    古い日付 → 新しい日付
                 ================================= */
 
@@ -1270,7 +1321,7 @@ function renderExamRows(
 
                 /* =================================
                    同じ試験日の場合
-                   
+
                    生徒ID順
                 ================================= */
 
@@ -1292,6 +1343,7 @@ function renderExamRows(
 
                 /* =================================
                    同じ生徒なら
+
                    元の試験日順
                 ================================= */
 
@@ -1389,7 +1441,7 @@ function renderExamRows(
 
                 /* =================================
                    終了済みかどうか
-                   
+
                    未終了 → 終了済み
                 ================================= */
 
@@ -1411,7 +1463,7 @@ function renderExamRows(
 
                 /* =================================
                    未終了の日付
-                   
+
                    遠い日付 → 近い日付
                 ================================= */
 
@@ -1437,7 +1489,7 @@ function renderExamRows(
 
                 /* =================================
                    終了済みの日付
-                   
+
                    古い日付 → 新しい日付
                 ================================= */
 
@@ -1463,7 +1515,7 @@ function renderExamRows(
 
                 /* =================================
                    同じ試験日の場合
-                   
+
                    生徒ID順
                 ================================= */
 
@@ -1485,6 +1537,7 @@ function renderExamRows(
 
                 /* =================================
                    同じ生徒なら
+
                    元の試験日順
                 ================================= */
 
@@ -1707,7 +1760,7 @@ function compareId(
 
     /* ====================================
        年度部分
-       
+
        例：
        24i01
        ↑
