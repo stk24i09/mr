@@ -327,7 +327,9 @@ async function loadSummary(){
 
     try{
 
-        /* 面接回数 */
+        /* ====================================
+           面接回数取得
+        ==================================== */
 
         const summaryResponse =
             await fetch(
@@ -338,7 +340,9 @@ async function loadSummary(){
             await summaryResponse.json();
 
 
-        /* 試験日 */
+        /* ====================================
+           試験日取得
+        ==================================== */
 
         const examResponse =
             await fetch(
@@ -352,9 +356,9 @@ async function loadSummary(){
         students = [];
 
 
-        /* ========================================
+        /* ====================================
            今日の日付
-        ======================================== */
+        ==================================== */
 
         const today =
             new Date();
@@ -367,9 +371,9 @@ async function loadSummary(){
         );
 
 
-        /* ========================================
+        /* ====================================
            生徒ごとの処理
-        ======================================== */
+        ==================================== */
 
         for(
             const studentName
@@ -377,7 +381,13 @@ async function loadSummary(){
         ){
 
             /*
-             * 生徒IDを取得
+             * 生徒ID取得
+             *
+             * 例：
+             * 佐藤 一真24i15
+             *
+             * ↓
+             * 24i15
              */
 
             const match =
@@ -396,7 +406,7 @@ async function loadSummary(){
 
 
             /*
-             * 生徒名
+             * 生徒名取得
              */
 
             const displayName =
@@ -409,7 +419,7 @@ async function loadSummary(){
 
 
             /*
-             * 試験日
+             * 試験日一覧
              */
 
             const examList =
@@ -430,7 +440,13 @@ async function loadSummary(){
                             ).split("/");
 
 
-                        if(parts.length !== 3){
+                        /*
+                         * 日付として解析できない場合
+                         */
+
+                        if(
+                            parts.length !== 3
+                        ){
 
                             return {
 
@@ -441,7 +457,12 @@ async function loadSummary(){
                                     null,
 
                                 daysUntil:
-                                    null
+                                    null,
+
+                                originalIndex:
+                                    examList.indexOf(
+                                        dateText
+                                    )
 
                             };
 
@@ -512,9 +533,13 @@ async function loadSummary(){
                 );
 
 
-            /* ========================================
-               終了していない試験日だけ取得
-            ======================================== */
+            /*
+             * ====================================
+             * 今日以降の試験日だけ取得
+             * ====================================
+             *
+             * 過去の日付はここでは除外する
+             */
 
             const unfinishedDates =
                 parsedExamDates.filter(
@@ -529,57 +554,138 @@ async function loadSummary(){
                 );
 
 
-            /* ========================================
-               近い順用リスト
-            ======================================== */
+            /*
+             * ====================================
+             * 未終了試験日を近い順にする
+             * ====================================
+             */
 
             const nearestDateList =
-                unfinishedDates
-                    .map(
-                        function(item){
+                [...unfinishedDates].sort(
+                    function(a,b){
 
-                            return item.daysUntil;
+                        return (
+                            a.daysUntil -
+                            b.daysUntil
+                        );
 
-                        }
-                    )
-                    .sort(
-                        function(a,b){
-
-                            return a - b;
-
-                        }
-                    );
+                    }
+                );
 
 
-            /* ========================================
-               遠い順用リスト
-            ======================================== */
+            /*
+             * ====================================
+             * 未終了試験日を遠い順にする
+             * ====================================
+             */
 
             const farthestDateList =
-                unfinishedDates
-                    .map(
+                [...unfinishedDates].sort(
+                    function(a,b){
+
+                        return (
+                            b.daysUntil -
+                            a.daysUntil
+                        );
+
+                    }
+                );
+
+
+            /*
+             * ====================================
+             * 表示用の試験日リスト
+             * ====================================
+             *
+             * 通常：
+             * B → C → D
+             *
+             * 近い順：
+             * 未終了を近い順 → 終了済み
+             *
+             * 遠い順：
+             * 未終了を遠い順 → 終了済み
+             */
+
+            let examDisplayList;
+
+
+            const sortType =
+                document.getElementById(
+                    "sortSelect"
+                )?.value || "id-asc";
+
+
+            if(
+                sortType === "exam-asc"
+            ){
+
+                const finishedDates =
+                    parsedExamDates.filter(
                         function(item){
 
-                            return item.daysUntil;
-
-                        }
-                    )
-                    .sort(
-                        function(a,b){
-
-                            return b - a;
+                            return (
+                                item.daysUntil !== null &&
+                                item.daysUntil < 0
+                            );
 
                         }
                     );
 
 
-            /* ========================================
-               試験日の状態
-               
-               0 = 未終了の試験日あり
-               1 = 全て終了
-               2 = 試験日なし
-            ======================================== */
+                examDisplayList =
+                    [
+                        ...nearestDateList,
+                        ...finishedDates
+                    ];
+
+            }
+            else if(
+                sortType === "exam-desc"
+            ){
+
+                const finishedDates =
+                    parsedExamDates.filter(
+                        function(item){
+
+                            return (
+                                item.daysUntil !== null &&
+                                item.daysUntil < 0
+                            );
+
+                        }
+                    );
+
+
+                examDisplayList =
+                    [
+                        ...farthestDateList,
+                        ...finishedDates
+                    ];
+
+            }
+            else{
+
+                /*
+                 * ID順・回数順などでは
+                 * 元のB → C → Dを維持
+                 */
+
+                examDisplayList =
+                    [...parsedExamDates];
+
+            }
+
+
+            /*
+             * ====================================
+             * 試験日の状態
+             * ====================================
+             *
+             * 0 = 未終了試験日あり
+             * 1 = 全て終了
+             * 2 = 試験日なし
+             */
 
             let examStatus;
 
@@ -605,9 +711,11 @@ async function loadSummary(){
             }
 
 
-            /* ========================================
-               データ保存
-            ======================================== */
+            /*
+             * ====================================
+             * 生徒データ保存
+             * ====================================
+             */
 
             students.push({
 
@@ -637,8 +745,16 @@ async function loadSummary(){
         }
 
 
+        /*
+         * 表示
+         */
+
         renderSummary();
 
+
+        /*
+         * 更新時間
+         */
 
         document.getElementById(
             "updateTime"
@@ -677,6 +793,10 @@ function renderSummary(){
         ).value;
 
 
+    /*
+     * 元データをコピー
+     */
+
     const sortedStudents =
         [...students];
 
@@ -685,7 +805,9 @@ function renderSummary(){
        ID 昇順
     ======================================== */
 
-    if(sortType === "id-asc"){
+    if(
+        sortType === "id-asc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
@@ -705,7 +827,9 @@ function renderSummary(){
        ID 降順
     ======================================== */
 
-    else if(sortType === "id-desc"){
+    else if(
+        sortType === "id-desc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
@@ -725,7 +849,9 @@ function renderSummary(){
        回数 多い順
     ======================================== */
 
-    else if(sortType === "count-desc"){
+    else if(
+        sortType === "count-desc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
@@ -734,7 +860,10 @@ function renderSummary(){
                     b.count !== a.count
                 ){
 
-                    return b.count - a.count;
+                    return (
+                        b.count -
+                        a.count
+                    );
 
                 }
 
@@ -754,7 +883,9 @@ function renderSummary(){
        回数 少ない順
     ======================================== */
 
-    else if(sortType === "count-asc"){
+    else if(
+        sortType === "count-asc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
@@ -763,7 +894,10 @@ function renderSummary(){
                     a.count !== b.count
                 ){
 
-                    return a.count - b.count;
+                    return (
+                        a.count -
+                        b.count
+                    );
 
                 }
 
@@ -783,13 +917,15 @@ function renderSummary(){
        試験日 近い順
     ======================================== */
 
-    else if(sortType === "exam-asc"){
+    else if(
+        sortType === "exam-asc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
 
                 /*
-                 * 未終了の試験日がある人を優先
+                 * 未終了試験日がある人を先
                  */
 
                 if(
@@ -814,24 +950,6 @@ function renderSummary(){
                     b.examStatus === 0
                 ){
 
-                    /*
-                     * 近い日から比較
-                     *
-                     * 例：
-                     *
-                     * A
-                     * [1日後, 50日後]
-                     *
-                     * B
-                     * [6日後, 30日後]
-                     *
-                     * ↓
-                     *
-                     * 1日後と6日後を比較
-                     *
-                     * Aが先
-                     */
-
                     const result =
                         compareDateListsAsc(
                             a.nearestDateList,
@@ -839,7 +957,9 @@ function renderSummary(){
                         );
 
 
-                    if(result !== 0){
+                    if(
+                        result !== 0
+                    ){
 
                         return result;
 
@@ -867,13 +987,15 @@ function renderSummary(){
        試験日 遠い順
     ======================================== */
 
-    else if(sortType === "exam-desc"){
+    else if(
+        sortType === "exam-desc"
+    ){
 
         sortedStudents.sort(
             function(a,b){
 
                 /*
-                 * 未終了の試験日がある人を優先
+                 * 未終了試験日がある人を先
                  */
 
                 if(
@@ -898,24 +1020,6 @@ function renderSummary(){
                     b.examStatus === 0
                 ){
 
-                    /*
-                     * 遠い日から比較
-                     *
-                     * 例：
-                     *
-                     * A
-                     * [50日後, 1日後]
-                     *
-                     * B
-                     * [166日後, 14日後]
-                     *
-                     * ↓
-                     *
-                     * 166日後と50日後を比較
-                     *
-                     * Bが先
-                     */
-
                     const result =
                         compareDateListsDesc(
                             a.farthestDateList,
@@ -923,7 +1027,9 @@ function renderSummary(){
                         );
 
 
-                    if(result !== 0){
+                    if(
+                        result !== 0
+                    ){
 
                         return result;
 
@@ -969,9 +1075,9 @@ function renderSummary(){
                 );
 
 
-            /* ========================================
+            /* ====================================
                試験日
-            ======================================== */
+            ==================================== */
 
             const examTd =
                 document.createElement(
@@ -983,8 +1089,88 @@ function renderSummary(){
                 "exam-date-cell";
 
 
+            /*
+             * 現在の並び替えに合わせて
+             * 表示する試験日を決める
+             */
+
+            let displayExamDates;
+
+
             if(
-                student.examDates.length === 0
+                sortType === "exam-asc"
+            ){
+
+                /*
+                 * 近い順
+                 */
+
+                const finishedDates =
+                    student.examDates.filter(
+                        function(item){
+
+                            return (
+                                item.daysUntil !== null &&
+                                item.daysUntil < 0
+                            );
+
+                        }
+                    );
+
+
+                displayExamDates =
+                    [
+                        ...student.nearestDateList,
+                        ...finishedDates
+                    ];
+
+            }
+            else if(
+                sortType === "exam-desc"
+            ){
+
+                /*
+                 * 遠い順
+                 */
+
+                const finishedDates =
+                    student.examDates.filter(
+                        function(item){
+
+                            return (
+                                item.daysUntil !== null &&
+                                item.daysUntil < 0
+                            );
+
+                        }
+                    );
+
+
+                displayExamDates =
+                    [
+                        ...student.farthestDateList,
+                        ...finishedDates
+                    ];
+
+            }
+            else{
+
+                /*
+                 * その他はB → C → D
+                 */
+
+                displayExamDates =
+                    [...student.examDates];
+
+            }
+
+
+            /*
+             * 試験日がない
+             */
+
+            if(
+                displayExamDates.length === 0
             ){
 
                 examTd.textContent =
@@ -993,7 +1179,7 @@ function renderSummary(){
             }
             else{
 
-                student.examDates.forEach(
+                displayExamDates.forEach(
                     function(exam){
 
                         const div =
@@ -1003,7 +1189,7 @@ function renderSummary(){
 
 
                         /*
-                         * 過去
+                         * 過去の試験日
                          */
 
                         if(
@@ -1044,9 +1230,9 @@ function renderSummary(){
             }
 
 
-            /* ========================================
+            /* ====================================
                生徒名 / ID
-            ======================================== */
+            ==================================== */
 
             const nameTd =
                 document.createElement(
@@ -1092,9 +1278,9 @@ function renderSummary(){
             );
 
 
-            /* ========================================
+            /* ====================================
                面接回数
-            ======================================== */
+            ==================================== */
 
             const countTd =
                 document.createElement(
@@ -1111,9 +1297,9 @@ function renderSummary(){
                 "回";
 
 
-            /* ========================================
+            /* ====================================
                行追加
-            ======================================== */
+            ==================================== */
 
             tr.appendChild(
                 examTd
@@ -1139,7 +1325,8 @@ function renderSummary(){
 
 
 /* ========================================
-   試験日の比較【近い順】
+   試験日の比較
+   近い順
 ======================================== */
 
 function compareDateListsAsc(
@@ -1155,13 +1342,8 @@ function compareDateListsAsc(
 
 
     /*
-     * 近い順なので
-     *
-     * 小さい日数
-     * ↓
-     * 先
-     *
-     * となる
+     * 1番目 → 2番目 → 3番目
+     * の順に比較
      */
 
     for(
@@ -1171,12 +1353,17 @@ function compareDateListsAsc(
     ){
 
         if(
-            listA[i] !== listB[i]
+            listA[i].daysUntil !==
+            listB[i].daysUntil
         ){
 
+            /*
+             * 小さい方が近い
+             */
+
             return (
-                listA[i] -
-                listB[i]
+                listA[i].daysUntil -
+                listB[i].daysUntil
             );
 
         }
@@ -1185,8 +1372,8 @@ function compareDateListsAsc(
 
 
     /*
-     * ここまで同じなら
-     * 試験日が多い方を先にする
+     * 全て同じなら
+     * 試験日が多い方を先
      */
 
     if(
@@ -1208,7 +1395,8 @@ function compareDateListsAsc(
 
 
 /* ========================================
-   試験日の比較【遠い順】
+   試験日の比較
+   遠い順
 ======================================== */
 
 function compareDateListsDesc(
@@ -1224,13 +1412,13 @@ function compareDateListsDesc(
 
 
     /*
-     * 遠い順なので
-     *
-     * 大きい日数
+     * 1番遠い日
      * ↓
-     * 先
+     * 2番目に遠い日
+     * ↓
+     * 3番目に遠い日
      *
-     * となる
+     * の順で比較
      */
 
     for(
@@ -1240,12 +1428,17 @@ function compareDateListsDesc(
     ){
 
         if(
-            listA[i] !== listB[i]
+            listA[i].daysUntil !==
+            listB[i].daysUntil
         ){
 
+            /*
+             * 大きい方が遠い
+             */
+
             return (
-                listB[i] -
-                listA[i]
+                listB[i].daysUntil -
+                listA[i].daysUntil
             );
 
         }
@@ -1254,8 +1447,8 @@ function compareDateListsDesc(
 
 
     /*
-     * ここまで同じなら
-     * 試験日が多い方を先にする
+     * 全て同じなら
+     * 試験日が多い方を先
      */
 
     if(
