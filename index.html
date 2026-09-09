@@ -404,10 +404,25 @@ async function loadSummary(){
                     .trim();
 
 
-            /* 試験日一覧 */
+           /*
+ * 試験日一覧
+ *
+ * 空欄の試験日は除外する
+ */
 
-            const examList =
-                examData[studentId] || [];
+const examList =
+    (examData[studentId] || [])
+        .filter(
+            function(dateText){
+
+                return (
+                    dateText !== null &&
+                    dateText !== undefined &&
+                    String(dateText).trim() !== ""
+                );
+
+            }
+        );
 
 
             /* ====================================
